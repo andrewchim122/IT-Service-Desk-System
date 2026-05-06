@@ -501,102 +501,174 @@
     };
 
 
-    // ========== 改良版 AI 分析引擎 v2 ==========
-    // 多維度加權評分系統，同時分析 title + description
+    // ========== AI 分析引擎 v3 - 廣東話口語支援 ==========
+    // 修正：加入廣東話 patterns、修正 hardware 偏重問題
     let aiDebounceTimer = null;
     let currentAiCategory = '';
     let currentAiPriority = '';
     let overrideMode = false;
 
-    // 每條 rule 包含 high-weight (2分) 同 normal-weight (1分) patterns
     const categoryRules = [
       {
         key: 'network',
         label: '網絡問題',
-        high: [/wi-?fi.*斷/i, /斷.*wi-?fi/i, /無法.*上網/i, /上網.*問題/i, /網絡.*中斷/i, /連線.*失敗/i, /internet.*down/i, /網站.*無法訪問/i, /伺服器.*無法/i, /dns.*失敗/i, /ip.*衝突/i, /網絡.*全/i],
-        normal: [/wi-?fi/i, /網絡/,/斷線/,/連線/,/路由器/,/router/i,/internet/i,/網站/,/伺服器/,/server/i,/dns/i,/ip.?地址/i,/vpn/i,/頻寬/,/bandwidth/i,/交換機/,/switch/i,/網線/,/ethernet/i,/ping/i,/timeout/i,/超時/,/防火牆/,/firewall/i,/proxy/i,/port/i,/埠/]
+        high: [
+          /wi-?fi.*[斷壞唔]/i, /[斷壞].*wi-?fi/i, /連唔到.*wifi/i, /wifi.*連唔到/i,
+          /無法.*上網/i, /上唔到網/i, /上網.*問題/i, /網絡.*中斷/i,
+          /連線.*失敗/i, /internet.*down/i, /網站.*無法/i, /網站.*打唔開/i,
+          /伺服器.*無法/i, /伺服器.*down/i, /ip.*衝突/i
+        ],
+        normal: [
+          /wi-?fi/i, /網絡/, /斷線/, /連線/, /路由器/, /router/i, /internet/i,
+          /網站/, /伺服器/, /server/i, /dns/i, /vpn/i, /頻寬/, /bandwidth/i,
+          /交換機/, /switch/i, /網線/, /ethernet/i, /ping/i, /timeout/i,
+          /超時/, /防火牆/, /firewall/i, /proxy/i, /上網/, /網絡線/,
+          /連唔到/, /斷咗/, /無網絡/, /no.*internet/i
+        ]
       },
       {
         key: 'software',
         label: '軟件問題',
-        high: [/系統.*崩潰/i,/軟件.*無法.*開啟/i,/程式.*停止/i,/藍屏/,/blue.*screen/i,/程式.*錯誤/i,/無法.*安裝/i,/安裝.*失敗/i,/病毒.*感染/i,/木馬/i],
-        normal: [/軟件/,/安裝/,/程式/,/application/i,/app/i,/系統更新/,/update/i,/升級/,/virus/i,/病毒/,/malware/i,/adobe/i,/office/i,/word/i,/excel/i,/powerpoint/i,/windows/i,/macos/i,/driver/i,/驅動/,/授權/,/license/i,/activate/i,/激活/,/crack/i,/破解/,/解除安裝/,/uninstall/i,/設定/,/setting/i,/配置/,/config/i,/browser/i,/瀏覽器/,/chrome/i,/firefox/i,/edge/i,/java/i,/python/i,/軟件版本/,/software/i]
+        high: [
+          /系統.*[壞崩潰]/, /軟件.*[開唔打唔]/, /程式.*[停止壞咗]/,
+          /藍屏/, /blue.*screen/i, /程式.*錯誤/, /無法.*安裝/,
+          /安裝.*失敗/, /裝唔到/, /開唔到.*程式/, /程式.*開唔到/,
+          /病毒.*感染/, /木馬/, /系統.*慢咗/, /電腦.*好慢.*軟件/
+        ],
+        normal: [
+          /軟件/, /安裝/, /程式/, /application/i, /app/i, /系統更新/,
+          /update/i, /升級/, /virus/i, /病毒/, /malware/i, /adobe/i,
+          /office/i, /word/i, /excel/i, /powerpoint/i, /windows/i,
+          /macos/i, /driver/i, /驅動/, /授權/, /license/i, /activate/i,
+          /激活/, /解除安裝/, /uninstall/i, /設定/, /setting/i,
+          /瀏覽器/, /chrome/i, /firefox/i, /edge/i, /software/i,
+          /裝software/, /裝程式/, /開唔到/, /run唔到/i
+        ]
       },
       {
         key: 'account',
         label: '帳號權限',
-        high: [/密碼.*忘記/,/忘記.*密碼/,/帳號.*鎖定/,/無法.*登入/,/login.*fail/i,/帳號.*停用/,/權限.*被拒/,/access.*denied/i],
-        normal: [/密碼/,/password/i,/帳號/,/帳戶/,/account/i,/登入/,/login/i,/logout/i,/sign.*in/i,/權限/,/permission/i,/access/i,/鎖定/,/unlock/i,/reset.*password/i,/用戶名/,/username/i,/profile/i,/ad.*帳/,/active.*directory/i,/ldap/i,/sso/i,/兩步/,/2fa/i,/驗證碼/,/otp/i]
+        high: [
+          /密碼.*[忘記唔記得]/, /[忘記唔記得].*密碼/, /帳號.*鎖定/,
+          /無法.*登入/, /登入唔到/, /入唔到.*系統/, /login.*fail/i,
+          /帳號.*停用/, /權限.*被拒/, /access.*denied/i,
+          /password.*expired/i, /密碼.*過期/
+        ],
+        normal: [
+          /密碼/, /password/i, /帳號/, /帳戶/, /account/i, /登入/,
+          /login/i, /logout/i, /權限/, /permission/i, /access/i,
+          /鎖定/, /unlock/i, /用戶名/, /username/i, /profile/i,
+          /sso/i, /兩步/, /2fa/i, /驗證碼/, /otp/i,
+          /開帳號/, /新帳號/, /申請.*帳/, /帳.*申請/
+        ]
       },
       {
         key: 'email',
         label: '電郵系統',
-        high: [/電郵.*無法.*收/,/電郵.*無法.*發/,/郵件.*伺服器.*錯誤/,/outlook.*無法.*連/,/gmail.*問題/,/郵箱.*已滿/,/email.*bounce/i],
-        normal: [/電郵/,/email/i,/e-?mail/i,/outlook/i,/gmail/i,/yahoo.*mail/i,/郵件/,/收件/,/發件/,/smtp/i,/imap/i,/pop3/i,/郵箱/,/mailbox/i,/附件/,/attachment/i,/spam/i,/垃圾郵件/,/郵件清單/,/mailing.*list/i,/calendar/i,/日曆/,/會議邀請/,/meeting.*invite/i]
+        high: [
+          /電郵.*[收唔send唔]/, /[收唔send唔].*電郵/,
+          /email.*[唔work收唔到]/, /收唔到.*[郵件email]/,
+          /send唔到.*[郵件email]/, /outlook.*[無法唔得]/,
+          /郵件.*伺服器.*錯誤/, /郵箱.*已滿/, /email.*bounce/i
+        ],
+        normal: [
+          /電郵/, /email/i, /e-?mail/i, /outlook/i, /gmail/i,
+          /郵件/, /收件/, /發件/, /smtp/i, /imap/i, /pop3/i,
+          /郵箱/, /mailbox/i, /附件/, /attachment/i, /spam/i,
+          /垃圾郵件/, /calendar/i, /日曆/, /會議邀請/,
+          /send.*mail/i, /mail.*問題/
+        ]
       },
       {
         key: 'hardware',
         label: '硬件問題',
-        high: [/電腦.*無法.*開機/,/開機.*無反應/,/螢幕.*無顯示/,/黑屏/,/藍屏/,/鍵盤.*失靈/,/滑鼠.*無反應/,/列印機.*卡紙/,/投影機.*無信號/,/音響.*無聲/,/麥克風.*無效/,/硬碟.*損壞/,/usb.*無法識別/i],
-        normal: [/電腦/,/開機/,/重啟/,/硬件/,/hardware/i,/螢幕/,/monitor/i,/screen/i,/鍵盤/,/keyboard/i,/滑鼠/,/mouse/i,/列印機/,/打印機/,/printer/i,/投影機/,/projector/i,/音響/,/speaker/i,/麥克風/,/microphone/i,/mic/i,/相機/,/camera/i,/webcam/i,/掃描/,/scanner/i,/白板/,/whiteboard/i,/觸控/,/touch/i,/空調/,/air.*con/i,/遙控/,/remote/i,/usb/i,/hdmi/i,/電池/,/battery/i,/充電/,/charge/i,/卡紙/,/jam/i,/硬碟/,/hard.*drive/i,/ssd/i,/ram/i,/記憶體/,/cpu/i,/處理器/,/風扇/,/fan/i,/過熱/,/overheat/i,/電源/,/power/i,/UPS/i,/網卡/,/NIC/i,/顯示卡/,/GPU/i]
+        high: [
+          /電腦.*[開唔壞]機/, /開唔到機/, /開機.*無反應/,
+          /螢幕.*[無黑]/, /黑屏/, /鍵盤.*[失靈唔work壞]/,
+          /滑鼠.*[無反應唔work壞]/, /[列打]印機.*卡紙/,
+          /投影機.*[無唔].*[信號畫面]/, /音響.*[無唔].*聲/,
+          /麥克風.*[無唔].*[效聲]/, /硬碟.*[損壞壞咗]/,
+          /usb.*無法識別/i, /機器.*壞咗/, /壞咗.*機器/
+        ],
+        normal: [
+          /開唔到機/, /死機/, /重啟/, /硬件/, /hardware/i,
+          /螢幕/, /monitor/i, /鍵盤/, /keyboard/i, /滑鼠/, /mouse/i,
+          /[列打]印機/, /printer/i, /投影機/, /projector/i,
+          /音響/, /speaker/i, /麥克風/, /microphone/i, /mic/i,
+          /相機/, /camera/i, /webcam/i, /掃描/, /scanner/i,
+          /白板/, /whiteboard/i, /觸控/, /touch/i,
+          /空調/, /遙控/, /usb/i, /hdmi/i, /電池/, /battery/i,
+          /充電/, /卡紙/, /硬碟/, /ssd/i, /ram/i, /記憶體/,
+          /cpu/i, /處理器/, /風扇/, /過熱/, /電源/, /ups/i,
+          /顯示卡/, /gpu/i, /打印/, /影印/
+        ]
       }
     ];
 
-    // 優先級：三個維度獨立評分後疊加
+    // 廣東話口語動詞補充（配合任何名詞提升分類準確度）
+    const cantoneseVerbHints = {
+      hardware: [/壞咗/, /壞左/, /唔work/i, /死機/, /out咗/i, /爆咗/],
+      network:  [/連唔到/, /上唔到/, /入唔到.*網/, /斷咗網/],
+      software: [/開唔到/, /裝唔到/, /run唔到/i, /用唔到.*軟件/],
+      account:  [/登入唔到/, /入唔到.*系統/, /改唔到.*密碼/],
+      email:    [/收唔到.*信/, /send唔到/i, /發唔到.*郵件/]
+    };
+
     const priorityDimensions = {
-      // 緊迫性
       urgency: {
-        urgent: [/緊急/,/urgent/i,/立即/,/即刻/,/今[天日].*必須/,/asap/i,/非常急/,/馬上/,/越快越好/,/即時/],
-        high:   [/今[天日]/,/today/i,/明[天日]/,/tomorrow/i,/盡快/,/盡早/,/需要.*快/,/要求.*快/],
-        low:    [/不急/,/方便時/,/有空/,/慢慢/,/隨時/,/有時間/,/低優先/,/no.*rush/i]
+        urgent: [/緊急/, /urgent/i, /立即/, /即刻/, /asap/i, /非常急/, /馬上/, /越快越好/, /即時/, /急急腳/],
+        high:   [/今[天日]/, /today/i, /明[天日]/, /tomorrow/i, /盡快/, /盡早/, /要快/, /快啲/],
+        low:    [/不急/, /方便時/, /有空/, /慢慢/, /隨時/, /有時間/, /低優先/, /no.*rush/i, /唔急/]
       },
-      // 影響範圍
       impact: {
-        urgent: [/全[校班級]/,/所有.*用戶/,/整個.*系統/,/全部.*電腦/,/全體/,/大規模/,/全面/],
-        high:   [/多個/,/多人/,/大部分/,/整[個班]/,/影響.*教學/,/影響.*運作/,/無法.*使用/,/完全.*停止/],
-        low:    [/個人/,/自己/,/一台/,/單一/,/我[的���]/]
+        urgent: [/全[校班級]/, /所有.*用戶/, /整個.*系統/, /全部.*電腦/, /全體/, /大規模/, /全面停/],
+        high:   [/多個/, /多人/, /大部分/, /整[個班]/, /影響.*教學/, /影響.*運作/, /無法.*使用/, /完全.*停止/, /成班/, /成個/],
+        low:    [/個人/, /自己/, /一台/, /單一/, /我[的嘅]/, /得我一個/]
       },
-      // 事件重要性
       event: {
-        urgent: [/典禮/,/考試/,/公開課/,/校長/,/視察/,/督學/,/直播/,/live/i,/發布會/,/presentation/i,/大型活動/,/比賽/,/頒獎/],
-        high:   [/公開/,/重要.*會議/,/家長/,/open.*day/i,/示範/,/demo/i,/評審/,/截止日期/,/deadline/i]
+        urgent: [/典禮/, /考試/, /公開課/, /校長/, /視察/, /督學/, /直播/, /live/i, /比賽/, /頒獎/, /大型活動/],
+        high:   [/公開/, /重要.*會議/, /家長/, /open.*day/i, /示範/, /demo/i, /評審/, /截止日期/, /deadline/i]
       }
     };
 
     function analyzeWithAI(title, description) {
-      // title 關鍵詞加倍計分
-      const titleText = title.toLowerCase();
-      const descText = description.toLowerCase();
+      const titleT = title.toLowerCase();
+      const descT = description.toLowerCase();
+      const fullT = titleT + ' ' + descT;
 
       // 分類評分
       const scores = categoryRules.map(rule => {
         let score = 0;
-        const matchedKeywords = [];
+        const matched = [];
         rule.high.forEach(p => {
-          if (p.test(titleText)) { score += 4; matchedKeywords.push({word: p.source.replace(/\\\./g,'.').replace(/\(\?:/g,''), weight:'高', from:'標題'}); }
-          if (p.test(descText))  { score += 2; matchedKeywords.push({word: p.source.replace(/\\\./g,'.').replace(/\(\?:/g,''), weight:'高', from:'描述'}); }
+          if (p.test(titleT)) { score += 4; matched.push(p.source.slice(0,12)); }
+          if (p.test(descT))  { score += 2; matched.push(p.source.slice(0,12)); }
         });
         rule.normal.forEach(p => {
-          if (p.test(titleText)) { score += 2; matchedKeywords.push({word: p.source.replace(/\\\./g,'.').replace(/\(\?:/g,''), weight:'普通', from:'標題'}); }
-          if (p.test(descText))  { score += 1; matchedKeywords.push({word: p.source.replace(/\\\./g,'.').replace(/\(\?:/g,''), weight:'普通', from:'描述'}); }
+          if (p.test(titleT)) { score += 2; matched.push(p.source.slice(0,12)); }
+          if (p.test(descT))  { score += 1; matched.push(p.source.slice(0,12)); }
         });
-        return { key: rule.key, label: rule.label, score, matchedKeywords };
+        // 廣東話動詞補充加分
+        if (cantoneseVerbHints[rule.key]) {
+          cantoneseVerbHints[rule.key].forEach(p => {
+            if (p.test(fullT)) { score += 2; matched.push('[粵]' + p.source.slice(0,8)); }
+          });
+        }
+        return { key: rule.key, label: rule.label, score, matched: [...new Set(matched)] };
       });
+
       scores.sort((a, b) => b.score - a.score);
       const top = scores[0];
       const topCategory = top.score > 0 ? top.key : 'other';
-
-      // 信心度：基於分數差距
       const scoreDiff = top.score - (scores[1]?.score || 0);
       const confidence = top.score === 0 ? '低' : scoreDiff >= 4 ? '高' : scoreDiff >= 2 ? '中' : '低';
 
-      // 優先級三維度評分
+      // 優先級三維度
       let priScore = { urgent: 0, high: 0, low: 0 };
-      const fullText = titleText + ' ' + descText;
       Object.values(priorityDimensions).forEach(dim => {
-        if (dim.urgent?.some(p => p.test(fullText))) priScore.urgent += 2;
-        if (dim.high?.some(p => p.test(fullText)))   priScore.high   += 1;
-        if (dim.low?.some(p => p.test(fullText)))    priScore.low    += 1;
+        if (dim.urgent?.some(p => p.test(fullT))) priScore.urgent += 2;
+        if (dim.high?.some(p => p.test(fullT)))   priScore.high   += 1;
+        if (dim.low?.some(p => p.test(fullT)))    priScore.low    += 1;
       });
       let priority = 'medium';
       if (priScore.urgent >= 2) priority = 'urgent';
@@ -604,30 +676,20 @@
       else if (priScore.high >= 2) priority = 'high';
       else if (priScore.low >= 1) priority = 'low';
 
-      // 生成詳細解釋
-      const topKeywords = top.matchedKeywords.slice(0, 4).map(k => {
-        const raw = k.word.replace(/[\\\/\(\)\?\:\.\*\+\[\]]/g,'').replace(/i$/,'');
-        return raw.length > 1 ? raw : null;
-      }).filter(Boolean);
-
-      let reason = '';
-      if (topCategory === 'other') {
-        reason = '描述未能匹配任何具體分類，已設為「其他」。建議使用手動覆蓋選擇正確分類。';
-      } else {
-        reason = `分類「${top.label}」（得分 ${top.score}）`;
-        if (topKeywords.length) reason += `，匹配關鍵詞：${topKeywords.join('、')}`;
-        reason += `。`;
-      }
-
+      // 解釋
+      const kws = top.matched.slice(0, 4).map(k => k.replace(/[\\\/\(\)\?\:\.\*\+\[\]\^]/g,'').replace(/i$/,'')).filter(k => k.length > 1);
+      let reason = topCategory === 'other'
+        ? '描述未能匹配任何分類，建議使用手動覆蓋選擇。'
+        : `分類「${top.label}」(得分${top.score})，關鍵詞：${kws.join('、') || '綜合判斷'}。`;
       const priLabel = {urgent:'緊急',high:'高',medium:'中',low:'低'}[priority];
       reason += `優先級「${priLabel}」`;
-      if (priScore.urgent > 0) reason += '，因含緊急事件/急切關鍵詞';
-      else if (priScore.high > 0) reason += '，因有較高影響範圍或重要性';
-      else if (priScore.low > 0) reason += '，未見緊急情況描述';
-      else reason += '，根據預設中級評估';
+      if (priScore.urgent > 0) reason += '，含緊急事件/急切關鍵詞';
+      else if (priScore.high > 0) reason += '，影響範圍較大或涉及重要活動';
+      else if (priScore.low > 0) reason += '，未見急切情況';
+      else reason += '，預設中級';
       reason += '。';
 
-      return { category: topCategory, priority, confidence, reason, scores };
+      return { category: topCategory, priority, confidence, reason };
     }
 
     function triggerAIAnalysis() {

@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>香港學校 IT Service Desk System</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Microsoft YaHei', '微軟正黑體', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      color: #333;
+      font-size: 28px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    header .subtitle {
+      color: #666;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .stat-card h3 {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .stat-card .number {
+      font-size: 36px;
+      font-weight: bold;
+      color: #667eea;
+    }
+
+    .stat-card.open .number { color: #ffc107; }
+    .stat-card.in-progress .number { color: #fd7e14; }
+    .stat-card.resolved .number { color: #28a745; }
+
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 20px;
+    }
+
+    .tickets-section {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .section-header h2 {
+      color: #333;
+      font-size: 20px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5568d3;
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filters input,
+    .filters select {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .filters input {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .ticket-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .ticket-item {
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 15px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .ticket-item:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+
+    .ticket-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .ticket-id {
+      font-weight: bold;
+      color: #667eea;
+      font-size: 14px;
+    }
+
+    .ticket-title {
+      font-size: 16px;
+      color: #333;
+      margin: 5px 0;
+    }
+
+    .ticket-meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .badge {
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .badge-open { background: #fff3cd; color: #856404; }
+    .badge-in_progress { background: #ffe5d0; color: #e67e22; }
+    .badge-resolved { background: #d4edda; color: #155724; }
+    .badge-closed { background: #d1ecf1; color: #0c5460; }
+
+    .priority-low { background: #d4edda; color: #155724; }
+    .priority-medium { background: #fff3cd; color: #856404; }
+    .priority-high { background: #ffe5d0; color: #e67e22; }
+    .priority-urgent { background: #f8d7da; color: #721c24; }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .form-card h3 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h2 {
+      color: #333;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .detail-row {
+      margin-bottom: 15px;
+    }
+
+    .detail-row label {
+      font-weight: bold;
+      color: #555;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .detail-row p {
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-warning {
+      background: #ffc107;
+      color: #333;
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🖥️ 香港學校 IT Service Desk System</h1>
+      <div class="subtitle">學校資訊科技支援服務系統</div>
+    </header>
+
+    <div class="stats-container" id="statsContainer">
+      <!-- 統計卡片將由 JavaScript 動態生成 -->
+    </div>
+
+    <div class="main-content">
+      <div class="tickets-section">
+        <div class="section-header">
+          <h2>📋 工單列表</h2>
+        </div>
+
+        <div class="filters">
+          <input type="text" id="searchInput" placeholder="🔍 搜尋工單...">
+          <select id="statusFilter">
+            <option value="">全部狀態</option>
+            <option value="open">待處理</option>
+            <option value="in_progress">處理中</option>
+            <option value="resolved">已解決</option>
+            <option value="closed">已關閉</option>
+          </select>
+          <select id="priorityFilter">
+            <option value="">全部優先級</option>
+            <option value="urgent">緊急</option>
+            <option value="high">高</option>
+            <option value="medium">中</option>
+            <option value="low">低</option>
+          </select>
+          <select id="categoryFilter">
+            <option value="">全部分類</option>
+            <option value="hardware">硬件問題</option>
+            <option value="software">軟件問題</option>
+            <option value="network">網絡問題</option>
+            <option value="account">帳號權限</option>
+            <option value="email">電郵系統</option>
+            <option value="other">其他</option>
+          </select>
+        </div>
+
+        <div class="ticket-list" id="ticketList">
+          <!-- 工單列表將由 JavaScript 動態生成 -->
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <div class="form-card">
+          <h3>➕ 創建新工單</h3>
+          <form id="createTicketForm">
+            <div class="form-group">
+              <label>標題 *</label>
+              <input type="text" id="ticketTitle" required placeholder="簡短描述問題">
+            </div>
+            <div class="form-group">
+              <label>分類 *</label>
+              <select id="ticketCategory" required>
+                <option value="">請選擇分類</option>
+                <option value="hardware">硬件問題</option>
+                <option value="software">軟件問題</option>
+                <option value="network">網絡問題</option>
+                <option value="account">帳號權限</option>
+                <option value="email">電郵系統</option>
+                <option value="other">其他</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>優先級 *</label>
+              <select id="ticketPriority" required>
+                <option value="">請選擇優先級</option>
+                <option value="low">低</option>
+                <option value="medium">中</option>
+                <option value="high">高</option>
+                <option value="urgent">緊急</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>提交人 *</label>
+              <input type="text" id="ticketSubmitter" required placeholder="老師姓名">
+            </div>
+            <div class="form-group">
+              <label>部門/科組</label>
+              <input type="text" id="ticketDepartment" placeholder="例如：數學科、學務處">
+            </div>
+            <div class="form-group">
+              <label>詳細描述 *</label>
+              <textarea id="ticketDescription" required placeholder="請詳細描述問題..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">提交工單</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 工單詳情 Modal -->
+  <div class="modal" id="ticketModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">工單詳情</h2>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div id="modalBody">
+        <!-- 詳情內容將由 JavaScript 動態生成 -->
+      </div>
+      <div class="action-buttons" id="modalActions">
+        <!-- 操作按鈕將由 JavaScript 動態生成 -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:3001/api';
+
+    // 載入數據
+    async function loadData() {
+      await loadStats();
+      await loadTickets();
+    }
+
+    // 載入統計數據
+    async function loadStats() {
+      try {
+        const response = await fetch(`${API_BASE}/stats`);
+        const stats = await response.json();
+        
+        const statsHTML = `
+          <div class="stat-card">
+            <h3>總工單數</h3>
+            <div class="number">${stats.total}</div>
+          </div>
+          <div class="stat-card open">
+            <h3>待處理</h3>
+            <div class="number">${stats.open}</div>
+          </div>
+          <div class="stat-card in-progress">
+            <h3>處理中</h3>
+            <div class="number">${stats.inProgress}</div>
+          </div>
+          <div class="stat-card resolved">
+            <h3>已解決</h3>
+            <div class="number">${stats.resolved}</div>
+          </div>
+        `;
+        
+        document.getElementById('statsContainer').innerHTML = statsHTML;
+      } catch (error) {
+        console.error('載入統計數據失敗:', error);
+      }
+    }
+
+    // 載入工單列表
+    async function loadTickets() {
+      try {
+        const search = document.getElementById('searchInput').value;
+        const status = document.getElementById('statusFilter').value;
+        const priority = document.getElementById('priorityFilter').value;
+        const category = document.getElementById('categoryFilter').value;
+
+        let url = `${API_BASE}/tickets?`;
+        if (search) url += `&search=${encodeURIComponent(search)}`;
+        if (status) url += `&status=${status}`;
+        if (priority) url += `&priority=${priority}`;
+        if (category) url += `&category=${category}`;
+
+        const response = await fetch(url);
+        const tickets = await response.json();
+
+        const ticketListHTML = tickets.map(ticket => `
+          <div class="ticket-item" onclick="showTicketDetail('${ticket.id}')">
+            <div class="ticket-header">
+              <span class="ticket-id">${ticket.id}</span>
+              <span class="badge badge-${ticket.status}">${getStatusLabel(ticket.status)}</span>
+            </div>
+            <div class="ticket-title">${ticket.title}</div>
+            <div class="ticket-meta">
+              <span class="badge priority-${ticket.priority}">${getPriorityLabel(ticket.priority)}</span>
+              <span>📁 ${getCategoryLabel(ticket.category)}</span>
+              <span>👤 ${ticket.submittedBy}</span>
+              <span>📅 ${formatDate(ticket.createdAt)}</span>
+            </div>
+          </div>
+        `).join('');
+
+        document.getElementById('ticketList').innerHTML = ticketListHTML || '<p style="text-align:center;color:#999;padding:40px;">暫無工單</p>';
+      } catch (error) {
+        console.error('載入工單失敗:', error);
+        document.getElementById('ticketList').innerHTML = '<p style="text-align:center;color:#dc3545;padding:40px;">載入失敗，請確保後端伺服器正在運行</p>';
+      }
+    }
+
+    // 顯示工單詳情
+    async function showTicketDetail(ticketId) {
+      try {
+        const response = await fetch(`${API_BASE}/tickets/${ticketId}`);
+        const ticket = await response.json();
+
+        document.getElementById('modalTitle').textContent = `${ticket.id} - ${ticket.title}`;
+        
+        document.getElementById('modalBody').innerHTML = `
+          <div class="detail-row">
+            <label>狀態</label>
+            <p><span class="badge badge-${ticket.status}">${getStatusLabel(ticket.status)}</span></p>
+          </div>
+          <div class="detail-row">
+            <label>優先級</label>
+            <p><span class="badge priority-${ticket.priority}">${getPriorityLabel(ticket.priority)}</span></p>
+          </div>
+          <div class="detail-row">
+            <label>分類</label>
+            <p>${getCategoryLabel(ticket.category)}</p>
+          </div>
+          <div class="detail-row">
+            <label>描述</label>
+            <p>${ticket.description}</p>
+          </div>
+          <div class="detail-row">
+            <label>提交人</label>
+            <p>${ticket.submittedBy} ${ticket.department ? `(${ticket.department})` : ''}</p>
+          </div>
+          <div class="detail-row">
+            <label>創建時間</label>
+            <p>${formatDate(ticket.createdAt)}</p>
+          </div>
+          <div class="detail-row">
+            <label>最後更新</label>
+            <p>${formatDate(ticket.updatedAt)}</p>
+          </div>
+          ${ticket.assignedTo ? `
+          <div class="detail-row">
+            <label>負責人</label>
+            <p>${ticket.assignedTo}</p>
+          </div>
+          ` : ''}
+          ${ticket.resolution ? `
+          <div class="detail-row">
+            <label>解決方案</label>
+            <p>${ticket.resolution}</p>
+          </div>
+          ` : ''}
+        `;
+
+        document.getElementById('modalActions').innerHTML = `
+          ${ticket.status === 'open' ? `
+            <button class="btn btn-warning" onclick="updateTicketStatus('${ticket.id}', 'in_progress')">開始處理</button>
+          ` : ''}
+          ${ticket.status === 'in_progress' ? `
+            <button class="btn btn-success" onclick="resolveTicket('${ticket.id}')">標記為已解決</button>
+          ` : ''}
+          <button class="btn btn-danger" onclick="deleteTicket('${ticket.id}')">刪除工單</button>
+        `;
+
+        document.getElementById('ticketModal').classList.add('active');
+      } catch (error) {
+        console.error('載入工單詳情失敗:', error);
+        alert('載入工單詳情失敗');
+      }
+    }
+
+    // 關閉 Modal
+    function closeModal() {
+      document.getElementById('ticketModal').classList.remove('active');
+    }
+
+    // 更新工單狀態
+    async function updateTicketStatus(ticketId, status) {
+      try {
+        await fetch(`${API_BASE}/tickets/${ticketId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status })
+        });
+        closeModal();
+        await loadData();
+      } catch (error) {
+        console.error('更新工單失敗:', error);
+        alert('更新工單失敗');
+      }
+    }
+
+    // 解決工單
+    async function resolveTicket(ticketId) {
+      const resolution = prompt('請輸入解決方案:');
+      if (resolution) {
+        try {
+          await fetch(`${API_BASE}/tickets/${ticketId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: 'resolved', resolution })
+          });
+          closeModal();
+          await loadData();
+        } catch (error) {
+          console.error('解決工單失敗:', error);
+          alert('解決工單失敗');
+        }
+      }
+    }
+
+    // 刪除工單
+    async function deleteTicket(ticketId) {
+      if (confirm('確定要刪除此工單嗎？')) {
+        try {
+          await fetch(`${API_BASE}/tickets/${ticketId}`, {
+            method: 'DELETE'
+          });
+          closeModal();
+          await loadData();
+        } catch (error) {
+          console.error('刪除工單失敗:', error);
+          alert('刪除工單失敗');
+        }
+      }
+    }
+
+    // 創建工單表單提交
+    document.getElementById('createTicketForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const ticketData = {
+        title: document.getElementById('ticketTitle').value,
+        category: document.getElementById('ticketCategory').value,
+        priority: document.getElementById('ticketPriority').value,
+        submittedBy: document.getElementById('ticketSubmitter').value,
+        department: document.getElementById('ticketDepartment').value,
+        description: document.getElementById('ticketDescription').value
+      };
+
+      try {
+        await fetch(`${API_BASE}/tickets`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(ticketData)
+        });
+        
+        // 重置表單
+        document.getElementById('createTicketForm').reset();
+        
+        // 重新載入數據
+        await loadData();
+        
+        alert('工單已成功創建！');
+      } catch (error) {
+        console.error('創建工單失敗:', error);
+        alert('創建工單失敗');
+      }
+    });
+
+    // 篩選器事件監聽
+    ['searchInput', 'statusFilter', 'priorityFilter', 'categoryFilter'].forEach(id => {
+      document.getElementById(id).addEventListener('change', loadTickets);
+      document.getElementById(id).addEventListener('input', loadTickets);
+    });
+
+    // 輔助函數
+    function getStatusLabel(status) {
+      const labels = {
+        open: '待處理',
+        in_progress: '處理中',
+        resolved: '已解決',
+        closed: '已關閉'
+      };
+      return labels[status] || status;
+    }
+
+    function getPriorityLabel(priority) {
+      const labels = {
+        low: '低',
+        medium: '中',
+        high: '高',
+        urgent: '緊急'
+      };
+      return labels[priority] || priority;
+    }
+
+    function getCategoryLabel(category) {
+      const labels = {
+        hardware: '硬件問題',
+        software: '軟件問題',
+        network: '網絡問題',
+        account: '帳號權限',
+        email: '電郵系統',
+        other: '其他'
+      };
+      return labels[category] || category;
+    }
+
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleString('zh-HK', { 
+        year: 'numeric', 
+        month: '2-digit', 
+        day: '2-digit', 
+        hour: '2-digit', 
+        minute: '2-digit' 
+      });
+    }
+
+    // 初始化
+    window.addEventListener('DOMContentLoaded', loadData);
+  </script>
+</body>
+</html>

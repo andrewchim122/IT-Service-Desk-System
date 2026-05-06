@@ -24,7 +24,7 @@
     /* 頂部導航欄 */
     .navbar {
       background: #03363d;
-      padding: 16px 32px;
+      padding: 12px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -43,14 +43,17 @@
     }
 
     .navbar-brand h1 {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 600;
     }
 
     .navbar-brand .subtitle {
-      font-size: 12px;
+      font-size: 11px;
       opacity: 0.8;
       font-weight: 400;
+      margin-left: 8px;
+      padding-left: 8px;
+      border-left: 1px solid rgba(255,255,255,0.3);
     }
 
     .navbar-actions {
@@ -59,23 +62,103 @@
       align-items: center;
     }
 
+    .navbar-nav {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-link {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      background: rgba(255,255,255,0.15);
+      color: white;
+    }
+
     .container {
-      max-width: 1440px;
+      max-width: 1600px;
       margin: 0 auto;
-      padding: 24px 32px;
+      padding: 20px 24px;
+    }
+
+    /* Zendesk-style 視圖切換器 */
+    .views-container {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border: 1px solid #e4e6e8;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .views-tabs {
+      display: flex;
+      border-bottom: 1px solid #e4e6e8;
+      background: #fafafa;
+      overflow-x: auto;
+    }
+
+    .view-tab {
+      padding: 12px 20px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: #6b7280;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .view-tab:hover {
+      background: #f3f4f6;
+      color: #1f2937;
+    }
+
+    .view-tab.active {
+      color: #03363d;
+      border-bottom-color: #03363d;
+      background: white;
+    }
+
+    .view-tab .count {
+      background: #e5e7eb;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .view-tab.active .count {
+      background: #03363d;
+      color: white;
     }
 
     /* 統計卡片區域 */
     .stats-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
     }
 
     .stat-card {
       background: white;
-      padding: 24px;
+      padding: 20px;
       border-radius: 8px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
       border: 1px solid #e4e6e8;
@@ -89,7 +172,7 @@
 
     .stat-card h3 {
       color: #6b7280;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -97,7 +180,7 @@
     }
 
     .stat-card .number {
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 700;
       color: #1f2937;
     }
@@ -107,11 +190,11 @@
     .stat-card.resolved .number { color: #059669; }
     .stat-card.closed .number { color: #6b7280; }
 
-    /* 主內容區 */
+    /* 主內容區 - Zendesk 風格雙欄布局 */
     .main-content {
       display: grid;
-      grid-template-columns: 1fr 380px;
-      gap: 24px;
+      grid-template-columns: 1fr 400px;
+      gap: 20px;
     }
 
     /* 求助單列表區域 */
@@ -127,23 +210,26 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 24px;
+      padding: 16px 20px;
       border-bottom: 1px solid #e4e6e8;
       background: #fafafa;
     }
 
     .section-header h2 {
       color: #1f2937;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .btn {
-      padding: 10px 16px;
+      padding: 8px 14px;
       border: none;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       transition: all 0.2s;
       display: inline-flex;
@@ -158,6 +244,7 @@
 
     .btn-primary:hover {
       background: #02272b;
+      box-shadow: 0 2px 8px rgba(3, 54, 61, 0.3);
     }
 
     .btn-success {
@@ -197,19 +284,31 @@
       background: #e5e7eb;
     }
 
-    /* 篩選器 */
-    .filters {
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+
+    /* 篩選工具列 */
+    .toolbar {
       display: flex;
       gap: 12px;
-      padding: 16px 24px;
+      padding: 16px 20px;
       border-bottom: 1px solid #e4e6e8;
       background: white;
       flex-wrap: wrap;
+      align-items: center;
     }
 
-    .filters input,
-    .filters select {
-      padding: 10px 14px;
+    .search-box {
+      flex: 1;
+      min-width: 280px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 10px 14px 10px 38px;
       border: 1px solid #d1d5db;
       border-radius: 6px;
       font-size: 14px;
@@ -217,73 +316,112 @@
       transition: all 0.2s;
     }
 
-    .filters input:focus,
+    .search-box::before {
+      content: "🔍";
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+    }
+
+    .filters select {
+      padding: 10px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+      transition: all 0.2s;
+      background: white;
+      cursor: pointer;
+    }
+
     .filters select:focus {
       outline: none;
       border-color: #03363d;
       box-shadow: 0 0 0 3px rgba(3, 54, 61, 0.1);
     }
 
-    .filters input {
-      flex: 1;
-      min-width: 240px;
+    /* 求助單列表 - 表格形式 */
+    .ticket-table {
+      width: 100%;
+      border-collapse: collapse;
     }
 
-    /* 求助單列表 */
-    .ticket-list {
-      padding: 16px 24px 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      min-height: 400px;
+    .ticket-table th {
+      text-align: left;
+      padding: 12px 16px;
+      background: #fafafa;
+      border-bottom: 1px solid #e4e6e8;
+      font-size: 12px;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
-    .ticket-item {
-      border: 1px solid #e4e6e8;
-      border-radius: 8px;
-      padding: 16px 20px;
-      transition: all 0.2s;
+    .ticket-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f3f4f6;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+
+    .ticket-row {
       cursor: pointer;
-      background: white;
+      transition: all 0.2s;
     }
 
-    .ticket-item:hover {
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      border-color: #03363d;
+    .ticket-row:hover {
+      background: #f9fafb;
     }
 
-    .ticket-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 12px;
-    }
-
-    .ticket-id {
+    .ticket-cell-id {
       font-weight: 600;
       color: #03363d;
       font-size: 13px;
-      background: #f0f9ff;
-      padding: 4px 10px;
+    }
+
+    .ticket-cell-title {
+      font-weight: 500;
+      color: #1f2937;
+    }
+
+    .ticket-cell-submitter {
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    .ticket-cell-assignee {
+      font-size: 13px;
+    }
+
+    .avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #03363d;
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      margin-right: 6px;
+    }
+
+    .sla-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      padding: 4px 8px;
       border-radius: 4px;
     }
 
-    .ticket-title {
-      font-size: 16px;
-      color: #1f2937;
-      font-weight: 500;
-      margin: 8px 0;
-      line-height: 1.4;
-    }
-
-    .ticket-meta {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      font-size: 12px;
-      color: #6b7280;
-      align-items: center;
-    }
+    .sla-good { background: #d1fae5; color: #047857; }
+    .sla-warning { background: #fef3c7; color: #92400e; }
+    .sla-breach { background: #fee2e2; color: #b91c1c; }
 
     .badge {
       padding: 4px 10px;
@@ -292,10 +430,11 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.3px;
+      display: inline-block;
     }
 
     .badge-open { background: #fef3c7; color: #92400e; }
-    .badge-in_progress { background: #fed7aa; color: #c2410c; }
+    .badge-in_progress { background: #dbeafe; color: #1e40af; }
     .badge-resolved { background: #d1fae5; color: #047857; }
     .badge-closed { background: #f3f4f6; color: #4b5563; }
 
@@ -304,27 +443,78 @@
     .priority-high { background: #fed7aa; color: #c2410c; }
     .priority-urgent { background: #fee2e2; color: #b91c1c; }
 
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      background: #f3f4f6;
+      border-radius: 4px;
+      font-size: 11px;
+      color: #6b7280;
+      margin-right: 4px;
+    }
+
     /* 側邊欄 */
     .sidebar {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 16px;
+    }
+
+    .quick-actions {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border: 1px solid #e4e6e8;
+    }
+
+    .quick-actions h3 {
+      color: #1f2937;
+      margin-bottom: 16px;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .quick-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .quick-stat {
+      text-align: center;
+      padding: 12px;
+      background: #f9fafb;
+      border-radius: 6px;
+    }
+
+    .quick-stat .value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .quick-stat .label {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 4px;
     }
 
     .form-card {
       background: white;
       border-radius: 8px;
-      padding: 24px;
+      padding: 20px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
       border: 1px solid #e4e6e8;
-      position: sticky;
-      top: 100px;
     }
 
     .form-card h3 {
       color: #1f2937;
-      margin-bottom: 20px;
-      font-size: 16px;
+      margin-bottom: 16px;
+      font-size: 14px;
       font-weight: 600;
       display: flex;
       align-items: center;
@@ -332,14 +522,14 @@
     }
 
     .form-group {
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .form-group label {
       display: block;
       margin-bottom: 6px;
       color: #374151;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 500;
     }
 
@@ -347,10 +537,10 @@
     .form-group select,
     .form-group textarea {
       width: 100%;
-      padding: 10px 14px;
+      padding: 8px 12px;
       border: 1px solid #d1d5db;
       border-radius: 6px;
-      font-size: 14px;
+      font-size: 13px;
       font-family: inherit;
       transition: all 0.2s;
     }
@@ -365,10 +555,10 @@
 
     .form-group textarea {
       resize: vertical;
-      min-height: 100px;
+      min-height: 80px;
     }
 
-    /* Modal */
+    /* Modal - Zendesk 風格 */
     .modal {
       display: none;
       position: fixed;
@@ -379,8 +569,9 @@
       background: rgba(0,0,0,0.5);
       z-index: 1000;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       backdrop-filter: blur(4px);
+      padding-top: 40px;
     }
 
     .modal.active {
@@ -390,27 +581,31 @@
     .modal-content {
       background: white;
       border-radius: 12px;
-      padding: 32px;
-      max-width: 640px;
       width: 90%;
+      max-width: 1000px;
       max-height: 85vh;
-      overflow-y: auto;
+      overflow: hidden;
       box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
     }
 
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
-      padding-bottom: 16px;
+      padding: 20px 24px;
       border-bottom: 1px solid #e4e6e8;
+      background: #fafafa;
     }
 
     .modal-header h2 {
       color: #1f2937;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
     .close-btn {
@@ -429,12 +624,47 @@
     }
 
     .close-btn:hover {
-      background: #f3f4f6;
+      background: #e5e7eb;
       color: #1f2937;
     }
 
+    .modal-body {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      overflow: hidden;
+    }
+
+    .ticket-detail-main {
+      padding: 24px;
+      border-right: 1px solid #e4e6e8;
+      overflow-y: auto;
+      max-height: 60vh;
+    }
+
+    .ticket-detail-sidebar {
+      padding: 24px;
+      background: #fafafa;
+      overflow-y: auto;
+      max-height: 60vh;
+    }
+
+    .detail-section {
+      margin-bottom: 24px;
+    }
+
+    .detail-section h3 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e4e6e8;
+    }
+
     .detail-row {
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .detail-row label {
@@ -442,7 +672,7 @@
       color: #6b7280;
       display: block;
       margin-bottom: 6px;
-      font-size: 12px;
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -453,47 +683,193 @@
       font-size: 14px;
     }
 
-    .action-buttons {
-      display: flex;
-      gap: 12px;
-      margin-top: 24px;
+    /* 活動時間軸 */
+    .timeline {
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #e5e7eb;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: 20px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -18px;
+      top: 4px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #03363d;
+      border: 2px solid white;
+    }
+
+    .timeline-item.public::before {
+      background: #059669;
+    }
+
+    .timeline-item.internal::before {
+      background: #d97706;
+    }
+
+    .timeline-time {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+
+    .timeline-content {
+      background: white;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #e4e6e8;
+    }
+
+    .timeline-author {
+      font-weight: 600;
+      font-size: 13px;
+      color: #1f2937;
+      margin-bottom: 4px;
+    }
+
+    .timeline-text {
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+
+    .internal-note {
+      background: #fffbeb;
+      border-color: #fcd34d;
+    }
+
+    .internal-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      background: #d97706;
+      color: white;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    /* 表單區域 */
+    .comment-form {
+      margin-top: 20px;
       padding-top: 20px;
       border-top: 1px solid #e4e6e8;
     }
 
-    @media (max-width: 1024px) {
+    .comment-form textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 80px;
+      margin-bottom: 12px;
+    }
+
+    .comment-form textarea:focus {
+      outline: none;
+      border-color: #03363d;
+      box-shadow: 0 0 0 3px rgba(3, 54, 61, 0.1);
+    }
+
+    .comment-options {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #6b7280;
+      cursor: pointer;
+    }
+
+    .action-bar {
+      display: flex;
+      gap: 12px;
+      padding: 16px 24px;
+      border-top: 1px solid #e4e6e8;
+      background: #fafafa;
+    }
+
+    /* 響應式設計 */
+    @media (max-width: 1200px) {
       .main-content {
         grid-template-columns: 1fr;
       }
       
-      .form-card {
-        position: static;
+      .sidebar {
+        order: -1;
+      }
+
+      .modal-body {
+        grid-template-columns: 1fr;
+      }
+
+      .ticket-detail-sidebar {
+        border-top: 1px solid #e4e6e8;
       }
     }
 
     @media (max-width: 768px) {
       .navbar {
-        padding: 12px 16px;
+        padding: 10px 16px;
       }
 
       .navbar-brand h1 {
-        font-size: 16px;
+        font-size: 15px;
+      }
+
+      .navbar-brand .subtitle {
+        display: none;
       }
 
       .container {
-        padding: 16px;
+        padding: 12px;
       }
 
       .stats-container {
         grid-template-columns: repeat(2, 1fr);
       }
 
-      .filters {
+      .toolbar {
         flex-direction: column;
       }
 
-      .filters input {
+      .search-box {
         min-width: 100%;
+      }
+
+      .ticket-table {
+        font-size: 12px;
+      }
+
+      .ticket-table th,
+      .ticket-table td {
+        padding: 10px 12px;
       }
     }
   </style>
@@ -511,6 +887,27 @@
   </nav>
 
   <div class="container">
+    <!-- Zendesk-style 視圖切換器 -->
+    <div class="views-container">
+      <div class="views-tabs">
+        <button class="view-tab active" data-view="all">
+          📋 所有求助單 <span class="count" id="countAll">0</span>
+        </button>
+        <button class="view-tab" data-view="open">
+          ⏳ 待處理 <span class="count" id="countOpen">0</span>
+        </button>
+        <button class="view-tab" data-view="in_progress">
+          🔄 跟進中 <span class="count" id="countInProgress">0</span>
+        </button>
+        <button class="view-tab" data-view="resolved">
+          ✅ 已解決 <span class="count" id="countResolved">0</span>
+        </button>
+        <button class="view-tab" data-view="my_tickets">
+          👤 我的求助單 <span class="count" id="countMyTickets">0</span>
+        </button>
+      </div>
+    </div>
+
     <div class="stats-container" id="statsContainer">
       <!-- 統計卡片將由 JavaScript 動態生成 -->
     </div>
@@ -519,42 +916,84 @@
       <div class="tickets-section">
         <div class="section-header">
           <h2>📋 求助單列表</h2>
+          <button class="btn btn-primary" onclick="scrollToCreate()">➕ 新建求助單</button>
         </div>
 
-        <div class="filters">
-          <input type="text" id="searchInput" placeholder="🔍 搜尋求助單...">
-          <select id="statusFilter">
-            <option value="">全部狀態</option>
-            <option value="open">待處理</option>
-            <option value="in_progress">跟進中</option>
-            <option value="resolved">已解決</option>
-            <option value="closed">已關閉</option>
-          </select>
-          <select id="priorityFilter">
-            <option value="">全部優先級</option>
-            <option value="urgent">緊急</option>
-            <option value="high">高</option>
-            <option value="medium">中</option>
-            <option value="low">低</option>
-          </select>
-          <select id="categoryFilter">
-            <option value="">全部分類</option>
-            <option value="hardware">硬件問題</option>
-            <option value="software">軟件問題</option>
-            <option value="network">網絡問題</option>
-            <option value="account">帳號權限</option>
-            <option value="email">電郵系統</option>
-            <option value="other">其他</option>
-          </select>
+        <div class="toolbar">
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="搜尋求助單編號、標題或申請人...">
+          </div>
+          <div class="filters">
+            <select id="statusFilter">
+              <option value="">全部狀態</option>
+              <option value="open">待處理</option>
+              <option value="in_progress">跟進中</option>
+              <option value="resolved">已解決</option>
+              <option value="closed">已關閉</option>
+            </select>
+            <select id="priorityFilter">
+              <option value="">全部優先級</option>
+              <option value="urgent">緊急</option>
+              <option value="high">高</option>
+              <option value="medium">中</option>
+              <option value="low">低</option>
+            </select>
+            <select id="categoryFilter">
+              <option value="">全部分類</option>
+              <option value="hardware">硬件問題</option>
+              <option value="software">軟件問題</option>
+              <option value="network">網絡問題</option>
+              <option value="account">帳號權限</option>
+              <option value="email">電郵系統</option>
+              <option value="other">其他</option>
+            </select>
+          </div>
         </div>
 
-        <div class="ticket-list" id="ticketList">
-          <!-- 求助單列表將由 JavaScript 動態生成 -->
-        </div>
+        <table class="ticket-table">
+          <thead>
+            <tr>
+              <th width="80">編號</th>
+              <th>標題</th>
+              <th width="120">申請人</th>
+              <th width="100">分類</th>
+              <th width="80">優先級</th>
+              <th width="100">狀態</th>
+              <th width="120">負責人</th>
+              <th width="100">SLA</th>
+            </tr>
+          </thead>
+          <tbody id="ticketList">
+            <!-- 求助單列表將由 JavaScript 動態生成 -->
+          </tbody>
+        </table>
       </div>
 
       <div class="sidebar">
-        <div class="form-card">
+        <!-- 快速統計 -->
+        <div class="quick-actions">
+          <h3>📊 快速統計</h3>
+          <div class="quick-stats">
+            <div class="quick-stat">
+              <div class="value" id="quickOpen">0</div>
+              <div class="label">待處理</div>
+            </div>
+            <div class="quick-stat">
+              <div class="value" id="quickInProgress">0</div>
+              <div class="label">跟進中</div>
+            </div>
+            <div class="quick-stat">
+              <div class="value" id="quickUrgent">0</div>
+              <div class="label">緊急</div>
+            </div>
+            <div class="quick-stat">
+              <div class="value" id="quickToday">0</div>
+              <div class="label">今日新增</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card" id="createForm">
           <h3>➕ 創建新求助單</h3>
           <form id="createTicketForm">
             <div class="form-group">
@@ -602,29 +1041,113 @@
     </div>
   </div>
 
-  <!-- 求助單詳情 Modal -->
+  <!-- 求助單詳情 Modal - Zendesk 風格 -->
   <div class="modal" id="ticketModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 id="modalTitle">求助單詳情</h2>
+        <h2 id="modalTitle"><span id="modalTicketId"></span> <span id="modalTicketTitle"></span></h2>
         <button class="close-btn" onclick="closeModal()">&times;</button>
       </div>
-      <div id="modalBody">
-        <!-- 詳情內容將由 JavaScript 動態生成 -->
+      <div class="modal-body">
+        <div class="ticket-detail-main">
+          <div class="detail-section">
+            <h3>📝 問題描述</h3>
+            <p id="modalDescription" style="line-height: 1.8; white-space: pre-wrap;"></p>
+          </div>
+          
+          <!-- 活動時間軸 -->
+          <div class="detail-section">
+            <h3>📅 活動記錄</h3>
+            <div class="timeline" id="modalTimeline">
+              <!-- 時間軸項目將由 JavaScript 動態生成 -->
+            </div>
+          </div>
+
+          <!-- 評論表單 -->
+          <div class="comment-form">
+            <h3>💬 添加回覆</h3>
+            <textarea id="commentText" placeholder="輸入您的回覆..."></textarea>
+            <div class="comment-options">
+              <label class="checkbox-label">
+                <input type="checkbox" id="isInternalNote">
+                內部備註 (申請人不可見)
+              </label>
+            </div>
+            <button class="btn btn-primary" onclick="addComment()">提交回覆</button>
+          </div>
+        </div>
+        
+        <div class="ticket-detail-sidebar">
+          <div class="detail-section">
+            <h3>📋 求助單資訊</h3>
+            <div class="detail-row">
+              <label>編號</label>
+              <p id="detailId"></p>
+            </div>
+            <div class="detail-row">
+              <label>狀態</label>
+              <p><span id="detailStatus" class="badge"></span></p>
+            </div>
+            <div class="detail-row">
+              <label>優先級</label>
+              <p><span id="detailPriority" class="badge"></span></p>
+            </div>
+            <div class="detail-row">
+              <label>分類</label>
+              <p id="detailCategory"></p>
+            </div>
+            <div class="detail-row">
+              <label>申請人</label>
+              <p id="detailSubmitter"></p>
+            </div>
+            <div class="detail-row">
+              <label>部門</label>
+              <p id="detailDepartment"></p>
+            </div>
+            <div class="detail-row">
+              <label>負責人</label>
+              <p id="detailAssignee">尚未指派</p>
+            </div>
+            <div class="detail-row">
+              <label>創建時間</label>
+              <p id="detailCreatedAt"></p>
+            </div>
+            <div class="detail-row">
+              <label>最後更新</label>
+              <p id="detailUpdatedAt"></p>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h3>⚡ 快速操作</h3>
+            <div style="display: flex; flex-direction: column; gap: 8px;" id="quickActions">
+              <!-- 快速操作按鈕將由 JavaScript 動態生成 -->
+            </div>
+          </div>
+
+          <div class="detail-section" id="resolutionSection" style="display: none;">
+            <h3>✅ 解決方案</h3>
+            <p id="detailResolution" style="white-space: pre-wrap;"></p>
+          </div>
+        </div>
       </div>
-      <div class="action-buttons" id="modalActions">
-        <!-- 操作按鈕將由 JavaScript 動態生成 -->
+      <div class="action-bar">
+        <button class="btn btn-secondary" onclick="closeModal()">關閉</button>
+        <button class="btn btn-danger" onclick="deleteCurrentTicket()">刪除求助單</button>
       </div>
     </div>
   </div>
 
   <script>
     const API_BASE = 'http://localhost:3001/api';
+    let currentView = 'all';
+    let currentTicketId = null;
 
     // 載入數據
     async function loadData() {
       await loadStats();
       await loadTickets();
+      updateViewCounts();
     }
 
     // 載入統計數據
@@ -653,12 +1176,40 @@
         `;
         
         document.getElementById('statsContainer').innerHTML = statsHTML;
+        
+        // 更新快速統計
+        document.getElementById('quickOpen').textContent = stats.open;
+        document.getElementById('quickInProgress').textContent = stats.inProgress;
+        document.getElementById('quickUrgent').textContent = stats.byPriority?.urgent || 0;
+        
+        // 計算今日新增 (簡單實現)
+        const today = new Date().toDateString();
+        const ticketsResponse = await fetch(`${API_BASE}/tickets`);
+        const allTickets = await ticketsResponse.json();
+        const todayCount = allTickets.filter(t => new Date(t.createdAt).toDateString() === today).length;
+        document.getElementById('quickToday').textContent = todayCount;
       } catch (error) {
         console.error('載入統計數據失敗:', error);
       }
     }
 
-    // 載入求助單列表
+    // 更新視圖計數
+    async function updateViewCounts() {
+      try {
+        const response = await fetch(`${API_BASE}/tickets`);
+        const tickets = await response.json();
+        
+        document.getElementById('countAll').textContent = tickets.length;
+        document.getElementById('countOpen').textContent = tickets.filter(t => t.status === 'open').length;
+        document.getElementById('countInProgress').textContent = tickets.filter(t => t.status === 'in_progress').length;
+        document.getElementById('countResolved').textContent = tickets.filter(t => t.status === 'resolved').length;
+        document.getElementById('countMyTickets').textContent = tickets.length; // 簡化實現
+      } catch (error) {
+        console.error('更新視圖計數失敗:', error);
+      }
+    }
+
+    // 載入求助單列表 - 表格形式
     async function loadTickets() {
       try {
         const search = document.getElementById('searchInput').value;
@@ -675,89 +1226,116 @@
         const response = await fetch(url);
         const tickets = await response.json();
 
-        const ticketListHTML = tickets.map(ticket => `
-          <div class="ticket-item" onclick="showTicketDetail('${ticket.id}')">
-            <div class="ticket-header">
-              <span class="ticket-id">${ticket.id}</span>
-              <span class="badge badge-${ticket.status}">${getStatusLabel(ticket.status)}</span>
-            </div>
-            <div class="ticket-title">${ticket.title}</div>
-            <div class="ticket-meta">
-              <span class="badge priority-${ticket.priority}">${getPriorityLabel(ticket.priority)}</span>
-              <span>📁 ${getCategoryLabel(ticket.category)}</span>
-              <span>👤 ${ticket.submittedBy}</span>
-              <span>📅 ${formatDate(ticket.createdAt)}</span>
-            </div>
-          </div>
-        `).join('');
+        const ticketRowsHTML = tickets.map(ticket => {
+          const slaClass = getSLAClass(ticket.createdAt);
+          const slaText = getSLAText(ticket.createdAt);
+          const assigneeDisplay = ticket.assignedTo 
+            ? `<span class="avatar">${getInitials(ticket.assignedTo)}</span>${ticket.assignedTo.split('-')[0].trim()}`
+            : '<span style="color:#9ca3af;">未指派</span>';
+          
+          return `
+            <tr class="ticket-row" onclick="showTicketDetail('${ticket.id}')">
+              <td><span class="ticket-cell-id">${ticket.id}</span></td>
+              <td><span class="ticket-cell-title">${ticket.title}</span></td>
+              <td><span class="ticket-cell-submitter">${ticket.submittedBy}</span></td>
+              <td><span class="tag">${getCategoryLabel(ticket.category)}</span></td>
+              <td><span class="badge priority-${ticket.priority}">${getPriorityLabel(ticket.priority)}</span></td>
+              <td><span class="badge badge-${ticket.status}">${getStatusLabel(ticket.status)}</span></td>
+              <td><span class="ticket-cell-assignee">${assigneeDisplay}</span></td>
+              <td><span class="sla-indicator ${slaClass}">${slaText}</span></td>
+            </tr>
+          `;
+        }).join('');
 
-        document.getElementById('ticketList').innerHTML = ticketListHTML || '<p style="text-align:center;color:#999;padding:40px;">暫無求助單</p>';
+        document.getElementById('ticketList').innerHTML = ticketRowsHTML || '<tr><td colspan="8" style="text-align:center;color:#999;padding:40px;">暫無求助單</td></tr>';
       } catch (error) {
         console.error('載入求助單失敗:', error);
-        document.getElementById('ticketList').innerHTML = '<p style="text-align:center;color:#dc3545;padding:40px;">載入失敗，請確保後端伺服器正在運行</p>';
+        document.getElementById('ticketList').innerHTML = '<tr><td colspan="8" style="text-align:center;color:#dc3545;padding:40px;">載入失敗，請確保後端伺服器正在運行</td></tr>';
       }
     }
 
-    // 顯示求助單詳情
+    // 獲取 SLA 狀態
+    function getSLAClass(createdAt) {
+      const now = new Date();
+      const created = new Date(createdAt);
+      const hoursDiff = (now - created) / (1000 * 60 * 60);
+      
+      if (hoursDiff < 24) return 'sla-good';
+      if (hoursDiff < 48) return 'sla-warning';
+      return 'sla-breach';
+    }
+
+    function getSLAText(createdAt) {
+      const now = new Date();
+      const created = new Date(createdAt);
+      const hoursDiff = Math.floor((now - created) / (1000 * 60 * 60));
+      
+      if (hoursDiff < 1) return '剛剛';
+      if (hoursDiff < 24) return `${hoursDiff}小時`;
+      const daysDiff = Math.floor(hoursDiff / 24);
+      return `${daysDiff}天`;
+    }
+
+    // 獲取姓名首字母
+    function getInitials(name) {
+      return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    // 滾動到創建表單
+    function scrollToCreate() {
+      document.getElementById('createForm').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 顯示求助單詳情 - Zendesk 風格
     async function showTicketDetail(ticketId) {
+      currentTicketId = ticketId;
       try {
         const response = await fetch(`${API_BASE}/tickets/${ticketId}`);
         const ticket = await response.json();
 
-        document.getElementById('modalTitle').textContent = `${ticket.id} - ${ticket.title}`;
+        document.getElementById('modalTicketId').textContent = ticket.id;
+        document.getElementById('modalTicketTitle').textContent = ticket.title;
+        document.getElementById('modalDescription').textContent = ticket.description;
         
-        document.getElementById('modalBody').innerHTML = `
-          <div class="detail-row">
-            <label>狀態</label>
-            <p><span class="badge badge-${ticket.status}">${getStatusLabel(ticket.status)}</span></p>
-          </div>
-          <div class="detail-row">
-            <label>優先級</label>
-            <p><span class="badge priority-${ticket.priority}">${getPriorityLabel(ticket.priority)}</span></p>
-          </div>
-          <div class="detail-row">
-            <label>分類</label>
-            <p>${getCategoryLabel(ticket.category)}</p>
-          </div>
-          <div class="detail-row">
-            <label>描述</label>
-            <p>${ticket.description}</p>
-          </div>
-          <div class="detail-row">
-            <label>申請人</label>
-            <p>${ticket.submittedBy} ${ticket.department ? `(${ticket.department})` : ''}</p>
-          </div>
-          <div class="detail-row">
-            <label>創建時間</label>
-            <p>${formatDate(ticket.createdAt)}</p>
-          </div>
-          <div class="detail-row">
-            <label>最後更新</label>
-            <p>${formatDate(ticket.updatedAt)}</p>
-          </div>
-          ${ticket.assignedTo ? `
-          <div class="detail-row">
-            <label>負責人</label>
-            <p>${ticket.assignedTo}</p>
-          </div>
-          ` : ''}
-          ${ticket.resolution ? `
-          <div class="detail-row">
-            <label>解決方案</label>
-            <p>${ticket.resolution}</p>
-          </div>
-          ` : ''}
-        `;
+        // 填充側邊欄資訊
+        document.getElementById('detailId').textContent = ticket.id;
+        document.getElementById('detailStatus').textContent = getStatusLabel(ticket.status);
+        document.getElementById('detailStatus').className = `badge badge-${ticket.status}`;
+        document.getElementById('detailPriority').textContent = getPriorityLabel(ticket.priority);
+        document.getElementById('detailPriority').className = `badge priority-${ticket.priority}`;
+        document.getElementById('detailCategory').textContent = getCategoryLabel(ticket.category);
+        document.getElementById('detailSubmitter').textContent = ticket.submittedBy;
+        document.getElementById('detailDepartment').textContent = ticket.department || '未填寫';
+        document.getElementById('detailAssignee').textContent = ticket.assignedTo || '尚未指派';
+        document.getElementById('detailCreatedAt').textContent = formatDate(ticket.createdAt);
+        document.getElementById('detailUpdatedAt').textContent = formatDate(ticket.updatedAt);
+        
+        // 解決方案
+        if (ticket.resolution) {
+          document.getElementById('resolutionSection').style.display = 'block';
+          document.getElementById('detailResolution').textContent = ticket.resolution;
+        } else {
+          document.getElementById('resolutionSection').style.display = 'none';
+        }
 
-        document.getElementById('modalActions').innerHTML = `
-          ${ticket.status === 'open' ? `
-            <button class="btn btn-warning" onclick="updateTicketStatus('${ticket.id}', 'in_progress')">開始跟進</button>
-          ` : ''}
-          ${ticket.status === 'in_progress' ? `
-            <button class="btn btn-success" onclick="resolveTicket('${ticket.id}')">標記為已解決</button>
-          ` : ''}
-          <button class="btn btn-danger" onclick="deleteTicket('${ticket.id}')">刪除求助單</button>
-        `;
+        // 生成時間軸
+        const timelineHTML = generateTimeline(ticket);
+        document.getElementById('modalTimeline').innerHTML = timelineHTML;
+
+        // 快速操作按鈕
+        let quickActionsHTML = '';
+        if (ticket.status === 'open') {
+          quickActionsHTML += `<button class="btn btn-warning" onclick="updateTicketStatus('${ticket.id}', 'in_progress')">🔄 開始跟進</button>`;
+        }
+        if (ticket.status === 'in_progress') {
+          quickActionsHTML += `<button class="btn btn-success" onclick="resolveTicketPrompt('${ticket.id}')">✅ 標記為已解決</button>`;
+        }
+        if (!ticket.assignedTo) {
+          quickActionsHTML += `<button class="btn btn-secondary" onclick="assignToMe('${ticket.id}')">👤 指派給我</button>`;
+        }
+        quickActionsHTML += `<button class="btn btn-secondary" onclick="closeModal()">關閉</button>`;
+        
+        document.getElementById('quickActions').innerHTML = quickActionsHTML;
 
         document.getElementById('ticketModal').classList.add('active');
       } catch (error) {
@@ -766,9 +1344,89 @@
       }
     }
 
+    // 生成時間軸
+    function generateTimeline(ticket) {
+      let html = `
+        <div class="timeline-item public">
+          <div class="timeline-time">${formatDate(ticket.createdAt)}</div>
+          <div class="timeline-content">
+            <div class="timeline-author">${ticket.submittedBy} 創建了求助單</div>
+            <div class="timeline-text">${ticket.description}</div>
+          </div>
+        </div>
+      `;
+
+      if (ticket.assignedTo) {
+        html += `
+          <div class="timeline-item internal">
+            <div class="timeline-time">${formatDate(ticket.updatedAt)}</div>
+            <div class="timeline-content">
+              <div class="timeline-author">${ticket.assignedTo} 被指派為負責人</div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (ticket.status === 'in_progress') {
+        html += `
+          <div class="timeline-item internal">
+            <div class="timeline-time">${formatDate(ticket.updatedAt)}</div>
+            <div class="timeline-content">
+              <div class="timeline-author">狀態變更為「跟進中」</div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (ticket.resolution) {
+        html += `
+          <div class="timeline-item public">
+            <div class="timeline-time">${formatDate(ticket.updatedAt)}</div>
+            <div class="timeline-content">
+              <div class="timeline-author">已解決</div>
+              <div class="timeline-text">${ticket.resolution}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      return html;
+    }
+
     // 關閉 Modal
     function closeModal() {
       document.getElementById('ticketModal').classList.remove('active');
+    }
+
+    // 添加評論 (模擬)
+    function addComment() {
+      const commentText = document.getElementById('commentText').value;
+      const isInternal = document.getElementById('isInternalNote').checked;
+      
+      if (!commentText.trim()) {
+        alert('請輸入回覆內容');
+        return;
+      }
+
+      // 這裡可以添加 API 調用來保存評論
+      alert(isInternal ? '內部備註已添加' : '回覆已發送給申請人');
+      document.getElementById('commentText').value = '';
+    }
+
+    // 指派給我
+    async function assignToMe(ticketId) {
+      try {
+        await fetch(`${API_BASE}/tickets/${ticketId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ assignedTo: '當前用戶' })
+        });
+        closeModal();
+        await loadData();
+      } catch (error) {
+        console.error('指派失敗:', error);
+        alert('指派失敗');
+      }
     }
 
     // 更新求助單狀態
@@ -787,30 +1445,35 @@
       }
     }
 
-    // 解決求助單
-    async function resolveTicket(ticketId) {
+    // 解決求助單 (提示框)
+    function resolveTicketPrompt(ticketId) {
       const resolution = prompt('請輸入解決方案:');
       if (resolution) {
-        try {
-          await fetch(`${API_BASE}/tickets/${ticketId}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ status: 'resolved', resolution })
-          });
-          closeModal();
-          await loadData();
-        } catch (error) {
-          console.error('解決求助單失敗:', error);
-          alert('解決求助單失敗');
-        }
+        resolveTicket(ticketId, resolution);
       }
     }
 
-    // 刪除求助單
-    async function deleteTicket(ticketId) {
-      if (confirm('確定要刪除此求助單嗎？')) {
+    // 解決求助單
+    async function resolveTicket(ticketId, resolution) {
+      try {
+        await fetch(`${API_BASE}/tickets/${ticketId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'resolved', resolution })
+        });
+        closeModal();
+        await loadData();
+      } catch (error) {
+        console.error('解決求助單失敗:', error);
+        alert('解決求助單失敗');
+      }
+    }
+
+    // 刪除當前求助單
+    async function deleteCurrentTicket() {
+      if (currentTicketId && confirm('確定要刪除此求助單嗎？')) {
         try {
-          await fetch(`${API_BASE}/tickets/${ticketId}`, {
+          await fetch(`${API_BASE}/tickets/${currentTicketId}`, {
             method: 'DELETE'
           });
           closeModal();
@@ -820,6 +1483,11 @@
           alert('刪除求助單失敗');
         }
       }
+    }
+
+    // 舊的刪除函數保留兼容性
+    async function deleteTicket(ticketId) {
+      deleteCurrentTicket();
     }
 
     // 創建求助單表單提交
@@ -859,6 +1527,21 @@
     ['searchInput', 'statusFilter', 'priorityFilter', 'categoryFilter'].forEach(id => {
       document.getElementById(id).addEventListener('change', loadTickets);
       document.getElementById(id).addEventListener('input', loadTickets);
+    });
+
+    // 視圖切換器
+    document.querySelectorAll('.view-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentView = tab.dataset.view;
+        
+        // 根據視圖過濾
+        if (currentView !== 'all') {
+          document.getElementById('statusFilter').value = currentView === 'my_tickets' ? '' : currentView;
+        }
+        loadTickets();
+      });
     });
 
     // 輔助函數

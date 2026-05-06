@@ -225,6 +225,78 @@ app.get('/api/options', (req, res) => {
   });
 });
 
+// AI 分析工單分類和優先級
+app.post('/api/analyze-ticket', (req, res) => {
+  const { title, description } = req.body;
+  
+  if (!title || !description) {
+    return res.status(400).json({ error: '缺少標題或描述' });
+  }
+  
+  const text = `${title} ${description}`.toLowerCase();
+  
+  // 簡單的基於規則的 AI 分析（可替換為真實的 AI API）
+  let category = 'other';
+  let priority = 'medium';
+  let confidence = 0.7;
+  let reasoning = [];
+  
+  // 分類分析 (按特定性排序，更具體的分類在前)
+  const emailKeywords = ['電郵', 'email', 'outlook', '郵件', '信箱'];
+  const accountKeywords = ['帳號', '密碼', 'login', 'account', '權限', '登入', '重設'];
+  const networkKeywords = ['網絡', 'wifi', 'internet', 'network', '連線', '斷線', 'ip'];
+  const softwareKeywords = ['軟件', '程式', 'application', 'software', '安裝', '更新', 'version'];
+  const hardwareKeywords = ['電腦', '硬件', 'printer', '投影機', '螢幕', '鍵盤', '滑鼠', 'hardware', 'computer', 'device'];
+  
+  if (emailKeywords.some(k => text.includes(k))) {
+    category = 'email';
+    reasoning.push('檢測到電郵系統相關關鍵詞');
+  } else if (accountKeywords.some(k => text.includes(k))) {
+    category = 'account';
+    reasoning.push('檢測到帳號相關關鍵詞');
+  } else if (networkKeywords.some(k => text.includes(k))) {
+    category = 'network';
+    reasoning.push('檢測到網絡相關關鍵詞');
+  } else if (softwareKeywords.some(k => text.includes(k))) {
+    category = 'software';
+    reasoning.push('檢測到軟件相關關鍵詞');
+  } else if (hardwareKeywords.some(k => text.includes(k))) {
+    category = 'hardware';
+    reasoning.push('檢測到硬件相關關鍵詞');
+  }
+  
+  // 優先級分析
+  const urgentKeywords = ['緊急', 'urgent', '無法運作', '完全不能用', '影響考試', '影響教學', '全部', 'every', 'all'];
+  const highKeywords = ['重要', 'high', '盡快', '急', '嚴重', 'critical'];
+  const lowKeywords = ['低', 'low', '有空再處理', '不急', 'minor'];
+  
+  if (urgentKeywords.some(k => text.includes(k))) {
+    priority = 'urgent';
+    reasoning.push('檢測到緊急情況關鍵詞');
+    confidence = 0.9;
+  } else if (highKeywords.some(k => text.includes(k))) {
+    priority = 'high';
+    reasoning.push('檢測到高優先級關鍵詞');
+    confidence = 0.8;
+  } else if (lowKeywords.some(k => text.includes(k))) {
+    priority = 'low';
+    reasoning.push('檢測到低優先級關鍵詞');
+    confidence = 0.85;
+  }
+  
+  // 如果沒有明確的關鍵詞，提供默認推理
+  if (reasoning.length === 0) {
+    reasoning.push('基於問題描述進行默認分類');
+  }
+  
+  res.json({
+    category,
+    priority,
+    confidence,
+    reasoning: reasoning.join('; ')
+  });
+});
+
 // 啟動伺服器
 app.listen(PORT, () => {
   console.log(`🚀 香港學校 IT Service Desk API 運行中...`);
@@ -237,4 +309,5 @@ app.listen(PORT, () => {
   console.log(`   DELETE /api/tickets/:id  - 刪除工單`);
   console.log(`   GET    /api/stats        - 獲取統計數據`);
   console.log(`   GET    /api/options      - 獲取選項列表`);
+  console.log(`   POST   /api/analyze-ticket - AI 分析工單分類和優先級`);
 });

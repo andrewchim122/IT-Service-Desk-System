@@ -500,57 +500,134 @@
       'TKT-2024-008':[{id:'act1',type:'public',author:'鄭國華老師',text:'提交求助單：學校網站無法訪問',timestamp:new Date(Date.now()-1*3600*1000).toISOString()},{id:'act2',type:'internal',author:'張偉強',text:'檢查緊伺服器，睇下係咪防火牆設定問題',timestamp:new Date(Date.now()-45*60*1000).toISOString()},{id:'act3',type:'public',author:'張偉強',text:'正在重設防火牆規則，預計 15 分鐘內恢復',timestamp:new Date(Date.now()-30*60*1000).toISOString()}]
     };
 
-    // ========== AI 分析引擎 ==========
-    // 純前端 rule-based，無需 API key，適合 GitHub Pages 靜態部署
+
+    // ========== 改良版 AI 分析引擎 v2 ==========
+    // 多維度加權評分系統，同時分析 title + description
     let aiDebounceTimer = null;
     let currentAiCategory = '';
     let currentAiPriority = '';
     let overrideMode = false;
 
+    // 每條 rule 包含 high-weight (2分) 同 normal-weight (1分) patterns
     const categoryRules = [
-      { key:'network', weight:0, patterns:[/wi-?fi/i,/網絡/,/斷線/,/連線/,/路由/,/internet/i,/網站/,/伺服器/,/dns/i,/ip/i,/vpn/i,/bandwidth/i,/頻寬/] },
-      { key:'software', weight:0, patterns:[/軟件/,/安裝/,/程式/,/app/i,/系統更新/,/virus/i,/病毒/,/adobe/i,/office/i,/windows/i,/driver/i,/驅動/,/授權/,/license/i] },
-      { key:'account', weight:0, patterns:[/密碼/,/帳號/,/帳戶/,/登入/,/login/i,/password/i,/權限/,/access/i,/鎖定/,/unlock/i,/email.*帳/,/用戶名/] },
-      { key:'email', weight:0, patterns:[/電郵/,/email/i,/outlook/i,/gmail/i,/郵件/,/收件/,/發件/,/smtp/i,/imap/i] },
-      { key:'hardware', weight:0, patterns:[/電腦/,/開機/,/重啟/,/硬件/,/螢幕/,/鍵盤/,/滑鼠/,/列印機/,/打印機/,/投影機/,/音響/,/麥克風/,/相機/,/掃描/,/白板/,/觸控/,/空調/,/遙控/,/usb/i,/hdmi/i,/電池/,/充電/,/卡紙/] }
+      {
+        key: 'network',
+        label: '網絡問題',
+        high: [/wi-?fi.*斷/i, /斷.*wi-?fi/i, /無法.*上網/i, /上網.*問題/i, /網絡.*中斷/i, /連線.*失敗/i, /internet.*down/i, /網站.*無法訪問/i, /伺服器.*無法/i, /dns.*失敗/i, /ip.*衝突/i, /網絡.*全/i],
+        normal: [/wi-?fi/i, /網絡/,/斷線/,/連線/,/路由器/,/router/i,/internet/i,/網站/,/伺服器/,/server/i,/dns/i,/ip.?地址/i,/vpn/i,/頻寬/,/bandwidth/i,/交換機/,/switch/i,/網線/,/ethernet/i,/ping/i,/timeout/i,/超時/,/防火牆/,/firewall/i,/proxy/i,/port/i,/埠/]
+      },
+      {
+        key: 'software',
+        label: '軟件問題',
+        high: [/系統.*崩潰/i,/軟件.*無法.*開啟/i,/程式.*停止/i,/藍屏/,/blue.*screen/i,/程式.*錯誤/i,/無法.*安裝/i,/安裝.*失敗/i,/病毒.*感染/i,/木馬/i],
+        normal: [/軟件/,/安裝/,/程式/,/application/i,/app/i,/系統更新/,/update/i,/升級/,/virus/i,/病毒/,/malware/i,/adobe/i,/office/i,/word/i,/excel/i,/powerpoint/i,/windows/i,/macos/i,/driver/i,/驅動/,/授權/,/license/i,/activate/i,/激活/,/crack/i,/破解/,/解除安裝/,/uninstall/i,/設定/,/setting/i,/配置/,/config/i,/browser/i,/瀏覽器/,/chrome/i,/firefox/i,/edge/i,/java/i,/python/i,/軟件版本/,/software/i]
+      },
+      {
+        key: 'account',
+        label: '帳號權限',
+        high: [/密碼.*忘記/,/忘記.*密碼/,/帳號.*鎖定/,/無法.*登入/,/login.*fail/i,/帳號.*停用/,/權限.*被拒/,/access.*denied/i],
+        normal: [/密碼/,/password/i,/帳號/,/帳戶/,/account/i,/登入/,/login/i,/logout/i,/sign.*in/i,/權限/,/permission/i,/access/i,/鎖定/,/unlock/i,/reset.*password/i,/用戶名/,/username/i,/profile/i,/ad.*帳/,/active.*directory/i,/ldap/i,/sso/i,/兩步/,/2fa/i,/驗證碼/,/otp/i]
+      },
+      {
+        key: 'email',
+        label: '電郵系統',
+        high: [/電郵.*無法.*收/,/電郵.*無法.*發/,/郵件.*伺服器.*錯誤/,/outlook.*無法.*連/,/gmail.*問題/,/郵箱.*已滿/,/email.*bounce/i],
+        normal: [/電郵/,/email/i,/e-?mail/i,/outlook/i,/gmail/i,/yahoo.*mail/i,/郵件/,/收件/,/發件/,/smtp/i,/imap/i,/pop3/i,/郵箱/,/mailbox/i,/附件/,/attachment/i,/spam/i,/垃圾郵件/,/郵件清單/,/mailing.*list/i,/calendar/i,/日曆/,/會議邀請/,/meeting.*invite/i]
+      },
+      {
+        key: 'hardware',
+        label: '硬件問題',
+        high: [/電腦.*無法.*開機/,/開機.*無反應/,/螢幕.*無顯示/,/黑屏/,/藍屏/,/鍵盤.*失靈/,/滑鼠.*無反應/,/列印機.*卡紙/,/投影機.*無信號/,/音響.*無聲/,/麥克風.*無效/,/硬碟.*損壞/,/usb.*無法識別/i],
+        normal: [/電腦/,/開機/,/重啟/,/硬件/,/hardware/i,/螢幕/,/monitor/i,/screen/i,/鍵盤/,/keyboard/i,/滑鼠/,/mouse/i,/列印機/,/打印機/,/printer/i,/投影機/,/projector/i,/音響/,/speaker/i,/麥克風/,/microphone/i,/mic/i,/相機/,/camera/i,/webcam/i,/掃描/,/scanner/i,/白板/,/whiteboard/i,/觸控/,/touch/i,/空調/,/air.*con/i,/遙控/,/remote/i,/usb/i,/hdmi/i,/電池/,/battery/i,/充電/,/charge/i,/卡紙/,/jam/i,/硬碟/,/hard.*drive/i,/ssd/i,/ram/i,/記憶體/,/cpu/i,/處理器/,/風扇/,/fan/i,/過熱/,/overheat/i,/電源/,/power/i,/UPS/i,/網卡/,/NIC/i,/顯示卡/,/GPU/i]
+      }
     ];
 
-    const urgentPatterns = [/緊急/,/urgent/i,/立即/,/即刻/,/今[天日]/,/today/i,/asap/i,/非常急/,/典禮/,/考試/,/公開課/,/校長/,/視察/,/明[天日]/,/明早/];
-    const highPatterns = [/嚴重/,/影響.*教學/,/全[班級校]/,/所有.*用戶/,/無法.*使用/,/完全/,/大範圍/,/多個/,/反覆/,/持續/,/重要/,/需要.*盡快/];
-    const lowPatterns = [/申請/,/安裝.*新/,/更換.*電池/,/個人/,/方便時/,/不急/,/低優先/,/建議/,/希望/,/如果可以/];
+    // 優先級：三個維度獨立評分後疊加
+    const priorityDimensions = {
+      // 緊迫性
+      urgency: {
+        urgent: [/緊急/,/urgent/i,/立即/,/即刻/,/今[天日].*必須/,/asap/i,/非常急/,/馬上/,/越快越好/,/即時/],
+        high:   [/今[天日]/,/today/i,/明[天日]/,/tomorrow/i,/盡快/,/盡早/,/需要.*快/,/要求.*快/],
+        low:    [/不急/,/方便時/,/有空/,/慢慢/,/隨時/,/有時間/,/低優先/,/no.*rush/i]
+      },
+      // 影響範圍
+      impact: {
+        urgent: [/全[校班級]/,/所有.*用戶/,/整個.*系統/,/全部.*電腦/,/全體/,/大規模/,/全面/],
+        high:   [/多個/,/多人/,/大部分/,/整[個班]/,/影響.*教學/,/影響.*運作/,/無法.*使用/,/完全.*停止/],
+        low:    [/個人/,/自己/,/一台/,/單一/,/我[的���]/]
+      },
+      // 事件重要性
+      event: {
+        urgent: [/典禮/,/考試/,/公開課/,/校長/,/視察/,/督學/,/直播/,/live/i,/發布會/,/presentation/i,/大型活動/,/比賽/,/頒獎/],
+        high:   [/公開/,/重要.*會議/,/家長/,/open.*day/i,/示範/,/demo/i,/評審/,/截止日期/,/deadline/i]
+      }
+    };
 
     function analyzeWithAI(title, description) {
-      const text = (title + ' ' + description).toLowerCase();
+      // title 關鍵詞加倍計分
+      const titleText = title.toLowerCase();
+      const descText = description.toLowerCase();
 
-      // 分類分析
-      const scores = categoryRules.map(rule => ({
-        key: rule.key,
-        score: rule.patterns.reduce((sum, p) => sum + (p.test(text) ? 1 : 0), 0)
-      }));
+      // 分類評分
+      const scores = categoryRules.map(rule => {
+        let score = 0;
+        const matchedKeywords = [];
+        rule.high.forEach(p => {
+          if (p.test(titleText)) { score += 4; matchedKeywords.push({word: p.source.replace(/\\\./g,'.').replace(/\(\?:/g,''), weight:'高', from:'標題'}); }
+          if (p.test(descText))  { score += 2; matchedKeywords.push({word: p.source.replace(/\\\./g,'.').replace(/\(\?:/g,''), weight:'高', from:'描述'}); }
+        });
+        rule.normal.forEach(p => {
+          if (p.test(titleText)) { score += 2; matchedKeywords.push({word: p.source.replace(/\\\./g,'.').replace(/\(\?:/g,''), weight:'普通', from:'標題'}); }
+          if (p.test(descText))  { score += 1; matchedKeywords.push({word: p.source.replace(/\\\./g,'.').replace(/\(\?:/g,''), weight:'普通', from:'描述'}); }
+        });
+        return { key: rule.key, label: rule.label, score, matchedKeywords };
+      });
       scores.sort((a, b) => b.score - a.score);
-      const topCategory = scores[0].score > 0 ? scores[0].key : 'other';
-      const confidence = scores[0].score >= 3 ? '高' : scores[0].score >= 2 ? '中' : scores[0].score >= 1 ? '中' : '低';
+      const top = scores[0];
+      const topCategory = top.score > 0 ? top.key : 'other';
 
-      // 優先級分析
+      // 信心度：基於分數差距
+      const scoreDiff = top.score - (scores[1]?.score || 0);
+      const confidence = top.score === 0 ? '低' : scoreDiff >= 4 ? '高' : scoreDiff >= 2 ? '中' : '低';
+
+      // 優先級三維度評分
+      let priScore = { urgent: 0, high: 0, low: 0 };
+      const fullText = titleText + ' ' + descText;
+      Object.values(priorityDimensions).forEach(dim => {
+        if (dim.urgent?.some(p => p.test(fullText))) priScore.urgent += 2;
+        if (dim.high?.some(p => p.test(fullText)))   priScore.high   += 1;
+        if (dim.low?.some(p => p.test(fullText)))    priScore.low    += 1;
+      });
       let priority = 'medium';
-      if (urgentPatterns.some(p => p.test(text))) priority = 'urgent';
-      else if (highPatterns.some(p => p.test(text))) priority = 'high';
-      else if (lowPatterns.some(p => p.test(text))) priority = 'low';
+      if (priScore.urgent >= 2) priority = 'urgent';
+      else if (priScore.urgent >= 1) priority = 'high';
+      else if (priScore.high >= 2) priority = 'high';
+      else if (priScore.low >= 1) priority = 'low';
 
-      // 生成解釋
-      const catLabel = getCategoryLabel(topCategory);
-      const priLabel = getPriorityLabel(priority);
-      const matchedCatWords = categoryRules.find(r=>r.key===topCategory)?.patterns.filter(p=>p.test(text)).map(p=>p.toString().replace(/\//g,'').replace(/[iI]$/,'')) || [];
-      const matchedPriWords = [...urgentPatterns,...highPatterns,...lowPatterns].filter(p=>p.test(text)).map(p=>p.toString().replace(/\//g,'').replace(/[iI]$/,''));
+      // 生成詳細解釋
+      const topKeywords = top.matchedKeywords.slice(0, 4).map(k => {
+        const raw = k.word.replace(/[\\\/\(\)\?\:\.\*\+\[\]]/g,'').replace(/i$/,'');
+        return raw.length > 1 ? raw : null;
+      }).filter(Boolean);
 
-      let reason = `分類「${catLabel}」`;
-      if (matchedCatWords.length) reason += `，因描述含：${matchedCatWords.slice(0,3).join('、')}`;
-      reason += `。優先級「${priLabel}」`;
-      if (matchedPriWords.length) reason += `，關鍵詞：${matchedPriWords.slice(0,2).join('、')}`;
-      else reason += '，根據一般預設';
+      let reason = '';
+      if (topCategory === 'other') {
+        reason = '描述未能匹配任何具體分類，已設為「其他」。建議使用手動覆蓋選擇正確分類。';
+      } else {
+        reason = `分類「${top.label}」（得分 ${top.score}）`;
+        if (topKeywords.length) reason += `，匹配關鍵詞：${topKeywords.join('、')}`;
+        reason += `。`;
+      }
+
+      const priLabel = {urgent:'緊急',high:'高',medium:'中',low:'低'}[priority];
+      reason += `優先級「${priLabel}」`;
+      if (priScore.urgent > 0) reason += '，因含緊急事件/急切關鍵詞';
+      else if (priScore.high > 0) reason += '，因有較高影響範圍或重要性';
+      else if (priScore.low > 0) reason += '，未見緊急情況描述';
+      else reason += '，根據預設中級評估';
       reason += '。';
 
-      return { category: topCategory, priority, confidence, reason };
+      return { category: topCategory, priority, confidence, reason, scores };
     }
 
     function triggerAIAnalysis() {
@@ -564,28 +641,24 @@
         return;
       }
       if (title.length + desc.length < 4) return;
-
       document.getElementById('aiLoading').classList.add('show');
       document.getElementById('aiAnalysisBox').classList.remove('show');
-
       aiDebounceTimer = setTimeout(() => {
         const result = analyzeWithAI(title, desc);
         currentAiCategory = result.category;
         currentAiPriority = result.priority;
-
         document.getElementById('aiCategoryDisplay').textContent = getCategoryLabel(result.category);
         document.getElementById('aiPriorityDisplay').textContent = getPriorityLabel(result.priority);
         document.getElementById('aiReason').textContent = result.reason;
-        document.getElementById('aiConfidence').textContent = '信心：' + result.confidence;
-        document.getElementById('aiConfidence').style.background = result.confidence === '高' ? '#d1fae5' : result.confidence === '中' ? '#fef3c7' : '#fee2e2';
-        document.getElementById('aiConfidence').style.color = result.confidence === '高' ? '#047857' : result.confidence === '中' ? '#92400e' : '#b91c1c';
-
+        const confEl = document.getElementById('aiConfidence');
+        confEl.textContent = '信心：' + result.confidence;
+        confEl.style.background = result.confidence==='高'?'#d1fae5':result.confidence==='中'?'#fef3c7':'#fee2e2';
+        confEl.style.color = result.confidence==='高'?'#047857':result.confidence==='中'?'#92400e':'#b91c1c';
         document.getElementById('finalCategory').value = result.category;
         document.getElementById('finalPriority').value = result.priority;
-
         document.getElementById('aiLoading').classList.remove('show');
         document.getElementById('aiAnalysisBox').classList.add('show');
-      }, 800);
+      }, 600);
     }
 
     function toggleOverride() {

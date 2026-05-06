@@ -1001,28 +1001,6 @@
               <input type="text" id="ticketTitle" required placeholder="簡短描述問題">
             </div>
             <div class="form-group">
-              <label>分類 *</label>
-              <select id="ticketCategory" required>
-                <option value="">請選擇分類</option>
-                <option value="hardware">硬件問題</option>
-                <option value="software">軟件問題</option>
-                <option value="network">網絡問題</option>
-                <option value="account">帳號權限</option>
-                <option value="email">電郵系統</option>
-                <option value="other">其他</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>優先級 *</label>
-              <select id="ticketPriority" required>
-                <option value="">請選擇優先級</option>
-                <option value="low">低</option>
-                <option value="medium">中</option>
-                <option value="high">高</option>
-                <option value="urgent">緊急</option>
-              </select>
-            </div>
-            <div class="form-group">
               <label>申請人 *</label>
               <input type="text" id="ticketSubmitter" required placeholder="老師姓名">
             </div>
@@ -1033,6 +1011,39 @@
             <div class="form-group">
               <label>詳細描述 *</label>
               <textarea id="ticketDescription" required placeholder="請詳細描述問題..."></textarea>
+            </div>
+            <div class="form-group">
+              <button type="button" class="btn btn-primary" onclick="analyzeTicket()" style="width: 100%;">
+                🤖 AI 智能分析分類和優先級
+              </button>
+              <div id="aiAnalysisResult" style="margin-top: 10px; padding: 12px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 6px; display: none;">
+                <strong>🤖 AI 分析結果：</strong><br>
+                <span id="aiCategory"></span><br>
+                <span id="aiPriority"></span><br>
+                <small id="aiReasoning" style="color: #6b7280;"></small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>分類 (AI 建議) *</label>
+              <select id="ticketCategory" required>
+                <option value="">請先使用 AI 分析</option>
+                <option value="hardware">硬件問題</option>
+                <option value="software">軟件問題</option>
+                <option value="network">網絡問題</option>
+                <option value="account">帳號權限</option>
+                <option value="email">電郵系統</option>
+                <option value="other">其他</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>優先級 (AI 建議) *</label>
+              <select id="ticketPriority" required>
+                <option value="">請先使用 AI 分析</option>
+                <option value="low">低</option>
+                <option value="medium">中</option>
+                <option value="high">高</option>
+                <option value="urgent">緊急</option>
+              </select>
             </div>
             <button type="submit" class="btn btn-primary" style="width: 100%;">提交求助單</button>
           </form>
@@ -1575,6 +1586,41 @@
         other: '其他'
       };
       return labels[category] || category;
+    }
+
+    // AI 分析工單分類和優先級
+    async function analyzeTicket() {
+      const title = document.getElementById('ticketTitle').value;
+      const description = document.getElementById('ticketDescription').value;
+      
+      if (!title || !description) {
+        alert('請先填寫標題和詳細描述');
+        return;
+      }
+      
+      try {
+        const response = await fetch(`${API_BASE}/analyze-ticket`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, description })
+        });
+        
+        const result = await response.json();
+        
+        // 顯示 AI 分析結果
+        document.getElementById('aiCategory').textContent = `分類：${getCategoryLabel(result.category)}`;
+        document.getElementById('aiPriority').textContent = `優先級：${getPriorityLabel(result.priority)}`;
+        document.getElementById('aiReasoning').textContent = `原因：${result.reasoning} (信心指數：${Math.round(result.confidence * 100)}%)`;
+        document.getElementById('aiAnalysisResult').style.display = 'block';
+        
+        // 自動填充下拉選單
+        document.getElementById('ticketCategory').value = result.category;
+        document.getElementById('ticketPriority').value = result.priority;
+        
+      } catch (error) {
+        console.error('AI 分析失敗:', error);
+        alert('AI 分析失敗，請手動選擇分類和優先級');
+      }
     }
 
     function formatDate(dateString) {

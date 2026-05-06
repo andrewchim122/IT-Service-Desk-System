@@ -1,764 +1,1595 @@
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>學校 IT 求助系統 | School IT Help Desk</title>
-    <style>
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --success-color: #27ae60;
-            --warning-color: #f39c12;
-            --light-bg: #ecf0f1;
-            --border-color: #bdc3c7;
-            --text-color: #2c3e50;
-            --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>學校 IT 求助系統</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Microsoft JhengHei", "Heiti TC", sans-serif;
-        }
+    body {
+      font-family: 'Inter', 'Microsoft YaHei', '微軟正黑體', Arial, sans-serif;
+      background: #f8f9fa;
+      min-height: 100vh;
+      color: #2a2a2a;
+    }
 
-        body {
-            background-color: #f5f7fa;
-            color: var(--text-color);
-            line-height: 1.6;
-        }
+    /* 頂部導航欄 */
+    .navbar {
+      background: #03363d;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-        /* Header */
-        header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 1.5rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: white;
+      text-decoration: none;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+    .navbar-brand h1 {
+      font-size: 18px;
+      font-weight: 600;
+    }
 
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .navbar-brand .subtitle {
+      font-size: 11px;
+      opacity: 0.8;
+      font-weight: 400;
+      margin-left: 8px;
+      padding-left: 8px;
+      border-left: 1px solid rgba(255,255,255,0.3);
+    }
 
-        h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
+    .navbar-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
 
-        .subtitle {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            margin-top: 5px;
-        }
+    .navbar-nav {
+      display: flex;
+      gap: 8px;
+    }
 
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
+    .nav-link {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-        .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: var(--card-shadow);
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
+    .nav-link:hover, .nav-link.active {
+      background: rgba(255,255,255,0.15);
+      color: white;
+    }
 
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 20px 24px;
+    }
 
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--secondary-color);
-            margin: 10px 0;
-        }
+    /* Zendesk-style 視圖切換器 */
+    .views-container {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border: 1px solid #e4e6e8;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
 
-        .stat-label {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-        }
+    .views-tabs {
+      display: flex;
+      border-bottom: 1px solid #e4e6e8;
+      background: #fafafa;
+      overflow-x: auto;
+    }
 
-        .stat-card.urgent .stat-number { color: var(--accent-color); }
-        .stat-card.processing .stat-number { color: var(--warning-color); }
-        .stat-card.resolved .stat-number { color: var(--success-color); }
+    .view-tab {
+      padding: 12px 20px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: #6b7280;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-        /* Main Content */
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 30px;
-            margin-bottom: 40px;
-        }
+    .view-tab:hover {
+      background: #f3f4f6;
+      color: #1f2937;
+    }
 
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-        }
+    .view-tab.active {
+      color: #03363d;
+      border-bottom-color: #03363d;
+      background: white;
+    }
 
-        /* Filters */
-        .filters-panel {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: var(--card-shadow);
-            margin-bottom: 20px;
-        }
+    .view-tab .count {
+      background: #e5e7eb;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
 
-        .filter-group {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-top: 15px;
-        }
+    .view-tab.active .count {
+      background: #03363d;
+      color: white;
+    }
 
-        .filter-item {
-            flex: 1;
-            min-width: 150px;
-        }
+    /* 統計卡片區域 */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
 
-        select, input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            font-size: 0.9rem;
-        }
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border: 1px solid #e4e6e8;
+      transition: all 0.2s;
+    }
 
-        /* Ticket List */
-        .ticket-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+    .stat-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
 
-        .ticket-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: var(--card-shadow);
-            border-left: 5px solid var(--secondary-color);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
+    .stat-card h3 {
+      color: #6b7280;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
 
-        .ticket-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
+    .stat-card .number {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1f2937;
+    }
 
-        .ticket-card.priority-urgent { border-left-color: var(--accent-color); }
-        .ticket-card.priority-high { border-left-color: var(--warning-color); }
-        .ticket-card.priority-medium { border-left-color: var(--secondary-color); }
-        .ticket-card.priority-low { border-left-color: var(--success-color); }
+    .stat-card.open .number { color: #d97706; }
+    .stat-card.in-progress .number { color: #ea580c; }
+    .stat-card.resolved .number { color: #059669; }
+    .stat-card.closed .number { color: #6b7280; }
 
-        .ticket-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
+    /* 主內容區 - Zendesk 風格雙欄布局 */
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 20px;
+    }
 
-        .ticket-id {
-            font-weight: bold;
-            color: #7f8c8d;
-            font-size: 0.85rem;
-        }
+    /* 求助單列表區域 */
+    .tickets-section {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border: 1px solid #e4e6e8;
+      overflow: hidden;
+    }
 
-        .ticket-status {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: white;
-        }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid #e4e6e8;
+      background: #fafafa;
+    }
 
-        .status-pending { background-color: #95a5a6; }
-        .status-processing { background-color: var(--warning-color); }
-        .status-resolved { background-color: var(--success-color); }
+    .section-header h2 {
+      color: #1f2937;
+      font-size: 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-        .ticket-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--primary-color);
-        }
+    .btn {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-        .ticket-meta {
-            display: flex;
-            gap: 15px;
-            font-size: 0.85rem;
-            color: #7f8c8d;
-            margin-top: 10px;
-        }
+    .btn-primary {
+      background: #03363d;
+      color: white;
+    }
 
-        .badge {
-            background: var(--light-bg);
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
+    .btn-primary:hover {
+      background: #02272b;
+      box-shadow: 0 2px 8px rgba(3, 54, 61, 0.3);
+    }
 
-        /* Form Panel */
-        .form-panel {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: var(--card-shadow);
-            position: sticky;
-            top: 20px;
-        }
+    .btn-success {
+      background: #059669;
+      color: white;
+    }
 
-        .form-title {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--light-bg);
-            padding-bottom: 10px;
-        }
+    .btn-success:hover {
+      background: #047857;
+    }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+    .btn-warning {
+      background: #d97706;
+      color: white;
+    }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
+    .btn-warning:hover {
+      background: #b45309;
+    }
 
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            resize: vertical;
-            min-height: 80px;
-            font-size: 0.9rem;
-        }
+    .btn-danger {
+      background: #dc2626;
+      color: white;
+    }
 
-        button {
-            width: 100%;
-            padding: 12px;
-            background: var(--secondary-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
+    .btn-danger:hover {
+      background: #b91c1c;
+    }
 
-        button:hover {
-            background: #2980b9;
-        }
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #374151;
+      border: 1px solid #d1d5db;
+    }
 
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
+    .btn-secondary:hover {
+      background: #e5e7eb;
+    }
 
-        .modal.active {
-            display: flex;
-        }
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
 
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
+    /* 篩選工具列 */
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid #e4e6e8;
+      background: white;
+      flex-wrap: wrap;
+      align-items: center;
+    }
 
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #7f8c8d;
-        }
+    .search-box {
+      flex: 1;
+      min-width: 280px;
+      position: relative;
+    }
 
-        .modal-header {
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--light-bg);
-            padding-bottom: 15px;
-        }
+    .search-box input {
+      width: 100%;
+      padding: 10px 14px 10px 38px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
 
-        .modal-body {
-            margin-bottom: 25px;
-        }
+    .search-box::before {
+      content: "🔍";
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+    }
 
-        .detail-row {
-            margin-bottom: 15px;
-        }
+    .filters select {
+      padding: 10px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+      transition: all 0.2s;
+      background: white;
+      cursor: pointer;
+    }
 
-        .detail-label {
-            font-weight: bold;
-            color: #7f8c8d;
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-        }
+    .filters select:focus {
+      outline: none;
+      border-color: #03363d;
+      box-shadow: 0 0 0 3px rgba(3, 54, 61, 0.1);
+    }
 
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-        }
+    /* 求助單列表 - 表格形式 */
+    .ticket-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
-        .btn-secondary {
-            background: #95a5a6;
-        }
-        
-        .btn-secondary:hover {
-            background: #7f8c8d;
-        }
+    .ticket-table th {
+      text-align: left;
+      padding: 12px 16px;
+      background: #fafafa;
+      border-bottom: 1px solid #e4e6e8;
+      font-size: 12px;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
 
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #7f8c8d;
-        }
+    .ticket-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f3f4f6;
+      font-size: 14px;
+      vertical-align: middle;
+    }
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #7f8c8d;
-            font-size: 0.85rem;
-            border-top: 1px solid var(--light-bg);
-            margin-top: 40px;
-        }
-    </style>
+    .ticket-row {
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .ticket-row:hover {
+      background: #f9fafb;
+    }
+
+    .ticket-cell-id {
+      font-weight: 600;
+      color: #03363d;
+      font-size: 13px;
+    }
+
+    .ticket-cell-title {
+      font-weight: 500;
+      color: #1f2937;
+    }
+
+    .ticket-cell-submitter {
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    .ticket-cell-assignee {
+      font-size: 13px;
+    }
+
+    .avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #03363d;
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      margin-right: 6px;
+    }
+
+    .sla-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .sla-good { background: #d1fae5; color: #047857; }
+    .sla-warning { background: #fef3c7; color: #92400e; }
+    .sla-breach { background: #fee2e2; color: #b91c1c; }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      display: inline-block;
+    }
+
+    .badge-open { background: #fef3c7; color: #92400e; }
+    .badge-in_progress { background: #dbeafe; color: #1e40af; }
+    .badge-resolved { background: #d1fae5; color: #047857; }
+    .badge-closed { background: #f3f4f6; color: #4b5563; }
+
+    .priority-low { background: #d1fae5; color: #047857; }
+    .priority-medium { background: #fef3c7; color: #92400e; }
+    .priority-high { background: #fed7aa; color: #c2410c; }
+    .priority-urgent { background: #fee2e2; color: #b91c1c; }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      background: #f3f4f6;
+      border-radius: 4px;
+      font-size: 11px;
+      color: #6b7280;
+      margin-right: 4px;
+    }
+
+    /* 側邊欄 */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .quick-actions {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border: 1px solid #e4e6e8;
+    }
+
+    .quick-actions h3 {
+      color: #1f2937;
+      margin-bottom: 16px;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .quick-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .quick-stat {
+      text-align: center;
+      padding: 12px;
+      background: #f9fafb;
+      border-radius: 6px;
+    }
+
+    .quick-stat .value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .quick-stat .label {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .form-card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border: 1px solid #e4e6e8;
+    }
+
+    .form-card h3 {
+      color: #1f2937;
+      margin-bottom: 16px;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      color: #374151;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #03363d;
+      box-shadow: 0 0 0 3px rgba(3, 54, 61, 0.1);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    /* Modal - Zendesk 風格 */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: flex-start;
+      backdrop-filter: blur(4px);
+      padding-top: 40px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 1000px;
+      max-height: 85vh;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid #e4e6e8;
+      background: #fafafa;
+    }
+
+    .modal-header h2 {
+      color: #1f2937;
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #6b7280;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .close-btn:hover {
+      background: #e5e7eb;
+      color: #1f2937;
+    }
+
+    .modal-body {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      overflow: hidden;
+    }
+
+    .ticket-detail-main {
+      padding: 24px;
+      border-right: 1px solid #e4e6e8;
+      overflow-y: auto;
+      max-height: 60vh;
+    }
+
+    .ticket-detail-sidebar {
+      padding: 24px;
+      background: #fafafa;
+      overflow-y: auto;
+      max-height: 60vh;
+    }
+
+    .detail-section {
+      margin-bottom: 24px;
+    }
+
+    .detail-section h3 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e4e6e8;
+    }
+
+    .detail-row {
+      margin-bottom: 16px;
+    }
+
+    .detail-row label {
+      font-weight: 600;
+      color: #6b7280;
+      display: block;
+      margin-bottom: 6px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .detail-row p {
+      color: #1f2937;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    /* 活動時間軸 */
+    .timeline {
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #e5e7eb;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: 20px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -18px;
+      top: 4px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #03363d;
+      border: 2px solid white;
+    }
+
+    .timeline-item.public::before {
+      background: #059669;
+    }
+
+    .timeline-item.internal::before {
+      background: #d97706;
+    }
+
+    .timeline-time {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+
+    .timeline-content {
+      background: white;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #e4e6e8;
+    }
+
+    .timeline-author {
+      font-weight: 600;
+      font-size: 13px;
+      color: #1f2937;
+      margin-bottom: 4px;
+    }
+
+    .timeline-text {
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+
+    .internal-note {
+      background: #fffbeb;
+      border-color: #fcd34d;
+    }
+
+    .internal-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      background: #d97706;
+      color: white;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    /* 表單區域 */
+    .comment-form {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e4e6e8;
+    }
+
+    .comment-form textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 80px;
+      margin-bottom: 12px;
+    }
+
+    .comment-form textarea:focus {
+      outline: none;
+      border-color: #03363d;
+      box-shadow: 0 0 0 3px rgba(3, 54, 61, 0.1);
+    }
+
+    .comment-options {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #6b7280;
+      cursor: pointer;
+    }
+
+    .action-bar {
+      display: flex;
+      gap: 12px;
+      padding: 16px 24px;
+      border-top: 1px solid #e4e6e8;
+      background: #fafafa;
+    }
+
+    /* 響應式設計 */
+    @media (max-width: 1200px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar {
+        order: -1;
+      }
+
+      .modal-body {
+        grid-template-columns: 1fr;
+      }
+
+      .ticket-detail-sidebar {
+        border-top: 1px solid #e4e6e8;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 10px 16px;
+      }
+
+      .navbar-brand h1 {
+        font-size: 15px;
+      }
+
+      .navbar-brand .subtitle {
+        display: none;
+      }
+
+      .container {
+        padding: 12px;
+      }
+
+      .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .toolbar {
+        flex-direction: column;
+      }
+
+      .search-box {
+        min-width: 100%;
+      }
+
+      .ticket-table {
+        font-size: 12px;
+      }
+
+      .ticket-table th,
+      .ticket-table td {
+        padding: 10px 12px;
+      }
+    }
+  </style>
 </head>
 <body>
-
-<header>
-    <div class="container header-content">
-        <div>
-            <h1>🏫 學校 IT 求助系統</h1>
-            <div class="subtitle">資訊科技支援服務平台</div>
-        </div>
-        <div style="text-align: right;">
-            <div style="font-weight: bold;">IT Support Team</div>
-            <div style="font-size: 0.8rem; opacity: 0.8;">內線分機：2026</div>
-        </div>
+  <!-- 頂部導航欄 -->
+  <nav class="navbar">
+    <a href="#" class="navbar-brand">
+      <h1>🖥️ 學校 IT 求助系統</h1>
+      <span class="subtitle">資訊科技支援服務平台</span>
+    </a>
+    <div class="navbar-actions">
+      <!-- 可添加用戶頭像、通知等 -->
     </div>
-</header>
+  </nav>
 
-<div class="container">
-    <!-- Statistics -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-label">總求助單數</div>
-            <div class="stat-number" id="stat-total">0</div>
-        </div>
-        <div class="stat-card urgent">
-            <div class="stat-label">待處理</div>
-            <div class="stat-number" id="stat-pending">0</div>
-        </div>
-        <div class="stat-card processing">
-            <div class="stat-label">跟進中</div>
-            <div class="stat-number" id="stat-processing">0</div>
-        </div>
-        <div class="stat-card resolved">
-            <div class="stat-label">已解決</div>
-            <div class="stat-number" id="stat-resolved">0</div>
-        </div>
+  <div class="container">
+    <!-- Zendesk-style 視圖切換器 -->
+    <div class="views-container">
+      <div class="views-tabs">
+        <button class="view-tab active" data-view="all">
+          📋 所有求助單 <span class="count" id="countAll">0</span>
+        </button>
+        <button class="view-tab" data-view="open">
+          ⏳ 待處理 <span class="count" id="countOpen">0</span>
+        </button>
+        <button class="view-tab" data-view="in_progress">
+          🔄 跟進中 <span class="count" id="countInProgress">0</span>
+        </button>
+        <button class="view-tab" data-view="resolved">
+          ✅ 已解決 <span class="count" id="countResolved">0</span>
+        </button>
+        <button class="view-tab" data-view="my_tickets">
+          👤 我的求助單 <span class="count" id="countMyTickets">0</span>
+        </button>
+      </div>
     </div>
 
-    <!-- Main Content -->
+    <div class="stats-container" id="statsContainer">
+      <!-- 統計卡片將由 JavaScript 動態生成 -->
+    </div>
+
     <div class="main-content">
-        <!-- Left: Ticket List -->
-        <div>
-            <div class="filters-panel">
-                <h3 style="margin-bottom: 15px;">🔍 篩選求助單</h3>
-                <div class="filter-group">
-                    <div class="filter-item">
-                        <input type="text" id="search-input" placeholder="搜尋關鍵字 (例如：投影機，WiFi)...">
-                    </div>
-                    <div class="filter-item">
-                        <select id="filter-status">
-                            <option value="">所有狀態</option>
-                            <option value="pending">待處理</option>
-                            <option value="processing">跟進中</option>
-                            <option value="resolved">已解決</option>
-                        </select>
-                    </div>
-                    <div class="filter-item">
-                        <select id="filter-priority">
-                            <option value="">所有優先級</option>
-                            <option value="urgent">緊急</option>
-                            <option value="high">高</option>
-                            <option value="medium">中</option>
-                            <option value="low">低</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div id="ticket-list" class="ticket-list">
-                <!-- Tickets will be rendered here -->
-            </div>
+      <div class="tickets-section">
+        <div class="section-header">
+          <h2>📋 求助單列表</h2>
+          <button class="btn btn-primary" onclick="scrollToCreate()">➕ 新建求助單</button>
         </div>
 
-        <!-- Right: New Ticket Form -->
-        <div>
-            <div class="form-panel">
-                <h2 class="form-title">➕ 創建新求助單</h2>
-                <form id="new-ticket-form">
-                    <div class="form-group">
-                        <label>申請人姓名</label>
-                        <input type="text" id="requester-name" required placeholder="例如：陳大文老師">
-                    </div>
-                    <div class="form-group">
-                        <label>所屬部門/科組</label>
-                        <input type="text" id="requester-dept" required placeholder="例如：數學科">
-                    </div>
-                    <div class="form-group">
-                        <label>問題分類</label>
-                        <select id="ticket-category" required>
-                            <option value="">請選擇分類</option>
-                            <option value="hardware">硬件問題</option>
-                            <option value="software">軟件問題</option>
-                            <option value="network">網絡問題</option>
-                            <option value="account">帳號權限</option>
-                            <option value="email">電郵系統</option>
-                            <option value="other">其他</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>優先級別</label>
-                        <select id="ticket-priority" required>
-                            <option value="low">低 - 一般查詢</option>
-                            <option value="medium" selected>中 - 影響工作</option>
-                            <option value="high">高 - 嚴重影響</option>
-                            <option value="urgent">緊急 - 系統癱瘓</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>問題描述</label>
-                        <textarea id="ticket-description" required placeholder="請詳細描述遇到的問題..."></textarea>
-                    </div>
-                    <button type="submit">提交求助單</button>
-                </form>
-            </div>
+        <div class="toolbar">
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="搜尋求助單編號、標題或申請人...">
+          </div>
+          <div class="filters">
+            <select id="statusFilter">
+              <option value="">全部狀態</option>
+              <option value="open">待處理</option>
+              <option value="in_progress">跟進中</option>
+              <option value="resolved">已解決</option>
+              <option value="closed">已關閉</option>
+            </select>
+            <select id="priorityFilter">
+              <option value="">全部優先級</option>
+              <option value="urgent">緊急</option>
+              <option value="high">高</option>
+              <option value="medium">中</option>
+              <option value="low">低</option>
+            </select>
+            <select id="categoryFilter">
+              <option value="">全部分類</option>
+              <option value="hardware">硬件問題</option>
+              <option value="software">軟件問題</option>
+              <option value="network">網絡問題</option>
+              <option value="account">帳號權限</option>
+              <option value="email">電郵系統</option>
+              <option value="other">其他</option>
+            </select>
+          </div>
         </div>
+
+        <table class="ticket-table">
+          <thead>
+            <tr>
+              <th width="80">編號</th>
+              <th>標題</th>
+              <th width="120">申請人</th>
+              <th width="100">分類</th>
+              <th width="80">優先級</th>
+              <th width="100">狀態</th>
+              <th width="120">負責人</th>
+              <th width="100">SLA</th>
+            </tr>
+          </thead>
+          <tbody id="ticketList">
+            <!-- 求助單列表將由 JavaScript 動態生成 -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sidebar">
+        <!-- 快速統計 -->
+        <div class="quick-actions">
+          <h3>📊 快速統計</h3>
+          <div class="quick-stats">
+            <div class="quick-stat">
+              <div class="value" id="quickOpen">0</div>
+              <div class="label">待處理</div>
+            </div>
+            <div class="quick-stat">
+              <div class="value" id="quickInProgress">0</div>
+              <div class="label">跟進中</div>
+            </div>
+            <div class="quick-stat">
+              <div class="value" id="quickUrgent">0</div>
+              <div class="label">緊急</div>
+            </div>
+            <div class="quick-stat">
+              <div class="value" id="quickToday">0</div>
+              <div class="label">今日新增</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card" id="createForm">
+          <h3>➕ 創建新求助單</h3>
+          <form id="createTicketForm">
+            <div class="form-group">
+              <label>標題 *</label>
+              <input type="text" id="ticketTitle" required placeholder="簡短描述問題">
+            </div>
+            <div class="form-group">
+              <label>分類 *</label>
+              <select id="ticketCategory" required>
+                <option value="">請選擇分類</option>
+                <option value="hardware">硬件問題</option>
+                <option value="software">軟件問題</option>
+                <option value="network">網絡問題</option>
+                <option value="account">帳號權限</option>
+                <option value="email">電郵系統</option>
+                <option value="other">其他</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>優先級 *</label>
+              <select id="ticketPriority" required>
+                <option value="">請選擇優先級</option>
+                <option value="low">低</option>
+                <option value="medium">中</option>
+                <option value="high">高</option>
+                <option value="urgent">緊急</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>申請人 *</label>
+              <input type="text" id="ticketSubmitter" required placeholder="老師姓名">
+            </div>
+            <div class="form-group">
+              <label>部門/科組</label>
+              <input type="text" id="ticketDepartment" placeholder="例如：數學科、學務處">
+            </div>
+            <div class="form-group">
+              <label>詳細描述 *</label>
+              <textarea id="ticketDescription" required placeholder="請詳細描述問題..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">提交求助單</button>
+          </form>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<!-- Ticket Detail Modal -->
-<div id="ticket-modal" class="modal">
+  <!-- 求助單詳情 Modal - Zendesk 風格 -->
+  <div class="modal" id="ticketModal">
     <div class="modal-content">
-        <span class="close-modal" onclick="closeModal()">&times;</span>
-        <div class="modal-header">
-            <h2 id="modal-title">求助單詳情</h2>
-            <div id="modal-id" style="color: #7f8c8d; margin-top: 5px;"></div>
+      <div class="modal-header">
+        <h2 id="modalTitle"><span id="modalTicketId"></span> <span id="modalTicketTitle"></span></h2>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="ticket-detail-main">
+          <div class="detail-section">
+            <h3>📝 問題描述</h3>
+            <p id="modalDescription" style="line-height: 1.8; white-space: pre-wrap;"></p>
+          </div>
+          
+          <!-- 活動時間軸 -->
+          <div class="detail-section">
+            <h3>📅 活動記錄</h3>
+            <div class="timeline" id="modalTimeline">
+              <!-- 時間軸項目將由 JavaScript 動態生成 -->
+            </div>
+          </div>
+
+          <!-- 評論表單 -->
+          <div class="comment-form">
+            <h3>💬 添加回覆</h3>
+            <textarea id="commentText" placeholder="輸入您的回覆..."></textarea>
+            <div class="comment-options">
+              <label class="checkbox-label">
+                <input type="checkbox" id="isInternalNote">
+                內部備註 (申請人不可見)
+              </label>
+            </div>
+            <button class="btn btn-primary" onclick="addComment()">提交回覆</button>
+          </div>
         </div>
-        <div class="modal-body">
+        
+        <div class="ticket-detail-sidebar">
+          <div class="detail-section">
+            <h3>📋 求助單資訊</h3>
             <div class="detail-row">
-                <div class="detail-label">狀態</div>
-                <div id="modal-status"></div>
+              <label>編號</label>
+              <p id="detailId"></p>
             </div>
             <div class="detail-row">
-                <div class="detail-label">申請人</div>
-                <div id="modal-requester"></div>
+              <label>狀態</label>
+              <p><span id="detailStatus" class="badge"></span></p>
             </div>
             <div class="detail-row">
-                <div class="detail-label">部門</div>
-                <div id="modal-dept"></div>
+              <label>優先級</label>
+              <p><span id="detailPriority" class="badge"></span></p>
             </div>
             <div class="detail-row">
-                <div class="detail-label">分類</div>
-                <div id="modal-category"></div>
+              <label>分類</label>
+              <p id="detailCategory"></p>
             </div>
             <div class="detail-row">
-                <div class="detail-label">優先級</div>
-                <div id="modal-priority"></div>
+              <label>申請人</label>
+              <p id="detailSubmitter"></p>
             </div>
             <div class="detail-row">
-                <div class="detail-label">描述</div>
-                <div id="modal-description" style="white-space: pre-wrap; background: #f9f9f9; padding: 10px; border-radius: 5px;"></div>
+              <label>部門</label>
+              <p id="detailDepartment"></p>
             </div>
             <div class="detail-row">
-                <div class="detail-label">提交時間</div>
-                <div id="modal-date"></div>
+              <label>負責人</label>
+              <p id="detailAssignee">尚未指派</p>
             </div>
+            <div class="detail-row">
+              <label>創建時間</label>
+              <p id="detailCreatedAt"></p>
+            </div>
+            <div class="detail-row">
+              <label>最後更新</label>
+              <p id="detailUpdatedAt"></p>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h3>⚡ 快速操作</h3>
+            <div style="display: flex; flex-direction: column; gap: 8px;" id="quickActions">
+              <!-- 快速操作按鈕將由 JavaScript 動態生成 -->
+            </div>
+          </div>
+
+          <div class="detail-section" id="resolutionSection" style="display: none;">
+            <h3>✅ 解決方案</h3>
+            <p id="detailResolution" style="white-space: pre-wrap;"></p>
+          </div>
         </div>
-        <div class="action-buttons">
-            <button id="btn-process" onclick="updateStatus('processing')" style="flex:1;">開始跟進</button>
-            <button id="btn-resolve" onclick="updateStatus('resolved')" style="flex:1; background: var(--success-color);">標記為解決</button>
-            <button class="btn-secondary" onclick="closeModal()" style="flex:1;">關閉</button>
-        </div>
+      </div>
+      <div class="action-bar">
+        <button class="btn btn-secondary" onclick="closeModal()">關閉</button>
+        <button class="btn btn-danger" onclick="deleteCurrentTicket()">刪除求助單</button>
+      </div>
     </div>
-</div>
+  </div>
 
-<footer>
-    <div class="container">
-        <p>© 2024 學校 IT 求助系統 | 技術支援請聯絡 IT Department</p>
-        <p>本系統僅供示範用途</p>
-    </div>
-</footer>
-
-<script>
-    // Initial Data (Simulated Database)
-    let tickets = [
-        {
-            id: 'IT-2024-001',
-            title: '課室投影機無法顯示',
-            requester: '黃老師',
-            department: '英文科',
-            category: 'hardware',
-            priority: 'high',
-            status: 'pending',
-            description: '302 課室的投影機開啟後沒有信號輸出，已嘗試重新插拔 HDMI 線但無效。下午有課，急需處理。',
-            date: '2024-05-20 09:15'
-        },
-        {
-            id: 'IT-2024-002',
-            title: '教師電郵帳號登入失敗',
-            requester: '李志明',
-            department: '學務處',
-            category: 'email',
-            priority: 'urgent',
-            status: 'processing',
-            description: '無法登入學校電郵系統，提示密碼錯誤，但確認密碼無誤。可能需要重設。',
-            date: '2024-05-20 10:30'
-        },
-        {
-            id: 'IT-2024-003',
-            title: '申請安裝統計軟件 SPSS',
-            requester: '張教授',
-            department: '數學科',
-            category: 'software',
-            priority: 'medium',
-            status: 'resolved',
-            description: '需要在辦公室電腦安裝 SPSS 統計軟件用於研究項目。',
-            date: '2024-05-19 14:20'
-        }
-    ];
-
+  <script>
+    const API_BASE = 'http://localhost:3001/api';
+    let currentView = 'all';
     let currentTicketId = null;
 
-    // Category Mapping
-    const categoryMap = {
-        'hardware': '硬件問題',
-        'software': '軟件問題',
-        'network': '網絡問題',
-        'account': '帳號權限',
-        'email': '電郵系統',
-        'other': '其他'
-    };
+    // 載入數據
+    async function loadData() {
+      await loadStats();
+      await loadTickets();
+      updateViewCounts();
+    }
 
-    const priorityMap = {
-        'urgent': '緊急',
-        'high': '高',
-        'medium': '中',
-        'low': '低'
-    };
+    // 載入統計數據
+    async function loadStats() {
+      try {
+        const response = await fetch(`${API_BASE}/stats`);
+        const stats = await response.json();
+        
+        const statsHTML = `
+          <div class="stat-card">
+            <h3>總求助單數</h3>
+            <div class="number">${stats.total}</div>
+          </div>
+          <div class="stat-card open">
+            <h3>待處理</h3>
+            <div class="number">${stats.open}</div>
+          </div>
+          <div class="stat-card in-progress">
+            <h3>跟進中</h3>
+            <div class="number">${stats.inProgress}</div>
+          </div>
+          <div class="stat-card resolved">
+            <h3>已解決</h3>
+            <div class="number">${stats.resolved}</div>
+          </div>
+        `;
+        
+        document.getElementById('statsContainer').innerHTML = statsHTML;
+        
+        // 更新快速統計
+        document.getElementById('quickOpen').textContent = stats.open;
+        document.getElementById('quickInProgress').textContent = stats.inProgress;
+        document.getElementById('quickUrgent').textContent = stats.byPriority?.urgent || 0;
+        
+        // 計算今日新增 (簡單實現)
+        const today = new Date().toDateString();
+        const ticketsResponse = await fetch(`${API_BASE}/tickets`);
+        const allTickets = await ticketsResponse.json();
+        const todayCount = allTickets.filter(t => new Date(t.createdAt).toDateString() === today).length;
+        document.getElementById('quickToday').textContent = todayCount;
+      } catch (error) {
+        console.error('載入統計數據失敗:', error);
+      }
+    }
 
-    const statusMap = {
-        'pending': '待處理',
-        'processing': '跟進中',
-        'resolved': '已解決'
-    };
+    // 更新視圖計數
+    async function updateViewCounts() {
+      try {
+        const response = await fetch(`${API_BASE}/tickets`);
+        const tickets = await response.json();
+        
+        document.getElementById('countAll').textContent = tickets.length;
+        document.getElementById('countOpen').textContent = tickets.filter(t => t.status === 'open').length;
+        document.getElementById('countInProgress').textContent = tickets.filter(t => t.status === 'in_progress').length;
+        document.getElementById('countResolved').textContent = tickets.filter(t => t.status === 'resolved').length;
+        document.getElementById('countMyTickets').textContent = tickets.length; // 簡化實現
+      } catch (error) {
+        console.error('更新視圖計數失敗:', error);
+      }
+    }
 
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
-        renderTickets();
-        updateStats();
-        setupEventListeners();
+    // 載入求助單列表 - 表格形式
+    async function loadTickets() {
+      try {
+        const search = document.getElementById('searchInput').value;
+        const status = document.getElementById('statusFilter').value;
+        const priority = document.getElementById('priorityFilter').value;
+        const category = document.getElementById('categoryFilter').value;
+
+        let url = `${API_BASE}/tickets?`;
+        if (search) url += `&search=${encodeURIComponent(search)}`;
+        if (status) url += `&status=${status}`;
+        if (priority) url += `&priority=${priority}`;
+        if (category) url += `&category=${category}`;
+
+        const response = await fetch(url);
+        const tickets = await response.json();
+
+        const ticketRowsHTML = tickets.map(ticket => {
+          const slaClass = getSLAClass(ticket.createdAt);
+          const slaText = getSLAText(ticket.createdAt);
+          const assigneeDisplay = ticket.assignedTo 
+            ? `<span class="avatar">${getInitials(ticket.assignedTo)}</span>${ticket.assignedTo.split('-')[0].trim()}`
+            : '<span style="color:#9ca3af;">未指派</span>';
+          
+          return `
+            <tr class="ticket-row" onclick="showTicketDetail('${ticket.id}')">
+              <td><span class="ticket-cell-id">${ticket.id}</span></td>
+              <td><span class="ticket-cell-title">${ticket.title}</span></td>
+              <td><span class="ticket-cell-submitter">${ticket.submittedBy}</span></td>
+              <td><span class="tag">${getCategoryLabel(ticket.category)}</span></td>
+              <td><span class="badge priority-${ticket.priority}">${getPriorityLabel(ticket.priority)}</span></td>
+              <td><span class="badge badge-${ticket.status}">${getStatusLabel(ticket.status)}</span></td>
+              <td><span class="ticket-cell-assignee">${assigneeDisplay}</span></td>
+              <td><span class="sla-indicator ${slaClass}">${slaText}</span></td>
+            </tr>
+          `;
+        }).join('');
+
+        document.getElementById('ticketList').innerHTML = ticketRowsHTML || '<tr><td colspan="8" style="text-align:center;color:#999;padding:40px;">暫無求助單</td></tr>';
+      } catch (error) {
+        console.error('載入求助單失敗:', error);
+        document.getElementById('ticketList').innerHTML = '<tr><td colspan="8" style="text-align:center;color:#dc3545;padding:40px;">載入失敗，請確保後端伺服器正在運行</td></tr>';
+      }
+    }
+
+    // 獲取 SLA 狀態
+    function getSLAClass(createdAt) {
+      const now = new Date();
+      const created = new Date(createdAt);
+      const hoursDiff = (now - created) / (1000 * 60 * 60);
+      
+      if (hoursDiff < 24) return 'sla-good';
+      if (hoursDiff < 48) return 'sla-warning';
+      return 'sla-breach';
+    }
+
+    function getSLAText(createdAt) {
+      const now = new Date();
+      const created = new Date(createdAt);
+      const hoursDiff = Math.floor((now - created) / (1000 * 60 * 60));
+      
+      if (hoursDiff < 1) return '剛剛';
+      if (hoursDiff < 24) return `${hoursDiff}小時`;
+      const daysDiff = Math.floor(hoursDiff / 24);
+      return `${daysDiff}天`;
+    }
+
+    // 獲取姓名首字母
+    function getInitials(name) {
+      return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    // 滾動到創建表單
+    function scrollToCreate() {
+      document.getElementById('createForm').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 顯示求助單詳情 - Zendesk 風格
+    async function showTicketDetail(ticketId) {
+      currentTicketId = ticketId;
+      try {
+        const response = await fetch(`${API_BASE}/tickets/${ticketId}`);
+        const ticket = await response.json();
+
+        document.getElementById('modalTicketId').textContent = ticket.id;
+        document.getElementById('modalTicketTitle').textContent = ticket.title;
+        document.getElementById('modalDescription').textContent = ticket.description;
+        
+        // 填充側邊欄資訊
+        document.getElementById('detailId').textContent = ticket.id;
+        document.getElementById('detailStatus').textContent = getStatusLabel(ticket.status);
+        document.getElementById('detailStatus').className = `badge badge-${ticket.status}`;
+        document.getElementById('detailPriority').textContent = getPriorityLabel(ticket.priority);
+        document.getElementById('detailPriority').className = `badge priority-${ticket.priority}`;
+        document.getElementById('detailCategory').textContent = getCategoryLabel(ticket.category);
+        document.getElementById('detailSubmitter').textContent = ticket.submittedBy;
+        document.getElementById('detailDepartment').textContent = ticket.department || '未填寫';
+        document.getElementById('detailAssignee').textContent = ticket.assignedTo || '尚未指派';
+        document.getElementById('detailCreatedAt').textContent = formatDate(ticket.createdAt);
+        document.getElementById('detailUpdatedAt').textContent = formatDate(ticket.updatedAt);
+        
+        // 解決方案
+        if (ticket.resolution) {
+          document.getElementById('resolutionSection').style.display = 'block';
+          document.getElementById('detailResolution').textContent = ticket.resolution;
+        } else {
+          document.getElementById('resolutionSection').style.display = 'none';
+        }
+
+        // 生成時間軸
+        const timelineHTML = generateTimeline(ticket);
+        document.getElementById('modalTimeline').innerHTML = timelineHTML;
+
+        // 快速操作按鈕
+        let quickActionsHTML = '';
+        if (ticket.status === 'open') {
+          quickActionsHTML += `<button class="btn btn-warning" onclick="updateTicketStatus('${ticket.id}', 'in_progress')">🔄 開始跟進</button>`;
+        }
+        if (ticket.status === 'in_progress') {
+          quickActionsHTML += `<button class="btn btn-success" onclick="resolveTicketPrompt('${ticket.id}')">✅ 標記為已解決</button>`;
+        }
+        if (!ticket.assignedTo) {
+          quickActionsHTML += `<button class="btn btn-secondary" onclick="assignToMe('${ticket.id}')">👤 指派給我</button>`;
+        }
+        quickActionsHTML += `<button class="btn btn-secondary" onclick="closeModal()">關閉</button>`;
+        
+        document.getElementById('quickActions').innerHTML = quickActionsHTML;
+
+        document.getElementById('ticketModal').classList.add('active');
+      } catch (error) {
+        console.error('載入求助單詳情失敗:', error);
+        alert('載入求助單詳情失敗');
+      }
+    }
+
+    // 生成時間軸
+    function generateTimeline(ticket) {
+      let html = `
+        <div class="timeline-item public">
+          <div class="timeline-time">${formatDate(ticket.createdAt)}</div>
+          <div class="timeline-content">
+            <div class="timeline-author">${ticket.submittedBy} 創建了求助單</div>
+            <div class="timeline-text">${ticket.description}</div>
+          </div>
+        </div>
+      `;
+
+      if (ticket.assignedTo) {
+        html += `
+          <div class="timeline-item internal">
+            <div class="timeline-time">${formatDate(ticket.updatedAt)}</div>
+            <div class="timeline-content">
+              <div class="timeline-author">${ticket.assignedTo} 被指派為負責人</div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (ticket.status === 'in_progress') {
+        html += `
+          <div class="timeline-item internal">
+            <div class="timeline-time">${formatDate(ticket.updatedAt)}</div>
+            <div class="timeline-content">
+              <div class="timeline-author">狀態變更為「跟進中」</div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (ticket.resolution) {
+        html += `
+          <div class="timeline-item public">
+            <div class="timeline-time">${formatDate(ticket.updatedAt)}</div>
+            <div class="timeline-content">
+              <div class="timeline-author">已解決</div>
+              <div class="timeline-text">${ticket.resolution}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      return html;
+    }
+
+    // 關閉 Modal
+    function closeModal() {
+      document.getElementById('ticketModal').classList.remove('active');
+    }
+
+    // 添加評論 (模擬)
+    function addComment() {
+      const commentText = document.getElementById('commentText').value;
+      const isInternal = document.getElementById('isInternalNote').checked;
+      
+      if (!commentText.trim()) {
+        alert('請輸入回覆內容');
+        return;
+      }
+
+      // 這裡可以添加 API 調用來保存評論
+      alert(isInternal ? '內部備註已添加' : '回覆已發送給申請人');
+      document.getElementById('commentText').value = '';
+    }
+
+    // 指派給我
+    async function assignToMe(ticketId) {
+      try {
+        await fetch(`${API_BASE}/tickets/${ticketId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ assignedTo: '當前用戶' })
+        });
+        closeModal();
+        await loadData();
+      } catch (error) {
+        console.error('指派失敗:', error);
+        alert('指派失敗');
+      }
+    }
+
+    // 更新求助單狀態
+    async function updateTicketStatus(ticketId, status) {
+      try {
+        await fetch(`${API_BASE}/tickets/${ticketId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status })
+        });
+        closeModal();
+        await loadData();
+      } catch (error) {
+        console.error('更新求助單失敗:', error);
+        alert('更新求助單失敗');
+      }
+    }
+
+    // 解決求助單 (提示框)
+    function resolveTicketPrompt(ticketId) {
+      const resolution = prompt('請輸入解決方案:');
+      if (resolution) {
+        resolveTicket(ticketId, resolution);
+      }
+    }
+
+    // 解決求助單
+    async function resolveTicket(ticketId, resolution) {
+      try {
+        await fetch(`${API_BASE}/tickets/${ticketId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'resolved', resolution })
+        });
+        closeModal();
+        await loadData();
+      } catch (error) {
+        console.error('解決求助單失敗:', error);
+        alert('解決求助單失敗');
+      }
+    }
+
+    // 刪除當前求助單
+    async function deleteCurrentTicket() {
+      if (currentTicketId && confirm('確定要刪除此求助單嗎？')) {
+        try {
+          await fetch(`${API_BASE}/tickets/${currentTicketId}`, {
+            method: 'DELETE'
+          });
+          closeModal();
+          await loadData();
+        } catch (error) {
+          console.error('刪除求助單失敗:', error);
+          alert('刪除求助單失敗');
+        }
+      }
+    }
+
+    // 舊的刪除函數保留兼容性
+    async function deleteTicket(ticketId) {
+      deleteCurrentTicket();
+    }
+
+    // 創建求助單表單提交
+    document.getElementById('createTicketForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const ticketData = {
+        title: document.getElementById('ticketTitle').value,
+        category: document.getElementById('ticketCategory').value,
+        priority: document.getElementById('ticketPriority').value,
+        submittedBy: document.getElementById('ticketSubmitter').value,
+        department: document.getElementById('ticketDepartment').value,
+        description: document.getElementById('ticketDescription').value
+      };
+
+      try {
+        await fetch(`${API_BASE}/tickets`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(ticketData)
+        });
+        
+        // 重置表單
+        document.getElementById('createTicketForm').reset();
+        
+        // 重新載入數據
+        await loadData();
+        
+        alert('求助單已成功創建！');
+      } catch (error) {
+        console.error('創建求助單失敗:', error);
+        alert('創建求助單失敗');
+      }
     });
 
-    function setupEventListeners() {
-        // Search and Filters
-        document.getElementById('search-input').addEventListener('input', renderTickets);
-        document.getElementById('filter-status').addEventListener('change', renderTickets);
-        document.getElementById('filter-priority').addEventListener('change', renderTickets);
+    // 篩選器事件監聽
+    ['searchInput', 'statusFilter', 'priorityFilter', 'categoryFilter'].forEach(id => {
+      document.getElementById(id).addEventListener('change', loadTickets);
+      document.getElementById(id).addEventListener('input', loadTickets);
+    });
 
-        // New Ticket Form
-        document.getElementById('new-ticket-form').addEventListener('submit', handleNewTicket);
-    }
-
-    function renderTickets() {
-        const listContainer = document.getElementById('ticket-list');
-        const searchTerm = document.getElementById('search-input').value.toLowerCase();
-        const statusFilter = document.getElementById('filter-status').value;
-        const priorityFilter = document.getElementById('filter-priority').value;
-
-        const filteredTickets = tickets.filter(ticket => {
-            const matchesSearch = ticket.title.toLowerCase().includes(searchTerm) || 
-                                  ticket.description.toLowerCase().includes(searchTerm) ||
-                                  ticket.requester.toLowerCase().includes(searchTerm);
-            const matchesStatus = statusFilter ? ticket.status === statusFilter : true;
-            const matchesPriority = priorityFilter ? ticket.priority === priorityFilter : true;
-            
-            return matchesSearch && matchesStatus && matchesPriority;
-        });
-
-        // Sort by date (newest first)
-        filteredTickets.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        if (filteredTickets.length === 0) {
-            listContainer.innerHTML = `
-                <div class="empty-state">
-                    <h3>😕 找不到相關求助單</h3>
-                    <p>請嘗試調整篩選條件或搜尋關鍵字</p>
-                </div>
-            `;
-            return;
+    // 視圖切換器
+    document.querySelectorAll('.view-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentView = tab.dataset.view;
+        
+        // 根據視圖過濾
+        if (currentView !== 'all') {
+          document.getElementById('statusFilter').value = currentView === 'my_tickets' ? '' : currentView;
         }
+        loadTickets();
+      });
+    });
 
-        listContainer.innerHTML = filteredTickets.map(ticket => `
-            <div class="ticket-card priority-${ticket.priority}" onclick="openModal('${ticket.id}')">
-                <div class="ticket-header">
-                    <span class="ticket-id">${ticket.id}</span>
-                    <span class="ticket-status status-${ticket.status}">${statusMap[ticket.status]}</span>
-                </div>
-                <div class="ticket-title">${ticket.title}</div>
-                <div class="ticket-meta">
-                    <span class="badge">${categoryMap[ticket.category]}</span>
-                    <span>👤 ${ticket.requester}</span>
-                    <span>🏫 ${ticket.department}</span>
-                    <span>📅 ${ticket.date.split(' ')[0]}</span>
-                </div>
-            </div>
-        `).join('');
+    // 輔助函數
+    function getStatusLabel(status) {
+      const labels = {
+        open: '待處理',
+        in_progress: '跟進中',
+        resolved: '已解決',
+        closed: '已關閉'
+      };
+      return labels[status] || status;
     }
 
-    function updateStats() {
-        const total = tickets.length;
-        const pending = tickets.filter(t => t.status === 'pending').length;
-        const processing = tickets.filter(t => t.status === 'processing').length;
-        const resolved = tickets.filter(t => t.status === 'resolved').length;
-
-        document.getElementById('stat-total').textContent = total;
-        document.getElementById('stat-pending').textContent = pending;
-        document.getElementById('stat-processing').textContent = processing;
-        document.getElementById('stat-resolved').textContent = resolved;
+    function getPriorityLabel(priority) {
+      const labels = {
+        low: '低',
+        medium: '中',
+        high: '高',
+        urgent: '緊急'
+      };
+      return labels[priority] || priority;
     }
 
-    function handleNewTicket(e) {
-        e.preventDefault();
-        
-        const name = document.getElementById('requester-name').value;
-        const dept = document.getElementById('requester-dept').value;
-        const category = document.getElementById('ticket-category').value;
-        const priority = document.getElementById('ticket-priority').value;
-        const description = document.getElementById('ticket-description').value;
-
-        const newId = `IT-2024-${String(tickets.length + 1).padStart(3, '0')}`;
-        const now = new Date();
-        const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-
-        const newTicket = {
-            id: newId,
-            title: description.substring(0, 30) + (description.length > 30 ? '...' : ''),
-            requester: name,
-            department: dept,
-            category: category,
-            priority: priority,
-            status: 'pending',
-            description: description,
-            date: dateStr
-        };
-
-        tickets.unshift(newTicket);
-        
-        // Reset form
-        e.target.reset();
-        document.getElementById('ticket-priority').value = 'medium';
-        
-        renderTickets();
-        updateStats();
-        alert(`✅ 工單 ${newId} 已成功提交！`);
+    function getCategoryLabel(category) {
+      const labels = {
+        hardware: '硬件問題',
+        software: '軟件問題',
+        network: '網絡問題',
+        account: '帳號權限',
+        email: '電郵系統',
+        other: '其他'
+      };
+      return labels[category] || category;
     }
 
-    function openModal(id) {
-        const ticket = tickets.find(t => t.id === id);
-        if (!ticket) return;
-
-        currentTicketId = id;
-        
-        document.getElementById('modal-title').textContent = ticket.title;
-        document.getElementById('modal-id').textContent = ticket.id;
-        document.getElementById('modal-status').innerHTML = `<span class="ticket-status status-${ticket.status}">${statusMap[ticket.status]}</span>`;
-        document.getElementById('modal-requester').textContent = ticket.requester;
-        document.getElementById('modal-dept').textContent = ticket.department;
-        document.getElementById('modal-category').textContent = categoryMap[ticket.category];
-        document.getElementById('modal-priority').textContent = priorityMap[ticket.priority];
-        document.getElementById('modal-description').textContent = ticket.description;
-        document.getElementById('modal-date').textContent = ticket.date;
-
-        // Update buttons based on status
-        const btnProcess = document.getElementById('btn-process');
-        const btnResolve = document.getElementById('btn-resolve');
-        
-        if (ticket.status === 'resolved') {
-            btnProcess.style.display = 'none';
-            btnResolve.style.display = 'none';
-        } else if (ticket.status === 'processing') {
-            btnProcess.style.display = 'none';
-            btnResolve.style.display = 'block';
-        } else {
-            btnProcess.style.display = 'block';
-            btnResolve.style.display = 'block';
-        }
-
-        document.getElementById('ticket-modal').classList.add('active');
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleString('zh-HK', { 
+        year: 'numeric', 
+        month: '2-digit', 
+        day: '2-digit', 
+        hour: '2-digit', 
+        minute: '2-digit' 
+      });
     }
 
-    function closeModal() {
-        document.getElementById('ticket-modal').classList.remove('active');
-        currentTicketId = null;
-    }
-
-    function updateStatus(newStatus) {
-        if (!currentTicketId) return;
-        
-        const ticket = tickets.find(t => t.id === currentTicketId);
-        if (ticket) {
-            ticket.status = newStatus;
-            renderTickets();
-            updateStats();
-            openModal(currentTicketId); // Refresh modal content
-        }
-    }
-
-    // Close modal when clicking outside
-    window.onclick = function(event) {
-        const modal = document.getElementById('ticket-modal');
-        if (event.target === modal) {
-            closeModal();
-        }
-    }
-</script>
-
+    // 初始化
+    window.addEventListener('DOMContentLoaded', loadData);
+  </script>
 </body>
 </html>

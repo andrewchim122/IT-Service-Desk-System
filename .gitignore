@@ -2,22 +2,69 @@
 # Dependencies
 node_modules/
 
-# Logs and temp files
-*.log
-
-# Environment variables
+# Environment
 .env
 .env.local
 .env.*
 
-# Package lock file
-package-lock.json
+# Logs
+*.log
 
-# IDE files
+# Build artifacts
+dist/
+build/
+target/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.venv.bak/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git/modules/
+.DS_Store
+*.swp
+*.swo
+*~
+.project
+.pydevproject
 .vscode/
 .idea/
 
-# OS generated files
-.DS_Store
-Thumbs.db
+# Node.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+node_modules/
+dist/
+build/
+.nyc_output
+coverage/
+.nyc_output/
+istanbul/
+.lcovonly
+*.lcov
+.coverage
+coverage-final.json
+.nyc_output/
+coverage/
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.jest/
+jest/
 ```

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>學校 IT 服務台系統 | School IT Service Desk</title>
+    <title>學校 IT 求助系統 | School IT Help Desk</title>
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -362,8 +362,8 @@
 <header>
     <div class="container header-content">
         <div>
-            <h1>🏫 學校 IT 服務台系統</h1>
-            <div class="subtitle">School IT Service Desk System</div>
+            <h1>🏫 學校 IT 求助系統</h1>
+            <div class="subtitle">資訊科技支援服務平台</div>
         </div>
         <div style="text-align: right;">
             <div style="font-weight: bold;">IT Support Team</div>
@@ -376,7 +376,7 @@
     <!-- Statistics -->
     <div class="stats-grid">
         <div class="stat-card">
-            <div class="stat-label">總工單數</div>
+            <div class="stat-label">總求助單數</div>
             <div class="stat-number" id="stat-total">0</div>
         </div>
         <div class="stat-card urgent">
@@ -384,7 +384,7 @@
             <div class="stat-number" id="stat-pending">0</div>
         </div>
         <div class="stat-card processing">
-            <div class="stat-label">處理中</div>
+            <div class="stat-label">跟進中</div>
             <div class="stat-number" id="stat-processing">0</div>
         </div>
         <div class="stat-card resolved">
@@ -398,7 +398,7 @@
         <!-- Left: Ticket List -->
         <div>
             <div class="filters-panel">
-                <h3 style="margin-bottom: 15px;">🔍 篩選工單</h3>
+                <h3 style="margin-bottom: 15px;">🔍 篩選求助單</h3>
                 <div class="filter-group">
                     <div class="filter-item">
                         <input type="text" id="search-input" placeholder="搜尋關鍵字 (例如：投影機，WiFi)...">
@@ -407,7 +407,7 @@
                         <select id="filter-status">
                             <option value="">所有狀態</option>
                             <option value="pending">待處理</option>
-                            <option value="processing">處理中</option>
+                            <option value="processing">跟進中</option>
                             <option value="resolved">已解決</option>
                         </select>
                     </div>
@@ -431,7 +431,7 @@
         <!-- Right: New Ticket Form -->
         <div>
             <div class="form-panel">
-                <h2 class="form-title">➕ 創建新工單</h2>
+                <h2 class="form-title">➕ 創建新求助單</h2>
                 <form id="new-ticket-form">
                     <div class="form-group">
                         <label>申請人姓名</label>
@@ -466,7 +466,7 @@
                         <label>問題描述</label>
                         <textarea id="ticket-description" required placeholder="請詳細描述遇到的問題..."></textarea>
                     </div>
-                    <button type="submit">提交工單</button>
+                    <button type="submit">提交求助單</button>
                 </form>
             </div>
         </div>
@@ -478,7 +478,7 @@
     <div class="modal-content">
         <span class="close-modal" onclick="closeModal()">&times;</span>
         <div class="modal-header">
-            <h2 id="modal-title">工單詳情</h2>
+            <h2 id="modal-title">求助單詳情</h2>
             <div id="modal-id" style="color: #7f8c8d; margin-top: 5px;"></div>
         </div>
         <div class="modal-body">
@@ -512,7 +512,7 @@
             </div>
         </div>
         <div class="action-buttons">
-            <button id="btn-process" onclick="updateStatus('processing')" style="flex:1;">開始處理</button>
+            <button id="btn-process" onclick="updateStatus('processing')" style="flex:1;">開始跟進</button>
             <button id="btn-resolve" onclick="updateStatus('resolved')" style="flex:1; background: var(--success-color);">標記為解決</button>
             <button class="btn-secondary" onclick="closeModal()" style="flex:1;">關閉</button>
         </div>
@@ -521,7 +521,7 @@
 
 <footer>
     <div class="container">
-        <p>© 2024 學校 IT 服務台系統 | 技術支援請聯絡 IT Department</p>
+        <p>© 2024 學校 IT 求助系統 | 技術支援請聯絡 IT Department</p>
         <p>本系統僅供示範用途</p>
     </div>
 </footer>
@@ -585,7 +585,7 @@
 
     const statusMap = {
         'pending': '待處理',
-        'processing': '處理中',
+        'processing': '跟進中',
         'resolved': '已解決'
     };
 
@@ -628,7 +628,7 @@
         if (filteredTickets.length === 0) {
             listContainer.innerHTML = `
                 <div class="empty-state">
-                    <h3>😕 找不到相關工單</h3>
+                    <h3>😕 找不到相關求助單</h3>
                     <p>請嘗試調整篩選條件或搜尋關鍵字</p>
                 </div>
             `;

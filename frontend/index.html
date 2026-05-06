@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>香港學校 IT Service Desk System</title>
+  <title>學校 IT 求助系統</title>
   <style>
     * {
       margin: 0;
@@ -345,8 +345,8 @@
 <body>
   <div class="container">
     <header>
-      <h1>🖥️ 香港學校 IT Service Desk System</h1>
-      <div class="subtitle">學校資訊科技支援服務系統</div>
+      <h1>🖥️ 學校 IT 求助系統</h1>
+      <div class="subtitle">資訊科技支援服務平台</div>
     </header>
 
     <div class="stats-container" id="statsContainer">
@@ -356,15 +356,15 @@
     <div class="main-content">
       <div class="tickets-section">
         <div class="section-header">
-          <h2>📋 工單列表</h2>
+          <h2>📋 求助單列表</h2>
         </div>
 
         <div class="filters">
-          <input type="text" id="searchInput" placeholder="🔍 搜尋工單...">
+          <input type="text" id="searchInput" placeholder="🔍 搜尋求助單...">
           <select id="statusFilter">
             <option value="">全部狀態</option>
             <option value="open">待處理</option>
-            <option value="in_progress">處理中</option>
+            <option value="in_progress">跟進中</option>
             <option value="resolved">已解決</option>
             <option value="closed">已關閉</option>
           </select>
@@ -387,13 +387,13 @@
         </div>
 
         <div class="ticket-list" id="ticketList">
-          <!-- 工單列表將由 JavaScript 動態生成 -->
+          <!-- 求助單列表將由 JavaScript 動態生成 -->
         </div>
       </div>
 
       <div class="sidebar">
         <div class="form-card">
-          <h3>➕ 創建新工單</h3>
+          <h3>➕ 創建新求助單</h3>
           <form id="createTicketForm">
             <div class="form-group">
               <label>標題 *</label>
@@ -422,7 +422,7 @@
               </select>
             </div>
             <div class="form-group">
-              <label>提交人 *</label>
+              <label>申請人 *</label>
               <input type="text" id="ticketSubmitter" required placeholder="老師姓名">
             </div>
             <div class="form-group">
@@ -433,18 +433,18 @@
               <label>詳細描述 *</label>
               <textarea id="ticketDescription" required placeholder="請詳細描述問題..."></textarea>
             </div>
-            <button type="submit" class="btn btn-primary" style="width: 100%;">提交工單</button>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">提交求助單</button>
           </form>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 工單詳情 Modal -->
+  <!-- 求助單詳情 Modal -->
   <div class="modal" id="ticketModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 id="modalTitle">工單詳情</h2>
+        <h2 id="modalTitle">求助單詳情</h2>
         <button class="close-btn" onclick="closeModal()">&times;</button>
       </div>
       <div id="modalBody">
@@ -473,7 +473,7 @@
         
         const statsHTML = `
           <div class="stat-card">
-            <h3>總工單數</h3>
+            <h3>總求助單數</h3>
             <div class="number">${stats.total}</div>
           </div>
           <div class="stat-card open">
@@ -481,7 +481,7 @@
             <div class="number">${stats.open}</div>
           </div>
           <div class="stat-card in-progress">
-            <h3>處理中</h3>
+            <h3>跟進中</h3>
             <div class="number">${stats.inProgress}</div>
           </div>
           <div class="stat-card resolved">
@@ -496,7 +496,7 @@
       }
     }
 
-    // 載入工單列表
+    // 載入求助單列表
     async function loadTickets() {
       try {
         const search = document.getElementById('searchInput').value;
@@ -529,14 +529,14 @@
           </div>
         `).join('');
 
-        document.getElementById('ticketList').innerHTML = ticketListHTML || '<p style="text-align:center;color:#999;padding:40px;">暫無工單</p>';
+        document.getElementById('ticketList').innerHTML = ticketListHTML || '<p style="text-align:center;color:#999;padding:40px;">暫無求助單</p>';
       } catch (error) {
-        console.error('載入工單失敗:', error);
+        console.error('載入求助單失敗:', error);
         document.getElementById('ticketList').innerHTML = '<p style="text-align:center;color:#dc3545;padding:40px;">載入失敗，請確保後端伺服器正在運行</p>';
       }
     }
 
-    // 顯示工單詳情
+    // 顯示求助單詳情
     async function showTicketDetail(ticketId) {
       try {
         const response = await fetch(`${API_BASE}/tickets/${ticketId}`);
@@ -562,7 +562,7 @@
             <p>${ticket.description}</p>
           </div>
           <div class="detail-row">
-            <label>提交人</label>
+            <label>申請人</label>
             <p>${ticket.submittedBy} ${ticket.department ? `(${ticket.department})` : ''}</p>
           </div>
           <div class="detail-row">
@@ -589,18 +589,18 @@
 
         document.getElementById('modalActions').innerHTML = `
           ${ticket.status === 'open' ? `
-            <button class="btn btn-warning" onclick="updateTicketStatus('${ticket.id}', 'in_progress')">開始處理</button>
+            <button class="btn btn-warning" onclick="updateTicketStatus('${ticket.id}', 'in_progress')">開始跟進</button>
           ` : ''}
           ${ticket.status === 'in_progress' ? `
             <button class="btn btn-success" onclick="resolveTicket('${ticket.id}')">標記為已解決</button>
           ` : ''}
-          <button class="btn btn-danger" onclick="deleteTicket('${ticket.id}')">刪除工單</button>
+          <button class="btn btn-danger" onclick="deleteTicket('${ticket.id}')">刪除求助單</button>
         `;
 
         document.getElementById('ticketModal').classList.add('active');
       } catch (error) {
-        console.error('載入工單詳情失敗:', error);
-        alert('載入工單詳情失敗');
+        console.error('載入求助單詳情失敗:', error);
+        alert('載入求助單詳情失敗');
       }
     }
 
@@ -609,7 +609,7 @@
       document.getElementById('ticketModal').classList.remove('active');
     }
 
-    // 更新工單狀態
+    // 更新求助單狀態
     async function updateTicketStatus(ticketId, status) {
       try {
         await fetch(`${API_BASE}/tickets/${ticketId}`, {
@@ -620,12 +620,12 @@
         closeModal();
         await loadData();
       } catch (error) {
-        console.error('更新工單失敗:', error);
-        alert('更新工單失敗');
+        console.error('更新求助單失敗:', error);
+        alert('更新求助單失敗');
       }
     }
 
-    // 解決工單
+    // 解決求助單
     async function resolveTicket(ticketId) {
       const resolution = prompt('請輸入解決方案:');
       if (resolution) {
@@ -638,15 +638,15 @@
           closeModal();
           await loadData();
         } catch (error) {
-          console.error('解決工單失敗:', error);
-          alert('解決工單失敗');
+          console.error('解決求助單失敗:', error);
+          alert('解決求助單失敗');
         }
       }
     }
 
-    // 刪除工單
+    // 刪除求助單
     async function deleteTicket(ticketId) {
-      if (confirm('確定要刪除此工單嗎？')) {
+      if (confirm('確定要刪除此求助單嗎？')) {
         try {
           await fetch(`${API_BASE}/tickets/${ticketId}`, {
             method: 'DELETE'
@@ -654,13 +654,13 @@
           closeModal();
           await loadData();
         } catch (error) {
-          console.error('刪除工單失敗:', error);
-          alert('刪除工單失敗');
+          console.error('刪除求助單失敗:', error);
+          alert('刪除求助單失敗');
         }
       }
     }
 
-    // 創建工單表單提交
+    // 創建求助單表單提交
     document.getElementById('createTicketForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -686,10 +686,10 @@
         // 重新載入數據
         await loadData();
         
-        alert('工單已成功創建！');
+        alert('求助單已成功創建！');
       } catch (error) {
-        console.error('創建工單失敗:', error);
-        alert('創建工單失敗');
+        console.error('創建求助單失敗:', error);
+        alert('創建求助單失敗');
       }
     });
 
@@ -703,7 +703,7 @@
     function getStatusLabel(status) {
       const labels = {
         open: '待處理',
-        in_progress: '處理中',
+        in_progress: '跟進中',
         resolved: '已解決',
         closed: '已關閉'
       };

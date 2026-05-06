@@ -9,107 +9,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Inter', 'Microsoft YaHei', '微軟正黑體', Arial, sans-serif;
-      background: #f8f9fa;
-      min-height: 100vh;
-      color: #2a2a2a;
-    }
-    .navbar {
-      background: #03363d;
-      padding: 12px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .navbar-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: white;
-      text-decoration: none;
-    }
+    body { font-family: 'Inter', 'Microsoft YaHei', '微軟正黑體', Arial, sans-serif; background: #f8f9fa; min-height: 100vh; color: #2a2a2a; }
+    .navbar { background: #03363d; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+    .navbar-brand { display: flex; align-items: center; gap: 12px; color: white; text-decoration: none; }
     .navbar-brand h1 { font-size: 18px; font-weight: 600; }
-    .navbar-brand .subtitle {
-      font-size: 11px;
-      opacity: 0.8;
-      font-weight: 400;
-      margin-left: 8px;
-      padding-left: 8px;
-      border-left: 1px solid rgba(255,255,255,0.3);
-    }
+    .navbar-brand .subtitle { font-size: 11px; opacity: 0.8; font-weight: 400; margin-left: 8px; padding-left: 8px; border-left: 1px solid rgba(255,255,255,0.3); }
     .navbar-actions { display: flex; gap: 12px; align-items: center; }
-    .nav-link {
-      color: rgba(255,255,255,0.8);
-      text-decoration: none;
-      padding: 8px 12px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 500;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .navbar-nav { display: flex; gap: 8px; }
+    .nav-link { color: rgba(255,255,255,0.8); text-decoration: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
     .nav-link:hover, .nav-link.active { background: rgba(255,255,255,0.15); color: white; }
     .container { max-width: 1600px; margin: 0 auto; padding: 20px 24px; }
-    .views-container {
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-      border: 1px solid #e4e6e8;
-      margin-bottom: 20px;
-      overflow: hidden;
-    }
-    .views-tabs {
-      display: flex;
-      border-bottom: 1px solid #e4e6e8;
-      background: #fafafa;
-      overflow-x: auto;
-    }
-    .view-tab {
-      padding: 12px 20px;
-      border: none;
-      background: none;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      color: #6b7280;
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s;
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .views-container { background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e4e6e8; margin-bottom: 20px; overflow: hidden; }
+    .views-tabs { display: flex; border-bottom: 1px solid #e4e6e8; background: #fafafa; overflow-x: auto; }
+    .view-tab { padding: 12px 20px; border: none; background: none; cursor: pointer; font-size: 14px; font-weight: 500; color: #6b7280; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
     .view-tab:hover { background: #f3f4f6; color: #1f2937; }
     .view-tab.active { color: #03363d; border-bottom-color: #03363d; background: white; }
-    .view-tab .count {
-      background: #e5e7eb;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 600;
-    }
+    .view-tab .count { background: #e5e7eb; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
     .view-tab.active .count { background: #03363d; color: white; }
-    .stats-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .stat-card {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-      border: 1px solid #e4e6e8;
-      transition: all 0.2s;
-    }
+    .stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .stat-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e4e6e8; transition: all 0.2s; }
     .stat-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
     .stat-card h3 { color: #6b7280; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
     .stat-card .number { font-size: 28px; font-weight: 700; color: #1f2937; }
@@ -118,34 +36,10 @@
     .stat-card.resolved .number { color: #059669; }
     .stat-card.closed .number { color: #6b7280; }
     .main-content { display: grid; grid-template-columns: 1fr 400px; gap: 20px; }
-    .tickets-section {
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-      border: 1px solid #e4e6e8;
-      overflow: hidden;
-    }
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 20px;
-      border-bottom: 1px solid #e4e6e8;
-      background: #fafafa;
-    }
+    .tickets-section { background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e4e6e8; overflow: hidden; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid #e4e6e8; background: #fafafa; }
     .section-header h2 { color: #1f2937; font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-    .btn {
-      padding: 8px 14px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 500;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .btn { padding: 8px 14px; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
     .btn-primary { background: #03363d; color: white; }
     .btn-primary:hover { background: #02272b; box-shadow: 0 2px 8px rgba(3,54,61,0.3); }
     .btn-success { background: #059669; color: white; }
@@ -157,56 +51,14 @@
     .btn-secondary { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
     .btn-secondary:hover { background: #e5e7eb; }
     .btn-sm { padding: 6px 10px; font-size: 12px; }
-    .toolbar {
-      display: flex;
-      gap: 12px;
-      padding: 16px 20px;
-      border-bottom: 1px solid #e4e6e8;
-      background: white;
-      flex-wrap: wrap;
-      align-items: center;
-    }
+    .toolbar { display: flex; gap: 12px; padding: 16px 20px; border-bottom: 1px solid #e4e6e8; background: white; flex-wrap: wrap; align-items: center; }
     .search-box { flex: 1; min-width: 280px; position: relative; }
-    .search-box input {
-      width: 100%;
-      padding: 10px 14px 10px 38px;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      font-size: 14px;
-      font-family: inherit;
-      transition: all 0.2s;
-    }
-    .search-box::before {
-      content: "🔍";
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 14px;
-    }
-    .filters select {
-      padding: 10px 14px;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      font-size: 13px;
-      font-family: inherit;
-      transition: all 0.2s;
-      background: white;
-      cursor: pointer;
-    }
+    .search-box input { width: 100%; padding: 10px 14px 10px 38px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; font-family: inherit; transition: all 0.2s; }
+    .search-box::before { content: "🔍"; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; }
+    .filters select { padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; font-family: inherit; transition: all 0.2s; background: white; cursor: pointer; }
     .filters select:focus { outline: none; border-color: #03363d; box-shadow: 0 0 0 3px rgba(3,54,61,0.1); }
     .ticket-table { width: 100%; border-collapse: collapse; }
-    .ticket-table th {
-      text-align: left;
-      padding: 12px 16px;
-      background: #fafafa;
-      border-bottom: 1px solid #e4e6e8;
-      font-size: 12px;
-      font-weight: 600;
-      color: #6b7280;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+    .ticket-table th { text-align: left; padding: 12px 16px; background: #fafafa; border-bottom: 1px solid #e4e6e8; font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; }
     .ticket-table td { padding: 14px 16px; border-bottom: 1px solid #f3f4f6; font-size: 14px; vertical-align: middle; }
     .ticket-row { cursor: pointer; transition: all 0.2s; }
     .ticket-row:hover { background: #f9fafb; }
@@ -214,19 +66,7 @@
     .ticket-cell-title { font-weight: 500; color: #1f2937; }
     .ticket-cell-submitter { color: #6b7280; font-size: 13px; }
     .ticket-cell-assignee { font-size: 13px; }
-    .avatar {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: #03363d;
-      color: white;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 600;
-      margin-right: 6px;
-    }
+    .avatar { width: 24px; height: 24px; border-radius: 50%; background: #03363d; color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; margin-right: 6px; }
     .sla-indicator { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; padding: 4px 8px; border-radius: 4px; }
     .sla-good { background: #d1fae5; color: #047857; }
     .sla-warning { background: #fef3c7; color: #92400e; }
@@ -252,63 +92,58 @@
     .form-card h3 { color: #1f2937; margin-bottom: 16px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
     .form-group { margin-bottom: 14px; }
     .form-group label { display: block; margin-bottom: 6px; color: #374151; font-size: 12px; font-weight: 500; }
-    .form-group input, .form-group select, .form-group textarea {
-      width: 100%;
-      padding: 8px 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      font-size: 13px;
-      font-family: inherit;
-      transition: all 0.2s;
-    }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-      outline: none;
-      border-color: #03363d;
-      box-shadow: 0 0 0 3px rgba(3,54,61,0.1);
-    }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; font-family: inherit; transition: all 0.2s; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #03363d; box-shadow: 0 0 0 3px rgba(3,54,61,0.1); }
     .form-group textarea { resize: vertical; min-height: 80px; }
 
-    /* ── AI 分析區塊樣式 ── */
-    .ai-analysis-block {
-      background: #f0faf9;
-      border: 1px solid #a7d4d0;
+    /* ===== AI 分析區域樣式 ===== */
+    .ai-analysis-box {
+      background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+      border: 1px solid #86efac;
       border-radius: 8px;
-      padding: 12px 14px;
+      padding: 14px;
       margin-bottom: 14px;
+      display: none;
     }
-    .ai-analysis-block .ai-header {
+    .ai-analysis-box.show { display: block; }
+    .ai-analysis-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 10px;
     }
-    .ai-analysis-block .ai-title {
+    .ai-analysis-title {
       font-size: 12px;
       font-weight: 600;
-      color: #03363d;
+      color: #047857;
       display: flex;
       align-items: center;
       gap: 6px;
     }
-    .ai-analysis-block .ai-status {
+    .ai-confidence {
       font-size: 11px;
-      color: #6b7280;
+      background: #d1fae5;
+      color: #047857;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 600;
     }
     .ai-result-row {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       margin-bottom: 8px;
     }
     .ai-result-item {
       flex: 1;
       background: white;
-      border: 1px solid #d1e8e6;
+      border: 1px solid #d1fae5;
       border-radius: 6px;
       padding: 8px 10px;
     }
     .ai-result-item .ai-result-label {
       font-size: 10px;
       color: #6b7280;
+      font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.4px;
       margin-bottom: 4px;
@@ -317,121 +152,62 @@
       font-size: 13px;
       font-weight: 600;
       color: #1f2937;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .ai-confidence {
-      font-size: 10px;
-      color: #6b7280;
-      font-weight: 400;
     }
     .ai-reason {
       font-size: 11px;
       color: #4b5563;
       line-height: 1.5;
-      margin-top: 4px;
+      background: white;
+      border-radius: 6px;
+      padding: 8px 10px;
+      border: 1px solid #d1fae5;
+      margin-bottom: 8px;
     }
+    .ai-override-toggle {
+      font-size: 11px;
+      color: #6b7280;
+      cursor: pointer;
+      text-decoration: underline;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    .ai-override-toggle:hover { color: #03363d; }
     .ai-loading {
-      display: flex;
+      display: none;
       align-items: center;
       gap: 8px;
-      color: #6b7280;
       font-size: 12px;
+      color: #6b7280;
       padding: 8px 0;
     }
-    .ai-spinner {
-      width: 14px;
-      height: 14px;
+    .ai-loading.show { display: flex; }
+    .spinner {
+      width: 16px; height: 16px;
       border: 2px solid #d1d5db;
       border-top-color: #03363d;
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .ai-override-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px solid #d1e8e6;
-    }
-    .ai-override-label {
-      font-size: 11px;
-      color: #6b7280;
-      white-space: nowrap;
-    }
-    .ai-override-selects {
-      display: flex;
-      gap: 8px;
-      flex: 1;
-    }
-    .ai-override-selects select {
-      flex: 1;
-      padding: 5px 8px;
-      border: 1px solid #d1d5db;
-      border-radius: 5px;
-      font-size: 12px;
-      font-family: inherit;
-      background: white;
-      cursor: pointer;
-    }
-    .ai-override-selects select:focus {
-      outline: none;
-      border-color: #03363d;
-    }
-    /* ── end AI styles ── */
+    .override-fields { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid #d1fae5; }
+    .override-fields.show { display: block; }
+    .override-row { display: flex; gap: 8px; }
+    .override-row .form-group { flex: 1; margin-bottom: 0; }
+    /* ===== END AI 區域 ===== */
 
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 1000;
-      justify-content: center;
-      align-items: flex-start;
-      backdrop-filter: blur(4px);
-      padding-top: 40px;
-    }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: flex-start; backdrop-filter: blur(4px); padding-top: 40px; }
     .modal.active { display: flex; }
-    .modal-content {
-      background: white;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 1000px;
-      max-height: 85vh;
-      overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      display: flex;
-      flex-direction: column;
-    }
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 24px;
-      border-bottom: 1px solid #e4e6e8;
-      background: #fafafa;
-    }
+    .modal-content { background: white; border-radius: 12px; width: 90%; max-width: 1000px; max-height: 85vh; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3); display: flex; flex-direction: column; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid #e4e6e8; background: #fafafa; }
     .modal-header h2 { color: #1f2937; font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 12px; }
-    .close-btn {
-      background: none; border: none; font-size: 24px; cursor: pointer;
-      color: #6b7280; width: 32px; height: 32px;
-      display: flex; align-items: center; justify-content: center;
-      border-radius: 6px; transition: all 0.2s;
-    }
+    .close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; transition: all 0.2s; }
     .close-btn:hover { background: #e5e7eb; color: #1f2937; }
     .modal-body { display: grid; grid-template-columns: 1fr 320px; overflow: hidden; }
     .ticket-detail-main { padding: 24px; border-right: 1px solid #e4e6e8; overflow-y: auto; max-height: 60vh; }
     .ticket-detail-sidebar { padding: 24px; background: #fafafa; overflow-y: auto; max-height: 60vh; }
     .detail-section { margin-bottom: 24px; }
-    .detail-section h3 {
-      font-size: 13px; font-weight: 600; color: #6b7280;
-      text-transform: uppercase; letter-spacing: 0.5px;
-      margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #e4e6e8;
-    }
+    .detail-section h3 { font-size: 13px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #e4e6e8; }
     .detail-row { margin-bottom: 16px; }
     .detail-row label { font-weight: 600; color: #6b7280; display: block; margin-bottom: 6px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
     .detail-row p { color: #1f2937; line-height: 1.6; font-size: 14px; }
@@ -469,7 +245,6 @@
       .search-box { min-width: 100%; }
       .ticket-table { font-size: 12px; }
       .ticket-table th, .ticket-table td { padding: 10px 12px; }
-      .ai-result-row { flex-direction: column; }
     }
   </style>
 </head>
@@ -559,7 +334,7 @@
           </div>
         </div>
 
-        <!-- ─── 創建新求助單 ─── -->
+        <!-- 創建新求助單表單 -->
         <div class="form-card" id="createForm">
           <h3>➕ 創建新求助單</h3>
           <form id="createTicketForm">
@@ -576,33 +351,74 @@
               <input type="text" id="ticketDepartment" placeholder="例如：數學科、學務處">
             </div>
             <div class="form-group">
-              <label>詳細描述 * <span style="color:#6b7280;font-weight:400;">(填寫後 AI 將自動分析分類及優先級)</span></label>
-              <textarea id="ticketDescription" required placeholder="請詳細描述問題..."></textarea>
+              <label>詳細描述 * <span style="color:#9ca3af;font-weight:400;">（填寫後 AI 將自動分析）</span></label>
+              <textarea id="ticketDescription" required placeholder="請詳細描述問題，AI 將根據內容自動判斷分類及優先級..."></textarea>
             </div>
 
-            <!-- ─── AI 分析結果區塊 ─── -->
-            <div class="ai-analysis-block" id="aiAnalysisBlock">
-              <div class="ai-header">
-                <span class="ai-title">🤖 AI 智能分析</span>
-                <span class="ai-status" id="aiStatusText">請填寫標題及描述以啟動分析</span>
-              </div>
-              <div id="aiResultArea">
-                <div style="color:#9ca3af;font-size:12px;padding:4px 0;">等待輸入...</div>
-              </div>
-              <!-- 隱藏欄位儲存 AI 決定的值 -->
-              <input type="hidden" id="ticketCategory">
-              <input type="hidden" id="ticketPriority">
+            <!-- AI 分析載入中 -->
+            <div class="ai-loading" id="aiLoading">
+              <div class="spinner"></div>
+              <span>🤖 AI 正在分析問題...</span>
             </div>
-            <!-- ─── end AI block ─── -->
 
-            <button type="submit" class="btn btn-primary" style="width:100%;" id="submitBtn" disabled>提交求助單</button>
+            <!-- AI 分析結果框 -->
+            <div class="ai-analysis-box" id="aiAnalysisBox">
+              <div class="ai-analysis-header">
+                <div class="ai-analysis-title">🤖 AI 分析結果</div>
+                <span class="ai-confidence" id="aiConfidence">信心：高</span>
+              </div>
+              <div class="ai-result-row">
+                <div class="ai-result-item">
+                  <div class="ai-result-label">分類</div>
+                  <div class="ai-result-value" id="aiCategoryDisplay">—</div>
+                </div>
+                <div class="ai-result-item">
+                  <div class="ai-result-label">優先級</div>
+                  <div class="ai-result-value" id="aiPriorityDisplay">—</div>
+                </div>
+              </div>
+              <div class="ai-reason" id="aiReason">—</div>
+              <button type="button" class="ai-override-toggle" onclick="toggleOverride()">✏️ 手動覆蓋 AI 判斷</button>
+              <div class="override-fields" id="overrideFields">
+                <div class="override-row">
+                  <div class="form-group">
+                    <label>手動選擇分類</label>
+                    <select id="ticketCategory">
+                      <option value="">請選擇分類</option>
+                      <option value="hardware">硬件問題</option>
+                      <option value="software">軟件問題</option>
+                      <option value="network">網絡問題</option>
+                      <option value="account">帳號權限</option>
+                      <option value="email">電郵系統</option>
+                      <option value="other">其他</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>手動選擇優先級</label>
+                    <select id="ticketPriority">
+                      <option value="">請選擇優先級</option>
+                      <option value="low">低</option>
+                      <option value="medium">中</option>
+                      <option value="high">高</option>
+                      <option value="urgent">緊急</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 隱藏欄位儲存 AI 判斷值 -->
+            <input type="hidden" id="finalCategory">
+            <input type="hidden" id="finalPriority">
+
+            <button type="submit" class="btn btn-primary" style="width:100%;">提交求助單</button>
           </form>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal -->
+  <!-- 求助單詳情 Modal -->
   <div class="modal" id="ticketModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -666,483 +482,178 @@
       { id:'TKT-2024-001', title:'課室電腦無法啟動', description:'302 課室的投影機連接電腦無法開機，按電源鍵無反應。明天有公開課需要用到，急需處理。', category:'hardware', priority:'high', status:'open', submittedBy:'陳大文老師', department:'數學科', location:'302 課室', contactEmail:'tchan@school.edu.hk', contactPhone:'2123 4567', assignedTo:null, createdAt:new Date(Date.now()-2*3600*1000).toISOString(), updatedAt:new Date(Date.now()-2*3600*1000).toISOString(), resolvedAt:null, tags:['電腦','投影機','緊急'] },
       { id:'TKT-2024-002', title:'學生電腦室 Wi-Fi 連線不穩', description:'電腦室 A 的學生反映 Wi-Fi 經常斷線，影響網上學習活動重啟路由器後問題仍然存在。', category:'network', priority:'medium', status:'in_progress', submittedBy:'李美玲老師', department:'電腦科', location:'電腦室 A', contactEmail:'mlee@school.edu.hk', contactPhone:'2123 4568', assignedTo:'黃志明', createdAt:new Date(Date.now()-24*3600*1000).toISOString(), updatedAt:new Date(Date.now()-5*3600*1000).toISOString(), resolvedAt:null, tags:['Wi-Fi','網絡','電腦室'] },
       { id:'TKT-2024-003', title:'申請安裝 Adobe Acrobat Reader', description:'辦公室電腦需要安裝 Adobe Acrobat Reader 以閱讀 PDF 文件，請協助安裝。', category:'software', priority:'low', status:'resolved', submittedBy:'王淑芬老師', department:'行政處', location:'教師辦公室', contactEmail:'swong@school.edu.hk', contactPhone:'2123 4569', assignedTo:'張偉強', createdAt:new Date(Date.now()-3*24*3600*1000).toISOString(), updatedAt:new Date(Date.now()-1*24*3600*1000).toISOString(), resolvedAt:new Date(Date.now()-1*24*3600*1000).toISOString(), tags:['軟件','PDF'] },
-      { id:'TKT-2024-004', title:'禮堂音響系統故障', description:'禮堂麥克風沒有聲音，擴大機顯示錯誤代碼 E-03。本週五有畢業典禮，非常緊急！', category:'av_equipment', priority:'urgent', status:'in_progress', submittedBy:'林家豪老師', department:'學務處', location:'禮堂', contactEmail:'klam@school.edu.hk', contactPhone:'2123 4570', assignedTo:'黃志明', createdAt:new Date(Date.now()-4*3600*1000).toISOString(), updatedAt:new Date(Date.now()-1*3600*1000).toISOString(), resolvedAt:null, tags:['音響','麥克風','緊急','畢業典禮'] },
-      { id:'TKT-2024-005', title:'圖書館列印機卡紙', description:'圖書館公共列印機頻繁卡紙，已嘗試取出紙張但問題持續發生。', category:'printer', priority:'medium', status:'open', submittedBy:'張麗莎老師', department:'圖書館', location:'圖書館', contactEmail:'lcheung@school.edu.hk', contactPhone:'2123 4571', assignedTo:null, createdAt:new Date(Date.now()-6*3600*1000).toISOString(), updatedAt:new Date(Date.now()-6*3600*1000).toISOString(), resolvedAt:null, tags:['列印機','卡紙'] },
+      { id:'TKT-2024-004', title:'禮堂音響系統故障', description:'禮堂麥克風沒有聲音，擴大機顯示錯誤代碼 E-03。本週五有畢業典禮，非常緊急！', category:'hardware', priority:'urgent', status:'in_progress', submittedBy:'林家豪老師', department:'學務處', location:'禮堂', contactEmail:'klam@school.edu.hk', contactPhone:'2123 4570', assignedTo:'黃志明', createdAt:new Date(Date.now()-4*3600*1000).toISOString(), updatedAt:new Date(Date.now()-1*3600*1000).toISOString(), resolvedAt:null, tags:['音響','麥克風','緊急','畢業典禮'] },
+      { id:'TKT-2024-005', title:'圖書館列印機卡紙', description:'圖書館公共列印機頻繁卡紙，已嘗試取出紙張但問題持續發生。', category:'hardware', priority:'medium', status:'open', submittedBy:'張麗莎老師', department:'圖書館', location:'圖書館', contactEmail:'lcheung@school.edu.hk', contactPhone:'2123 4571', assignedTo:null, createdAt:new Date(Date.now()-6*3600*1000).toISOString(), updatedAt:new Date(Date.now()-6*3600*1000).toISOString(), resolvedAt:null, tags:['列印機','卡紙'] },
       { id:'TKT-2024-006', title:'教員室空調遙控器失靈', description:'教員室空調遙控器無法調節溫度，顯示屏空白，可能需要更換電池或遙控器。', category:'hardware', priority:'low', status:'closed', submittedBy:'劉志遠老師', department:'教員室', location:'教員室', contactEmail:'clau@school.edu.hk', contactPhone:'2123 4572', assignedTo:'張偉強', createdAt:new Date(Date.now()-7*24*3600*1000).toISOString(), updatedAt:new Date(Date.now()-5*24*3600*1000).toISOString(), resolvedAt:new Date(Date.now()-5*24*3600*1000).toISOString(), tags:['空調','遙控器'] },
-      { id:'TKT-2024-007', title:'電子白板觸控功能異常', description:'201 課室的電子白板觸控不準確，需要校準或維修。影響正常教學。', category:'av_equipment', priority:'high', status:'open', submittedBy:'吳敏儀老師', department:'中文科', location:'201 課室', contactEmail:'mng@school.edu.hk', contactPhone:'2123 4573', assignedTo:'黃志明', createdAt:new Date(Date.now()-12*3600*1000).toISOString(), updatedAt:new Date(Date.now()-10*3600*1000).toISOString(), resolvedAt:null, tags:['電子白板','觸控'] },
+      { id:'TKT-2024-007', title:'電子白板觸控功能異常', description:'201 課室的電子白板觸控不準確，需要校準或維修。影響正常教學。', category:'hardware', priority:'high', status:'open', submittedBy:'吳敏儀老師', department:'中文科', location:'201 課室', contactEmail:'mng@school.edu.hk', contactPhone:'2123 4573', assignedTo:'黃志明', createdAt:new Date(Date.now()-12*3600*1000).toISOString(), updatedAt:new Date(Date.now()-10*3600*1000).toISOString(), resolvedAt:null, tags:['電子白板','觸控'] },
       { id:'TKT-2024-008', title:'學校網站無法訪問', description:'校外人士反映無法訪問學校網站，顯示「連接超時」。請檢查伺服器狀態。', category:'network', priority:'urgent', status:'in_progress', submittedBy:'鄭國華老師', department:'資訊科技處', location:'伺服器房', contactEmail:'kcheng@school.edu.hk', contactPhone:'2123 4574', assignedTo:'張偉強', createdAt:new Date(Date.now()-1*3600*1000).toISOString(), updatedAt:new Date(Date.now()-30*60*1000).toISOString(), resolvedAt:null, tags:['網站','伺服器','緊急'] }
     ];
 
     const mockActivities = {
-      'TKT-2024-001': [{id:'act1',type:'public',author:'陳大文老師',text:'提交求助單：課室電腦無法啟動',timestamp:new Date(Date.now()-2*3600*1000).toISOString()}],
-      'TKT-2024-002': [
-        {id:'act1',type:'public',author:'李美玲老師',text:'提交求助單：學生電腦室 Wi-Fi 連線不穩',timestamp:new Date(Date.now()-24*3600*1000).toISOString()},
-        {id:'act2',type:'internal',author:'黃志明',text:'已接收求助單，將檢查無線存取點設定',timestamp:new Date(Date.now()-20*3600*1000).toISOString()},
-        {id:'act3',type:'public',author:'黃志明',text:'已重啟主交換器，正在觀察情況',timestamp:new Date(Date.now()-5*3600*1000).toISOString()}
-      ],
-      'TKT-2024-003': [
-        {id:'act1',type:'public',author:'王淑芬老師',text:'提交求助單：申請安裝 Adobe Acrobat Reader',timestamp:new Date(Date.now()-3*24*3600*1000).toISOString()},
-        {id:'act2',type:'internal',author:'張偉強',text:'已透過 SCCM 推送安裝',timestamp:new Date(Date.now()-2*24*3600*1000).toISOString()},
-        {id:'act3',type:'public',author:'張偉強',text:'軟件已安裝完成，請重新啟動電腦後測試',timestamp:new Date(Date.now()-1*24*3600*1000).toISOString()},
-        {id:'act4',type:'public',author:'王淑芬老師',text:'確認問題已解決，謝謝！',timestamp:new Date(Date.now()-1*24*3600*1000).toISOString()}
-      ],
-      'TKT-2024-004': [
-        {id:'act1',type:'public',author:'林家豪老師',text:'提交求助單：禮堂音響系統故障',timestamp:new Date(Date.now()-4*3600*1000).toISOString()},
-        {id:'act2',type:'internal',author:'黃志明',text:'E-03 錯誤通常係擴大機過熱，會帶備用機過去',timestamp:new Date(Date.now()-3*3600*1000).toISOString()},
-        {id:'act3',type:'public',author:'黃志明',text:'已檢查音響系統，需要更換擴大機模組，已聯絡廠商',timestamp:new Date(Date.now()-1*3600*1000).toISOString()}
-      ],
-      'TKT-2024-005': [{id:'act1',type:'public',author:'張麗莎老師',text:'提交求助單：圖書館列印機卡紙',timestamp:new Date(Date.now()-6*3600*1000).toISOString()}],
-      'TKT-2024-006': [
-        {id:'act1',type:'public',author:'劉志遠老師',text:'提交求助單：教員室空調遙控器失靈',timestamp:new Date(Date.now()-7*24*3600*1000).toISOString()},
-        {id:'act2',type:'internal',author:'張偉強',text:'更換了遙控器電池',timestamp:new Date(Date.now()-6*24*3600*1000).toISOString()},
-        {id:'act3',type:'public',author:'張偉強',text:'遙控器已修復，問題解決',timestamp:new Date(Date.now()-5*24*3600*1000).toISOString()}
-      ],
-      'TKT-2024-007': [
-        {id:'act1',type:'public',author:'吳敏儀老師',text:'提交求助單：電子白板觸控功能異常',timestamp:new Date(Date.now()-12*3600*1000).toISOString()},
-        {id:'act2',type:'internal',author:'黃志明',text:'試過校準但效果不佳，可能需要更換觸控模組',timestamp:new Date(Date.now()-10*3600*1000).toISOString()}
-      ],
-      'TKT-2024-008': [
-        {id:'act1',type:'public',author:'鄭國華老師',text:'提交求助單：學校網站無法訪問',timestamp:new Date(Date.now()-1*3600*1000).toISOString()},
-        {id:'act2',type:'internal',author:'張偉強',text:'檢查緊伺服器，睇下係咪防火牆設定問題',timestamp:new Date(Date.now()-45*60*1000).toISOString()},
-        {id:'act3',type:'public',author:'張偉強',text:'正在重設防火牆規則，預計 15 分鐘內恢復',timestamp:new Date(Date.now()-30*60*1000).toISOString()}
-      ]
+      'TKT-2024-001':[{id:'act1',type:'public',author:'陳大文老師',text:'提交求助單：課室電腦無法啟動',timestamp:new Date(Date.now()-2*3600*1000).toISOString()}],
+      'TKT-2024-002':[{id:'act1',type:'public',author:'李美玲老師',text:'提交求助單：學生電腦室 Wi-Fi 連線不穩',timestamp:new Date(Date.now()-24*3600*1000).toISOString()},{id:'act2',type:'internal',author:'黃志明',text:'已接收求助單，將檢查無線存取點設定',timestamp:new Date(Date.now()-20*3600*1000).toISOString()},{id:'act3',type:'public',author:'黃志明',text:'已重啟主交換器，正在觀察情況',timestamp:new Date(Date.now()-5*3600*1000).toISOString()}],
+      'TKT-2024-003':[{id:'act1',type:'public',author:'王淑芬老師',text:'提交求助單：申請安裝 Adobe Acrobat Reader',timestamp:new Date(Date.now()-3*24*3600*1000).toISOString()},{id:'act2',type:'internal',author:'張偉強',text:'已透過 SCCM 推送安裝',timestamp:new Date(Date.now()-2*24*3600*1000).toISOString()},{id:'act3',type:'public',author:'張偉強',text:'軟件已安裝完成，請重新啟動電腦後測試',timestamp:new Date(Date.now()-1*24*3600*1000).toISOString()},{id:'act4',type:'public',author:'王淑芬老師',text:'確認問題已解決，謝謝！',timestamp:new Date(Date.now()-1*24*3600*1000).toISOString()}],
+      'TKT-2024-004':[{id:'act1',type:'public',author:'林家豪老師',text:'提交求助單：禮堂音響系統故障',timestamp:new Date(Date.now()-4*3600*1000).toISOString()},{id:'act2',type:'internal',author:'黃志明',text:'E-03 錯誤通常係擴大機過熱，會帶備用機過去',timestamp:new Date(Date.now()-3*3600*1000).toISOString()},{id:'act3',type:'public',author:'黃志明',text:'已檢查音響系統，需要更換擴大機模組，已聯絡廠商',timestamp:new Date(Date.now()-1*3600*1000).toISOString()}],
+      'TKT-2024-005':[{id:'act1',type:'public',author:'張麗莎老師',text:'提交求助單：圖書館列印機卡紙',timestamp:new Date(Date.now()-6*3600*1000).toISOString()}],
+      'TKT-2024-006':[{id:'act1',type:'public',author:'劉志遠老師',text:'提交求助單：教員室空調遙控器失靈',timestamp:new Date(Date.now()-7*24*3600*1000).toISOString()},{id:'act2',type:'internal',author:'張偉強',text:'更換了遙控器電池',timestamp:new Date(Date.now()-6*24*3600*1000).toISOString()},{id:'act3',type:'public',author:'張偉強',text:'遙控器已修復，問題解決',timestamp:new Date(Date.now()-5*24*3600*1000).toISOString()}],
+      'TKT-2024-007':[{id:'act1',type:'public',author:'吳敏儀老師',text:'提交求助單：電子白板觸控功能異常',timestamp:new Date(Date.now()-12*3600*1000).toISOString()},{id:'act2',type:'internal',author:'黃志明',text:'試過校準但效果不佳，可能需要更換觸控模組',timestamp:new Date(Date.now()-10*3600*1000).toISOString()}],
+      'TKT-2024-008':[{id:'act1',type:'public',author:'鄭國華老師',text:'提交求助單：學校網站無法訪問',timestamp:new Date(Date.now()-1*3600*1000).toISOString()},{id:'act2',type:'internal',author:'張偉強',text:'檢查緊伺服器，睇下係咪防火牆設定問題',timestamp:new Date(Date.now()-45*60*1000).toISOString()},{id:'act3',type:'public',author:'張偉強',text:'正在重設防火牆規則，預計 15 分鐘內恢復',timestamp:new Date(Date.now()-30*60*1000).toISOString()}]
     };
 
-    const API_BASE = USE_MOCK_DATA ? null : 'http://localhost:3001/api';
+    // ========== AI 分析引擎 ==========
+    // 純前端 rule-based，無需 API key，適合 GitHub Pages 靜態部署
+    let aiDebounceTimer = null;
+    let currentAiCategory = '';
+    let currentAiPriority = '';
+    let overrideMode = false;
+
+    const categoryRules = [
+      { key:'network', weight:0, patterns:[/wi-?fi/i,/網絡/,/斷線/,/連線/,/路由/,/internet/i,/網站/,/伺服器/,/dns/i,/ip/i,/vpn/i,/bandwidth/i,/頻寬/] },
+      { key:'software', weight:0, patterns:[/軟件/,/安裝/,/程式/,/app/i,/系統更新/,/virus/i,/病毒/,/adobe/i,/office/i,/windows/i,/driver/i,/驅動/,/授權/,/license/i] },
+      { key:'account', weight:0, patterns:[/密碼/,/帳號/,/帳戶/,/登入/,/login/i,/password/i,/權限/,/access/i,/鎖定/,/unlock/i,/email.*帳/,/用戶名/] },
+      { key:'email', weight:0, patterns:[/電郵/,/email/i,/outlook/i,/gmail/i,/郵件/,/收件/,/發件/,/smtp/i,/imap/i] },
+      { key:'hardware', weight:0, patterns:[/電腦/,/開機/,/重啟/,/硬件/,/螢幕/,/鍵盤/,/滑鼠/,/列印機/,/打印機/,/投影機/,/音響/,/麥克風/,/相機/,/掃描/,/白板/,/觸控/,/空調/,/遙控/,/usb/i,/hdmi/i,/電池/,/充電/,/卡紙/] }
+    ];
+
+    const urgentPatterns = [/緊急/,/urgent/i,/立即/,/即刻/,/今[天日]/,/today/i,/asap/i,/非常急/,/典禮/,/考試/,/公開課/,/校長/,/視察/,/明[天日]/,/明早/];
+    const highPatterns = [/嚴重/,/影響.*教學/,/全[班級校]/,/所有.*用戶/,/無法.*使用/,/完全/,/大範圍/,/多個/,/反覆/,/持續/,/重要/,/需要.*盡快/];
+    const lowPatterns = [/申請/,/安裝.*新/,/更換.*電池/,/個人/,/方便時/,/不急/,/低優先/,/建議/,/希望/,/如果可以/];
+
+    function analyzeWithAI(title, description) {
+      const text = (title + ' ' + description).toLowerCase();
+
+      // 分類分析
+      const scores = categoryRules.map(rule => ({
+        key: rule.key,
+        score: rule.patterns.reduce((sum, p) => sum + (p.test(text) ? 1 : 0), 0)
+      }));
+      scores.sort((a, b) => b.score - a.score);
+      const topCategory = scores[0].score > 0 ? scores[0].key : 'other';
+      const confidence = scores[0].score >= 3 ? '高' : scores[0].score >= 2 ? '中' : scores[0].score >= 1 ? '中' : '低';
+
+      // 優先級分析
+      let priority = 'medium';
+      if (urgentPatterns.some(p => p.test(text))) priority = 'urgent';
+      else if (highPatterns.some(p => p.test(text))) priority = 'high';
+      else if (lowPatterns.some(p => p.test(text))) priority = 'low';
+
+      // 生成解釋
+      const catLabel = getCategoryLabel(topCategory);
+      const priLabel = getPriorityLabel(priority);
+      const matchedCatWords = categoryRules.find(r=>r.key===topCategory)?.patterns.filter(p=>p.test(text)).map(p=>p.toString().replace(/\//g,'').replace(/[iI]$/,'')) || [];
+      const matchedPriWords = [...urgentPatterns,...highPatterns,...lowPatterns].filter(p=>p.test(text)).map(p=>p.toString().replace(/\//g,'').replace(/[iI]$/,''));
+
+      let reason = `分類「${catLabel}」`;
+      if (matchedCatWords.length) reason += `，因描述含：${matchedCatWords.slice(0,3).join('、')}`;
+      reason += `。優先級「${priLabel}」`;
+      if (matchedPriWords.length) reason += `，關鍵詞：${matchedPriWords.slice(0,2).join('、')}`;
+      else reason += '，根據一般預設';
+      reason += '。';
+
+      return { category: topCategory, priority, confidence, reason };
+    }
+
+    function triggerAIAnalysis() {
+      if (overrideMode) return;
+      clearTimeout(aiDebounceTimer);
+      const title = document.getElementById('ticketTitle').value.trim();
+      const desc = document.getElementById('ticketDescription').value.trim();
+      if (!title && !desc) {
+        document.getElementById('aiAnalysisBox').classList.remove('show');
+        document.getElementById('aiLoading').classList.remove('show');
+        return;
+      }
+      if (title.length + desc.length < 4) return;
+
+      document.getElementById('aiLoading').classList.add('show');
+      document.getElementById('aiAnalysisBox').classList.remove('show');
+
+      aiDebounceTimer = setTimeout(() => {
+        const result = analyzeWithAI(title, desc);
+        currentAiCategory = result.category;
+        currentAiPriority = result.priority;
+
+        document.getElementById('aiCategoryDisplay').textContent = getCategoryLabel(result.category);
+        document.getElementById('aiPriorityDisplay').textContent = getPriorityLabel(result.priority);
+        document.getElementById('aiReason').textContent = result.reason;
+        document.getElementById('aiConfidence').textContent = '信心：' + result.confidence;
+        document.getElementById('aiConfidence').style.background = result.confidence === '高' ? '#d1fae5' : result.confidence === '中' ? '#fef3c7' : '#fee2e2';
+        document.getElementById('aiConfidence').style.color = result.confidence === '高' ? '#047857' : result.confidence === '中' ? '#92400e' : '#b91c1c';
+
+        document.getElementById('finalCategory').value = result.category;
+        document.getElementById('finalPriority').value = result.priority;
+
+        document.getElementById('aiLoading').classList.remove('show');
+        document.getElementById('aiAnalysisBox').classList.add('show');
+      }, 800);
+    }
+
+    function toggleOverride() {
+      overrideMode = !overrideMode;
+      const fields = document.getElementById('overrideFields');
+      const btn = document.querySelector('.ai-override-toggle');
+      if (overrideMode) {
+        fields.classList.add('show');
+        btn.textContent = '🤖 使用 AI 判斷';
+        document.getElementById('ticketCategory').value = currentAiCategory;
+        document.getElementById('ticketPriority').value = currentAiPriority;
+      } else {
+        fields.classList.remove('show');
+        btn.textContent = '✏️ 手動覆蓋 AI 判斷';
+        document.getElementById('finalCategory').value = currentAiCategory;
+        document.getElementById('finalPriority').value = currentAiPriority;
+      }
+    }
+
+    // ========== 主要功能 ==========
+    const API_BASE = null;
     let currentView = 'all';
     let currentTicketId = null;
 
-    // ═══════════════════════════════════════════
-    // AI 分析引擎 (純前端 rule-based，無需 API key)
-    // ═══════════════════════════════════════════
-    const AI_RULES = {
-      category: [
-        { key:'network',   label:'網絡問題',   keywords:['wifi','wi-fi','網絡','網路','斷線','連線','路由','交換','伺服器','server','internet','ip','dns','vpn','寬頻'] },
-        { key:'hardware',  label:'硬件問題',   keywords:['電腦','主機','顯示器','螢幕','鍵盤','滑鼠','硬碟','記憶體','ram','cpu','風扇','電源','開唔到','開機','關機','無法啟動','遙控','空調'] },
-        { key:'software',  label:'軟件問題',   keywords:['軟件','軟體','安裝','更新','程式','app','系統','windows','office','word','excel','pdf','adobe','virus','病毒','崩潰','crash','error','錯誤'] },
-        { key:'account',   label:'帳號權限',   keywords:['帳號','密碼','登入','login','password','權限','access','用戶','user','鎖定','reset','重設'] },
-        { key:'email',     label:'電郵系統',   keywords:['電郵','email','郵件','outlook','mail','收件','發件','附件'] },
-        { key:'av_equipment', label:'視聽設備', keywords:['投影機','projector','白板','音響','喇叭','麥克風','mic','擴大機','螢幕','hdmi','顯示','影像','視頻','禮堂'] },
-        { key:'printer',   label:'列印機問題', keywords:['列印','打印','printer','印表機','卡紙','墨水','toner','碳粉'] }
-      ],
-      priority: [
-        { key:'urgent', label:'緊急', keywords:['緊急','urgent','立即','即刻','今日','今天','馬上','asap','critical','宕機','down','完全無法','所有人','全校','畢業','典禮','公開課','大型活動'] },
-        { key:'high',   label:'高',   keywords:['高','high','明天','明日','影響教學','無法上課','多人','課室','課堂','嚴重','重要'] },
-        { key:'medium', label:'中',   keywords:['中','medium','偶爾','有時','不穩','較慢','緩慢','部分'] },
-        { key:'low',    label:'低',   keywords:['低','low','建議','申請','安裝','升級','更換電池','遙控','方便'] }
-      ]
-    };
-
-    function aiAnalyse(title, description) {
-      const text = (title + ' ' + description).toLowerCase();
-      let bestCategory = { key:'other', label:'其他', score:0 };
-      let bestPriority = { key:'medium', label:'中', score:0 };
-
-      for (const cat of AI_RULES.category) {
-        const matched = cat.keywords.filter(k => text.includes(k));
-        if (matched.length > bestCategory.score) {
-          bestCategory = { ...cat, score: matched.length, matched };
-        }
-      }
-      for (const pri of AI_RULES.priority) {
-        const matched = pri.keywords.filter(k => text.includes(k));
-        if (matched.length > bestPriority.score) {
-          bestPriority = { ...pri, score: matched.length, matched };
-        }
-      }
-
-      const catConf = bestCategory.score >= 3 ? '高' : bestCategory.score === 2 ? '中' : bestCategory.score === 1 ? '低' : '預設';
-      const priConf = bestPriority.score >= 2 ? '高' : bestPriority.score === 1 ? '中' : '預設';
-
-      const catReason = bestCategory.matched && bestCategory.matched.length
-        ? `偵測到關鍵詞：${bestCategory.matched.slice(0,3).join('、')}`
-        : '未偵測到明確關鍵詞，使用預設分類';
-      const priReason = bestPriority.matched && bestPriority.matched.length
-        ? `偵測到關鍵詞：${bestPriority.matched.slice(0,3).join('、')}`
-        : '未偵測到明確緊急程度，使用中等優先級';
-
-      return {
-        category: { key: bestCategory.key, label: bestCategory.label, confidence: catConf, reason: catReason },
-        priority: { key: bestPriority.key, label: bestPriority.label, confidence: priConf, reason: priReason }
-      };
-    }
-
-    // ═══════════════════════════════════════════
-    // AI 分析 UI 邏輯
-    // ═══════════════════════════════════════════
-    let aiDebounceTimer = null;
-    let currentAiResult = null;
-
-    function triggerAiAnalysis() {
-      clearTimeout(aiDebounceTimer);
-      const title = document.getElementById('ticketTitle').value.trim();
-      const desc  = document.getElementById('ticketDescription').value.trim();
-      if (!title && !desc) {
-        setAiIdle();
-        return;
-      }
-      setAiLoading();
-      aiDebounceTimer = setTimeout(() => {
-        const result = aiAnalyse(title, desc);
-        currentAiResult = result;
-        setAiResult(result);
-      }, 600);
-    }
-
-    function setAiIdle() {
-      document.getElementById('aiStatusText').textContent = '請填寫標題及描述以啟動分析';
-      document.getElementById('aiResultArea').innerHTML = '<div style="color:#9ca3af;font-size:12px;padding:4px 0;">等待輸入...</div>';
-      document.getElementById('ticketCategory').value = '';
-      document.getElementById('ticketPriority').value = '';
-      document.getElementById('submitBtn').disabled = true;
-      currentAiResult = null;
-    }
-
-    function setAiLoading() {
-      document.getElementById('aiStatusText').textContent = '分析中...';
-      document.getElementById('aiResultArea').innerHTML = '<div class="ai-loading"><div class="ai-spinner"></div>AI 正在分析問題內容...</div>';
-      document.getElementById('submitBtn').disabled = true;
-    }
-
-    function setAiResult(result) {
-      const catClass = 'priority-' + (result.category.key === 'other' ? 'medium' : 'low');
-      const priClass = 'priority-' + result.priority.key;
-
-      document.getElementById('aiStatusText').textContent = '✅ 分析完成';
-      document.getElementById('aiResultArea').innerHTML = `
-        <div class="ai-result-row">
-          <div class="ai-result-item">
-            <div class="ai-result-label">分類</div>
-            <div class="ai-result-value">
-              <span class="badge ${catClass}">${result.category.label}</span>
-              <span class="ai-confidence">信心：${result.category.confidence}</span>
-            </div>
-            <div class="ai-reason">${result.category.reason}</div>
-          </div>
-          <div class="ai-result-item">
-            <div class="ai-result-label">優先級</div>
-            <div class="ai-result-value">
-              <span class="badge ${priClass}">${result.priority.label}</span>
-              <span class="ai-confidence">信心：${result.priority.confidence}</span>
-            </div>
-            <div class="ai-reason">${result.priority.reason}</div>
-          </div>
-        </div>
-        <div class="ai-override-row">
-          <span class="ai-override-label">✏️ 手動覆蓋：</span>
-          <div class="ai-override-selects">
-            <select id="overrideCategory" onchange="applyOverride()">
-              <option value="">分類（AI 決定）</option>
-              <option value="hardware">硬件問題</option>
-              <option value="software">軟件問題</option>
-              <option value="network">網絡問題</option>
-              <option value="account">帳號權限</option>
-              <option value="email">電郵系統</option>
-              <option value="av_equipment">視聽設備</option>
-              <option value="printer">列印機問題</option>
-              <option value="other">其他</option>
-            </select>
-            <select id="overridePriority" onchange="applyOverride()">
-              <option value="">優先級（AI 決定）</option>
-              <option value="low">低</option>
-              <option value="medium">中</option>
-              <option value="high">高</option>
-              <option value="urgent">緊急</option>
-            </select>
-          </div>
-        </div>
-      `;
-
-      // 儲存 AI 決定到 hidden fields
-      document.getElementById('ticketCategory').value = result.category.key;
-      document.getElementById('ticketPriority').value = result.priority.key;
-      document.getElementById('submitBtn').disabled = false;
-    }
-
-    function applyOverride() {
-      if (!currentAiResult) return;
-      const overrideCat = document.getElementById('overrideCategory').value;
-      const overridePri = document.getElementById('overridePriority').value;
-      if (overrideCat) document.getElementById('ticketCategory').value = overrideCat;
-      else document.getElementById('ticketCategory').value = currentAiResult.category.key;
-      if (overridePri) document.getElementById('ticketPriority').value = overridePri;
-      else document.getElementById('ticketPriority').value = currentAiResult.priority.key;
-    }
-
-    // ═══════════════════════════════════════════
-    // 主要數據邏輯
-    // ═══════════════════════════════════════════
-    async function loadData() {
-      await loadStats();
-      await loadTickets();
-      updateViewCounts();
-    }
+    async function loadData() { await loadStats(); await loadTickets(); updateViewCounts(); }
 
     async function loadStats() {
-      try {
-        let stats;
-        if (USE_MOCK_DATA) {
-          const total = mockTickets.length;
-          const open = mockTickets.filter(t => t.status === 'open').length;
-          const inProgress = mockTickets.filter(t => t.status === 'in_progress').length;
-          const resolved = mockTickets.filter(t => t.status === 'resolved' || t.status === 'closed').length;
-          const byPriority = { low:mockTickets.filter(t=>t.priority==='low').length, medium:mockTickets.filter(t=>t.priority==='medium').length, high:mockTickets.filter(t=>t.priority==='high').length, urgent:mockTickets.filter(t=>t.priority==='urgent').length };
-          stats = { total, open, inProgress, resolved, byPriority };
-        } else {
-          const response = await fetch(`${API_BASE}/stats`);
-          stats = await response.json();
-        }
-        document.getElementById('statsContainer').innerHTML = `
-          <div class="stat-card"><h3>總求助單數</h3><div class="number">${stats.total}</div></div>
-          <div class="stat-card open"><h3>待處理</h3><div class="number">${stats.open}</div></div>
-          <div class="stat-card in-progress"><h3>跟進中</h3><div class="number">${stats.inProgress}</div></div>
-          <div class="stat-card resolved"><h3>已解決</h3><div class="number">${stats.resolved}</div></div>
-        `;
-        document.getElementById('quickOpen').textContent = stats.open;
-        document.getElementById('quickInProgress').textContent = stats.inProgress;
-        document.getElementById('quickUrgent').textContent = stats.byPriority?.urgent || 0;
-        const today = new Date().toDateString();
-        const allTickets = USE_MOCK_DATA ? mockTickets : await (await fetch(`${API_BASE}/tickets`)).json();
-        document.getElementById('quickToday').textContent = allTickets.filter(t => new Date(t.createdAt).toDateString() === today).length;
-      } catch (error) { console.error('載入統計數據失敗:', error); }
+      const total = mockTickets.length;
+      const open = mockTickets.filter(t=>t.status==='open').length;
+      const inProgress = mockTickets.filter(t=>t.status==='in_progress').length;
+      const resolved = mockTickets.filter(t=>t.status==='resolved'||t.status==='closed').length;
+      const byPriority = { urgent: mockTickets.filter(t=>t.priority==='urgent').length };
+      document.getElementById('statsContainer').innerHTML = `
+        <div class="stat-card"><h3>總求助單數</h3><div class="number">${total}</div></div>
+        <div class="stat-card open"><h3>待處理</h3><div class="number">${open}</div></div>
+        <div class="stat-card in-progress"><h3>跟進中</h3><div class="number">${inProgress}</div></div>
+        <div class="stat-card resolved"><h3>已解決</h3><div class="number">${resolved}</div></div>`;
+      document.getElementById('quickOpen').textContent = open;
+      document.getElementById('quickInProgress').textContent = inProgress;
+      document.getElementById('quickUrgent').textContent = byPriority.urgent;
+      const today = new Date().toDateString();
+      document.getElementById('quickToday').textContent = mockTickets.filter(t=>new Date(t.createdAt).toDateString()===today).length;
     }
 
     async function updateViewCounts() {
-      try {
-        let tickets = USE_MOCK_DATA ? [...mockTickets] : await (await fetch(`${API_BASE}/tickets`)).json();
-        document.getElementById('countAll').textContent = tickets.length;
-        document.getElementById('countOpen').textContent = tickets.filter(t=>t.status==='open').length;
-        document.getElementById('countInProgress').textContent = tickets.filter(t=>t.status==='in_progress').length;
-        document.getElementById('countResolved').textContent = tickets.filter(t=>t.status==='resolved').length;
-        document.getElementById('countMyTickets').textContent = tickets.length;
-      } catch (error) { console.error('更新視圖計數失敗:', error); }
+      document.getElementById('countAll').textContent = mockTickets.length;
+      document.getElementById('countOpen').textContent = mockTickets.filter(t=>t.status==='open').length;
+      document.getElementById('countInProgress').textContent = mockTickets.filter(t=>t.status==='in_progress').length;
+      document.getElementById('countResolved').textContent = mockTickets.filter(t=>t.status==='resolved').length;
+      document.getElementById('countMyTickets').textContent = mockTickets.length;
     }
 
     async function loadTickets() {
-      try {
-        const search   = document.getElementById('searchInput').value;
-        const status   = document.getElementById('statusFilter').value;
-        const priority = document.getElementById('priorityFilter').value;
-        const category = document.getElementById('categoryFilter').value;
-        let tickets;
-        if (USE_MOCK_DATA) {
-          tickets = mockTickets.filter(ticket => {
-            if (status   && ticket.status   !== status)   return false;
-            if (priority && ticket.priority !== priority) return false;
-            if (category && ticket.category !== category) return false;
-            if (search) {
-              const sl = search.toLowerCase();
-              return ticket.title.toLowerCase().includes(sl) || ticket.description.toLowerCase().includes(sl) || ticket.id.toLowerCase().includes(sl) || ticket.submittedBy.toLowerCase().includes(sl);
-            }
-            return true;
-          });
-        } else {
-          let url = `${API_BASE}/tickets?`;
-          if (search)   url += `&search=${encodeURIComponent(search)}`;
-          if (status)   url += `&status=${status}`;
-          if (priority) url += `&priority=${priority}`;
-          if (category) url += `&category=${category}`;
-          const response = await fetch(url);
-          tickets = await response.json();
-        }
-        const html = tickets.map(ticket => {
-          const slaClass = getSLAClass(ticket.createdAt);
-          const slaText  = getSLAText(ticket.createdAt);
-          const assigneeDisplay = ticket.assignedTo
-            ? `<span class="avatar">${getInitials(ticket.assignedTo)}</span>${ticket.assignedTo.split('-')[0].trim()}`
-            : '<span style="color:#9ca3af;">未指派</span>';
-          return `<tr class="ticket-row" onclick="showTicketDetail('${ticket.id}')">
-            <td><span class="ticket-cell-id">${ticket.id}</span></td>
-            <td><span class="ticket-cell-title">${ticket.title}</span></td>
-            <td><span class="ticket-cell-submitter">${ticket.submittedBy}</span></td>
-            <td><span class="tag">${getCategoryLabel(ticket.category)}</span></td>
-            <td><span class="badge priority-${ticket.priority}">${getPriorityLabel(ticket.priority)}</span></td>
-            <td><span class="badge badge-${ticket.status}">${getStatusLabel(ticket.status)}</span></td>
-            <td><span class="ticket-cell-assignee">${assigneeDisplay}</span></td>
-            <td><span class="sla-indicator ${slaClass}">${slaText}</span></td>
-          </tr>`;
-        }).join('');
-        document.getElementById('ticketList').innerHTML = html || '<tr><td colspan="8" style="text-align:center;color:#999;padding:40px;">暫無求助單</td></tr>';
-      } catch (error) {
-        console.error('載入求助單失敗:', error);
-        document.getElementById('ticketList').innerHTML = '<tr><td colspan="8" style="text-align:center;color:#dc3545;padding:40px;">載入失敗</td></tr>';
-      }
-    }
-
-    function getSLAClass(createdAt) {
-      const h = (new Date() - new Date(createdAt)) / (1000*60*60);
-      return h < 24 ? 'sla-good' : h < 48 ? 'sla-warning' : 'sla-breach';
-    }
-    function getSLAText(createdAt) {
-      const h = Math.floor((new Date() - new Date(createdAt)) / (1000*60*60));
-      if (h < 1) return '剛剛';
-      if (h < 24) return `${h}小時`;
-      return `${Math.floor(h/24)}天`;
-    }
-    function getInitials(name) { return name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2); }
-    function scrollToCreate() { document.getElementById('createForm').scrollIntoView({ behavior:'smooth' }); }
-
-    async function showTicketDetail(ticketId) {
-      currentTicketId = ticketId;
-      try {
-        let ticket = USE_MOCK_DATA ? mockTickets.find(t=>t.id===ticketId) : await (await fetch(`${API_BASE}/tickets/${ticketId}`)).json();
-        if (!ticket) throw new Error('找不到求助單');
-        document.getElementById('modalTicketId').textContent = ticket.id;
-        document.getElementById('modalTicketTitle').textContent = ticket.title;
-        document.getElementById('modalDescription').textContent = ticket.description;
-        document.getElementById('detailId').textContent = ticket.id;
-        document.getElementById('detailStatus').textContent = getStatusLabel(ticket.status);
-        document.getElementById('detailStatus').className = `badge badge-${ticket.status}`;
-        document.getElementById('detailPriority').textContent = getPriorityLabel(ticket.priority);
-        document.getElementById('detailPriority').className = `badge priority-${ticket.priority}`;
-        document.getElementById('detailCategory').textContent = getCategoryLabel(ticket.category);
-        document.getElementById('detailSubmitter').textContent = ticket.submittedBy;
-        document.getElementById('detailDepartment').textContent = ticket.department || '未填寫';
-        document.getElementById('detailAssignee').textContent = ticket.assignedTo || '尚未指派';
-        document.getElementById('detailCreatedAt').textContent = formatDate(ticket.createdAt);
-        document.getElementById('detailUpdatedAt').textContent = formatDate(ticket.updatedAt);
-        if (ticket.resolution) { document.getElementById('resolutionSection').style.display='block'; document.getElementById('detailResolution').textContent=ticket.resolution; }
-        else { document.getElementById('resolutionSection').style.display='none'; }
-        document.getElementById('modalTimeline').innerHTML = generateTimeline(ticket);
-        let qa = '';
-        if (ticket.status==='open') qa += `<button class="btn btn-warning" onclick="updateTicketStatus('${ticket.id}','in_progress')">🔄 開始跟進</button>`;
-        if (ticket.status==='in_progress') qa += `<button class="btn btn-success" onclick="resolveTicketPrompt('${ticket.id}')">✅ 標記為已解決</button>`;
-        if (!ticket.assignedTo) qa += `<button class="btn btn-secondary" onclick="assignToMe('${ticket.id}')">👤 指派給我</button>`;
-        qa += `<button class="btn btn-secondary" onclick="closeModal()">關閉</button>`;
-        document.getElementById('quickActions').innerHTML = qa;
-        document.getElementById('ticketModal').classList.add('active');
-      } catch (error) { console.error('載入求助單詳情失敗:', error); alert('載入求助單詳情失敗'); }
-    }
-
-    function generateTimeline(ticket) {
-      let html = `<div class="timeline-item public"><div class="timeline-time">${formatDate(ticket.createdAt)}</div><div class="timeline-content"><div class="timeline-author">${ticket.submittedBy} 創建了求助單</div><div class="timeline-text">${ticket.description}</div></div></div>`;
-      if (USE_MOCK_DATA && mockActivities[ticket.id]) {
-        for (const a of mockActivities[ticket.id].slice(1)) {
-          const isInt = a.type==='internal';
-          html += `<div class="timeline-item ${a.type}"><div class="timeline-time">${formatDate(a.timestamp)}</div><div class="timeline-content ${isInt?'internal-note':''}">${isInt?'<span class="internal-badge">內部備註</span>':''}<div class="timeline-author">${a.author}</div><div class="timeline-text">${a.text}</div></div></div>`;
-        }
-      } else {
-        if (ticket.assignedTo) html += `<div class="timeline-item internal"><div class="timeline-time">${formatDate(ticket.updatedAt)}</div><div class="timeline-content"><div class="timeline-author">${ticket.assignedTo} 被指派為負責人</div></div></div>`;
-        if (ticket.status==='in_progress') html += `<div class="timeline-item internal"><div class="timeline-time">${formatDate(ticket.updatedAt)}</div><div class="timeline-content"><div class="timeline-author">狀態變更為「跟進中」</div></div></div>`;
-        if (ticket.resolution) html += `<div class="timeline-item public"><div class="timeline-time">${formatDate(ticket.updatedAt)}</div><div class="timeline-content"><div class="timeline-author">已解決</div><div class="timeline-text">${ticket.resolution}</div></div></div>`;
-      }
-      return html;
-    }
-
-    function closeModal() { document.getElementById('ticketModal').classList.remove('active'); }
-
-    function addComment() {
-      const t = document.getElementById('commentText').value;
-      const i = document.getElementById('isInternalNote').checked;
-      if (!t.trim()) { alert('請輸入回覆內容'); return; }
-      alert(i ? '內部備註已添加' : '回覆已發送給申請人');
-      document.getElementById('commentText').value = '';
-    }
-
-    async function assignToMe(ticketId) {
-      try {
-        if (USE_MOCK_DATA) { const t=mockTickets.find(t=>t.id===ticketId); if(t){t.assignedTo='當前用戶';t.updatedAt=new Date().toISOString();} alert('已指派給自己（模擬）'); }
-        else { await fetch(`${API_BASE}/tickets/${ticketId}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({assignedTo:'當前用戶'})}); }
-        closeModal(); await loadData();
-      } catch (e) { console.error(e); alert('指派失敗'); }
-    }
-
-    async function updateTicketStatus(ticketId, status) {
-      try {
-        if (USE_MOCK_DATA) { const t=mockTickets.find(t=>t.id===ticketId); if(t){t.status=status;t.updatedAt=new Date().toISOString();} alert(`狀態已更新為「${getStatusLabel(status)}」（模擬）`); }
-        else { await fetch(`${API_BASE}/tickets/${ticketId}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})}); }
-        closeModal(); await loadData();
-      } catch (e) { console.error(e); alert('更新求助單失敗'); }
-    }
-
-    function resolveTicketPrompt(ticketId) {
-      const r = prompt('請輸入解決方案:');
-      if (r) resolveTicket(ticketId, r);
-    }
-
-    async function resolveTicket(ticketId, resolution) {
-      try {
-        if (USE_MOCK_DATA) { const t=mockTickets.find(t=>t.id===ticketId); if(t){t.status='resolved';t.resolution=resolution;t.resolvedAt=new Date().toISOString();t.updatedAt=new Date().toISOString();} alert('求助單已標記為已解決（模擬）'); }
-        else { await fetch(`${API_BASE}/tickets/${ticketId}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'resolved',resolution})}); }
-        closeModal(); await loadData();
-      } catch (e) { console.error(e); alert('解決求助單失敗'); }
-    }
-
-    async function deleteCurrentTicket() {
-      if (currentTicketId && confirm('確定要刪除此求助單嗎？')) {
-        try {
-          if (USE_MOCK_DATA) { alert('演示模式下無法刪除求助單（模擬）'); return; }
-          await fetch(`${API_BASE}/tickets/${currentTicketId}`,{method:'DELETE'});
-          closeModal(); await loadData();
-        } catch (e) { console.error(e); alert('刪除求助單失敗'); }
-      }
-    }
-    async function deleteTicket() { deleteCurrentTicket(); }
-
-    // 表單提交
-    document.getElementById('createTicketForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const cat = document.getElementById('ticketCategory').value;
-      const pri = document.getElementById('ticketPriority').value;
-      if (!cat || !pri) { alert('請等待 AI 完成分析，或手動覆蓋分類及優先級'); return; }
-      const ticketData = {
-        title:       document.getElementById('ticketTitle').value,
-        category:    cat,
-        priority:    pri,
-        submittedBy: document.getElementById('ticketSubmitter').value,
-        department:  document.getElementById('ticketDepartment').value,
-        description: document.getElementById('ticketDescription').value
-      };
-      try {
-        if (USE_MOCK_DATA) {
-          const newId = `TKT-2024-${String(mockTickets.length+1).padStart(3,'0')}`;
-          mockTickets.unshift({ id:newId, ...ticketData, status:'open', location:'', contactEmail:'', contactPhone:'', assignedTo:null, createdAt:new Date().toISOString(), updatedAt:new Date().toISOString(), resolvedAt:null, tags:[] });
-          mockActivities[newId] = [{ id:'act1', type:'public', author:ticketData.submittedBy, text:`提交求助單：${ticketData.title}`, timestamp:new Date().toISOString() }];
-          alert(`求助單已成功創建！\nAI 分析結果 → 分類：${getCategoryLabel(cat)}，優先級：${getPriorityLabel(pri)}`);
-        } else {
-          await fetch(`${API_BASE}/tickets`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(ticketData)});
-          alert('求助單已成功創建！');
-        }
-        document.getElementById('createTicketForm').reset();
-        setAiIdle();
-        await loadData();
-      } catch (error) { console.error('創建求助單失敗:', error); alert('創建求助單失敗'); }
-    });
-
-    // 監聽標題/描述變化觸發 AI
-    document.getElementById('ticketTitle').addEventListener('input', triggerAiAnalysis);
-    document.getElementById('ticketDescription').addEventListener('input', triggerAiAnalysis);
-
-    // 篩選器
-    ['searchInput','statusFilter','priorityFilter','categoryFilter'].forEach(id => {
-      document.getElementById(id).addEventListener('change', loadTickets);
-      document.getElementById(id).addEventListener('input', loadTickets);
-    });
-
-    // 視圖切換
-    document.querySelectorAll('.view-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.view-tab').forEach(t=>t.classList.remove('active'));
-        tab.classList.add('active');
-        currentView = tab.dataset.view;
-        if (currentView !== 'all') {
-          if (currentView === 'my_tickets') {
-            document.getElementById('statusFilter').value = '';
-            const at = USE_MOCK_DATA ? mockTickets.filter(t=>t.assignedTo) : null;
-            if (at) { renderFilteredTickets(at); return; }
-          } else {
-            document.getElementById('statusFilter').value = currentView;
-          }
-        }
-        loadTickets();
+      const search = document.getElementById('searchInput').value;
+      const status = document.getElementById('statusFilter').value;
+      const priority = document.getElementById('priorityFilter').value;
+      const category = document.getElementById('categoryFilter').value;
+      let tickets = mockTickets.filter(t => {
+        if (status && t.status !== status) return false;
+        if (priority && t.priority !== priority) return false;
+        if (category && t.category !== category) return false;
+        if (search) { const s=search.toLowerCase(); return t.title.toLowerCase().includes(s)||t.description.toLowerCase().includes(s)||t.id.toLowerCase().includes(s)||t.submittedBy.toLowerCase().includes(s); }
+        return true;
       });
-    });
-
-    function renderFilteredTickets(tickets) {
-      const html = tickets.map(ticket => {
+      const rows = tickets.map(ticket => {
         const slaClass = getSLAClass(ticket.createdAt);
-        const slaText  = getSLAText(ticket.createdAt);
-        const ad = ticket.assignedTo ? `<span class="avatar">${getInitials(ticket.assignedTo)}</span>${ticket.assignedTo.split('-')[0].trim()}` : '<span style="color:#9ca3af;">未指派</span>';
+        const slaText = getSLAText(ticket.createdAt);
+        const assigneeDisplay = ticket.assignedTo ? `<span class="avatar">${getInitials(ticket.assignedTo)}</span>${ticket.assignedTo.split('-')[0].trim()}` : '<span style="color:#9ca3af;">未指派</span>';
         return `<tr class="ticket-row" onclick="showTicketDetail('${ticket.id}')">
           <td><span class="ticket-cell-id">${ticket.id}</span></td>
           <td><span class="ticket-cell-title">${ticket.title}</span></td>
@@ -1150,17 +661,138 @@
           <td><span class="tag">${getCategoryLabel(ticket.category)}</span></td>
           <td><span class="badge priority-${ticket.priority}">${getPriorityLabel(ticket.priority)}</span></td>
           <td><span class="badge badge-${ticket.status}">${getStatusLabel(ticket.status)}</span></td>
-          <td><span class="ticket-cell-assignee">${ad}</span></td>
+          <td><span class="ticket-cell-assignee">${assigneeDisplay}</span></td>
           <td><span class="sla-indicator ${slaClass}">${slaText}</span></td>
         </tr>`;
       }).join('');
-      document.getElementById('ticketList').innerHTML = html || '<tr><td colspan="8" style="text-align:center;color:#999;padding:40px;">暫無求助單</td></tr>';
+      document.getElementById('ticketList').innerHTML = rows || '<tr><td colspan="8" style="text-align:center;color:#999;padding:40px;">暫無求助單</td></tr>';
     }
 
-    function getStatusLabel(s)   { return {open:'待處理',in_progress:'跟進中',resolved:'已解決',closed:'已關閉'}[s]||s; }
-    function getPriorityLabel(p) { return {low:'低',medium:'中',high:'高',urgent:'緊急'}[p]||p; }
-    function getCategoryLabel(c) { return {hardware:'硬件問題',software:'軟件問題',network:'網絡問題',account:'帳號權限',email:'電郵系統',av_equipment:'視聽設備',printer:'列印機問題',other:'其他'}[c]||c; }
-    function formatDate(d) { return new Date(d).toLocaleString('zh-HK',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}); }
+    function getSLAClass(createdAt) { const h=(Date.now()-new Date(createdAt))/(1000*3600); return h<24?'sla-good':h<48?'sla-warning':'sla-breach'; }
+    function getSLAText(createdAt) { const h=Math.floor((Date.now()-new Date(createdAt))/(1000*3600)); if(h<1)return '剛剛'; if(h<24)return `${h}小時`; return `${Math.floor(h/24)}天`; }
+    function getInitials(name) { return name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2); }
+    function scrollToCreate() { document.getElementById('createForm').scrollIntoView({behavior:'smooth'}); }
+
+    async function showTicketDetail(ticketId) {
+      currentTicketId = ticketId;
+      const ticket = mockTickets.find(t=>t.id===ticketId);
+      if (!ticket) return;
+      document.getElementById('modalTicketId').textContent = ticket.id;
+      document.getElementById('modalTicketTitle').textContent = ticket.title;
+      document.getElementById('modalDescription').textContent = ticket.description;
+      document.getElementById('detailId').textContent = ticket.id;
+      document.getElementById('detailStatus').textContent = getStatusLabel(ticket.status);
+      document.getElementById('detailStatus').className = `badge badge-${ticket.status}`;
+      document.getElementById('detailPriority').textContent = getPriorityLabel(ticket.priority);
+      document.getElementById('detailPriority').className = `badge priority-${ticket.priority}`;
+      document.getElementById('detailCategory').textContent = getCategoryLabel(ticket.category);
+      document.getElementById('detailSubmitter').textContent = ticket.submittedBy;
+      document.getElementById('detailDepartment').textContent = ticket.department||'未填寫';
+      document.getElementById('detailAssignee').textContent = ticket.assignedTo||'尚未指派';
+      document.getElementById('detailCreatedAt').textContent = formatDate(ticket.createdAt);
+      document.getElementById('detailUpdatedAt').textContent = formatDate(ticket.updatedAt);
+      if (ticket.resolution) { document.getElementById('resolutionSection').style.display='block'; document.getElementById('detailResolution').textContent=ticket.resolution; } else { document.getElementById('resolutionSection').style.display='none'; }
+      document.getElementById('modalTimeline').innerHTML = generateTimeline(ticket);
+      let qa = '';
+      if (ticket.status==='open') qa+=`<button class="btn btn-warning" onclick="updateTicketStatus('${ticket.id}','in_progress')">🔄 開始跟進</button>`;
+      if (ticket.status==='in_progress') qa+=`<button class="btn btn-success" onclick="resolveTicketPrompt('${ticket.id}')">✅ 標記為已解決</button>`;
+      if (!ticket.assignedTo) qa+=`<button class="btn btn-secondary" onclick="assignToMe('${ticket.id}')">👤 指派給我</button>`;
+      qa+=`<button class="btn btn-secondary" onclick="closeModal()">關閉</button>`;
+      document.getElementById('quickActions').innerHTML = qa;
+      document.getElementById('ticketModal').classList.add('active');
+    }
+
+    function generateTimeline(ticket) {
+      let html = `<div class="timeline-item public"><div class="timeline-time">${formatDate(ticket.createdAt)}</div><div class="timeline-content"><div class="timeline-author">${ticket.submittedBy} 創建了求助單</div><div class="timeline-text">${ticket.description}</div></div></div>`;
+      if (mockActivities[ticket.id]) {
+        mockActivities[ticket.id].slice(1).forEach(activity => {
+          const isInt = activity.type==='internal';
+          html+=`<div class="timeline-item ${activity.type}"><div class="timeline-time">${formatDate(activity.timestamp)}</div><div class="timeline-content ${isInt?'internal-note':''}">${isInt?'<span class="internal-badge">內部備註</span>':''}<div class="timeline-author">${activity.author}</div><div class="timeline-text">${activity.text}</div></div></div>`;
+        });
+      }
+      return html;
+    }
+
+    function closeModal() { document.getElementById('ticketModal').classList.remove('active'); }
+    function addComment() { const t=document.getElementById('commentText').value; if(!t.trim()){alert('請輸入回覆內容');return;} alert(document.getElementById('isInternalNote').checked?'內部備註已添加':'回覆已發送給申請人'); document.getElementById('commentText').value=''; }
+
+    async function assignToMe(ticketId) { const t=mockTickets.find(t=>t.id===ticketId); if(t){t.assignedTo='當前用戶';t.updatedAt=new Date().toISOString();} alert('已指派給自己（模擬）'); closeModal(); await loadData(); }
+    async function updateTicketStatus(ticketId, status) { const t=mockTickets.find(t=>t.id===ticketId); if(t){t.status=status;t.updatedAt=new Date().toISOString();} alert(`狀態已更新為「${getStatusLabel(status)}」（模擬）`); closeModal(); await loadData(); }
+    function resolveTicketPrompt(ticketId) { const r=prompt('請輸入解決方案:'); if(r) resolveTicket(ticketId,r); }
+    async function resolveTicket(ticketId, resolution) { const t=mockTickets.find(t=>t.id===ticketId); if(t){t.status='resolved';t.resolution=resolution;t.resolvedAt=new Date().toISOString();t.updatedAt=new Date().toISOString();} alert('求助單已標記為已解決（模擬）'); closeModal(); await loadData(); }
+    async function deleteCurrentTicket() { if(currentTicketId&&confirm('確定要刪除此求助單嗎？')){ alert('演示模式下無法刪除求助單（模擬）'); } }
+    async function deleteTicket(ticketId) { deleteCurrentTicket(); }
+
+    // 表單提交
+    document.getElementById('createTicketForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      // 決定最終分類及優先級：手動覆蓋 > AI 分析
+      let finalCat = overrideMode ? document.getElementById('ticketCategory').value : document.getElementById('finalCategory').value;
+      let finalPri = overrideMode ? document.getElementById('ticketPriority').value : document.getElementById('finalPriority').value;
+      if (!finalCat) finalCat = 'other';
+      if (!finalPri) finalPri = 'medium';
+      const ticketData = {
+        title: document.getElementById('ticketTitle').value,
+        category: finalCat,
+        priority: finalPri,
+        submittedBy: document.getElementById('ticketSubmitter').value,
+        department: document.getElementById('ticketDepartment').value,
+        description: document.getElementById('ticketDescription').value
+      };
+      const newId = `TKT-2024-${String(mockTickets.length+1).padStart(3,'0')}`;
+      mockTickets.unshift({ id:newId, ...ticketData, status:'open', location:'', contactEmail:'', contactPhone:'', assignedTo:null, createdAt:new Date().toISOString(), updatedAt:new Date().toISOString(), resolvedAt:null, tags:[] });
+      mockActivities[newId] = [{ id:'act1', type:'public', author:ticketData.submittedBy, text:`提交求助單：${ticketData.title}`, timestamp:new Date().toISOString() }];
+      alert(`求助單已成功創建！\nAI 判斷 → 分類：${getCategoryLabel(finalCat)}，優先級：${getPriorityLabel(finalPri)}（模擬）`);
+      document.getElementById('createTicketForm').reset();
+      document.getElementById('aiAnalysisBox').classList.remove('show');
+      overrideMode = false;
+      document.getElementById('overrideFields').classList.remove('show');
+      document.querySelector('.ai-override-toggle').textContent = '✏️ 手動覆蓋 AI 判斷';
+      currentAiCategory = ''; currentAiPriority = '';
+      await loadData();
+    });
+
+    // AI 分析觸發器
+    document.getElementById('ticketTitle').addEventListener('input', triggerAIAnalysis);
+    document.getElementById('ticketDescription').addEventListener('input', triggerAIAnalysis);
+    // 手動覆蓋時同步 hidden fields
+    document.getElementById('ticketCategory').addEventListener('change', () => { if(overrideMode) document.getElementById('finalCategory').value=document.getElementById('ticketCategory').value; });
+    document.getElementById('ticketPriority').addEventListener('change', () => { if(overrideMode) document.getElementById('finalPriority').value=document.getElementById('ticketPriority').value; });
+
+    ['searchInput','statusFilter','priorityFilter','categoryFilter'].forEach(id => {
+      document.getElementById(id).addEventListener('change', loadTickets);
+      document.getElementById(id).addEventListener('input', loadTickets);
+    });
+
+    document.querySelectorAll('.view-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.view-tab').forEach(t=>t.classList.remove('active'));
+        tab.classList.add('active');
+        currentView = tab.dataset.view;
+        if (currentView==='my_tickets') {
+          const assigned = mockTickets.filter(t=>t.assignedTo);
+          renderFilteredTickets(assigned);
+          return;
+        }
+        if (currentView!=='all') document.getElementById('statusFilter').value=currentView;
+        else document.getElementById('statusFilter').value='';
+        loadTickets();
+      });
+    });
+
+    function renderFilteredTickets(tickets) {
+      const rows = tickets.map(ticket => {
+        const slaClass=getSLAClass(ticket.createdAt),slaText=getSLAText(ticket.createdAt);
+        const ad=ticket.assignedTo?`<span class="avatar">${getInitials(ticket.assignedTo)}</span>${ticket.assignedTo.split('-')[0].trim()}`:'<span style="color:#9ca3af;">未指派</span>';
+        return `<tr class="ticket-row" onclick="showTicketDetail('${ticket.id}')"><td><span class="ticket-cell-id">${ticket.id}</span></td><td><span class="ticket-cell-title">${ticket.title}</span></td><td><span class="ticket-cell-submitter">${ticket.submittedBy}</span></td><td><span class="tag">${getCategoryLabel(ticket.category)}</span></td><td><span class="badge priority-${ticket.priority}">${getPriorityLabel(ticket.priority)}</span></td><td><span class="badge badge-${ticket.status}">${getStatusLabel(ticket.status)}</span></td><td><span class="ticket-cell-assignee">${ad}</span></td><td><span class="sla-indicator ${slaClass}">${slaText}</span></td></tr>`;
+      }).join('');
+      document.getElementById('ticketList').innerHTML = rows||'<tr><td colspan="8" style="text-align:center;color:#999;padding:40px;">暫無求助單</td></tr>';
+    }
+
+    function getStatusLabel(s){return{open:'待處理',in_progress:'跟進中',resolved:'已解決',closed:'已關閉'}[s]||s;}
+    function getPriorityLabel(p){return{low:'低',medium:'中',high:'高',urgent:'緊急'}[p]||p;}
+    function getCategoryLabel(c){return{hardware:'硬件問題',software:'軟件問題',network:'網絡問題',account:'帳號權限',email:'電郵系統',other:'其他',av_equipment:'影音設備',printer:'列印機'}[c]||c;}
+    function formatDate(ds){return new Date(ds).toLocaleString('zh-HK',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});}
 
     window.addEventListener('DOMContentLoaded', loadData);
   </script>
